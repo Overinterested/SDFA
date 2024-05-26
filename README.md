@@ -12,7 +12,6 @@ SDFA (SDF-based Analyzer) is a comprehensive framework designed for accurate and
   <a href="#getting-started"><img src="./assets/xingxing.png" width=20 alt="*">Getting Started</a> |
   <a href="#usage"><img src="./assets/xingxing.png" width=20 alt="*">Usage</a> |
   <a href="#documentation"><img src="./assets/xingxing.png" width=20 alt="*">Documentation</a> |
-  <a href="#contributing"><img src="./assets/xingxing.png" width=20 alt="*">Contributing</a> |
   <a href="#license"><img src="./assets/xingxing.png" width=20 alt="*">License</a> |
   <a href="#acknowledgments"><img src="./assets/xingxing.png" width=20 alt="*">Acknowledgments</a>
 </p>
