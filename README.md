@@ -28,7 +28,6 @@ SDFA (SDF-based Analyzer) is a comprehensive framework designed for accurate and
 ### Prerequisites
 
 - Java 8 or later
-- SDFA jar
 
 ### Installation
 
