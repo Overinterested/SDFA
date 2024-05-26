@@ -8,13 +8,13 @@
 SDFA (SDF-based Analyzer) is a comprehensive framework designed for accurate and rapid parsing, storage, and analysis of structural variation (SV) data within large population samples. It introduces a novel Standardized Decomposition Format (SDF) for efficient SV representation, and provides modules for merging, annotation, and quantitative gene feature assessment.
 
 <p align="center">
-  <a href="#key-features"><img src="./assets/xingxing.png" width=22 alt="*">Key Features</a> |
-  <a href="#getting-started"><img src="./assets/xingxing.png" width=22 alt="*">Getting Started</a> |
-  <a href="#usage"><img src="./assets/xingxing.png" width=22 alt="*">Usage</a> |
-  <a href="#documentation"><img src="./assets/xingxing.png" width=22 alt="*">Documentation</a> |
-  <a href="#contributing"><img src="./assets/xingxing.png" width=22 alt="*">Contributing</a> |
-  <a href="#license"><img src="./assets/xingxing.png" width=22 alt="*">License</a> |
-  <a href="#acknowledgments"><img src="./assets/xingxing.png" width=22 alt="*">Acknowledgments</a>
+  <a href="#key-features"><img src="./assets/xingxing.png" width=20 alt="*">Key Features</a> |
+  <a href="#getting-started"><img src="./assets/xingxing.png" width=20 alt="*">Getting Started</a> |
+  <a href="#usage"><img src="./assets/xingxing.png" width=20 alt="*">Usage</a> |
+  <a href="#documentation"><img src="./assets/xingxing.png" width=20 alt="*">Documentation</a> |
+  <a href="#contributing"><img src="./assets/xingxing.png" width=20 alt="*">Contributing</a> |
+  <a href="#license"><img src="./assets/xingxing.png" width=20 alt="*">License</a> |
+  <a href="#acknowledgments"><img src="./assets/xingxing.png" width=20 alt="*">Acknowledgments</a>
 </p>
 
 ## Key Features
