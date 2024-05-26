@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="rconnection">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/lib/rconnection" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/lib/rconnection" recursive="false" />
+  </library>
+</component>

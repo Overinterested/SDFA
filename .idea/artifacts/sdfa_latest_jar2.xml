@@ -1,0 +1,24 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="sdfa_latest:jar2">
+    <output-path>$PROJECT_DIR$/out/artifacts/sdfa_latest_jar2</output-path>
+    <root id="archive" name="sdfa_latest.jar">
+      <element id="module-output" name="sdfa_latest" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/logback-1.2.11/slf4j-api-1.7.32.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/logback-1.2.11/logback-core-1.2.11.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/logback-1.2.11/logback-classic-1.2.11.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/xz-java.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/ccf-api-2.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/flatlaf-1.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/lz4-java-1.8.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/reflections/javassist.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/reflections/reflections-0.10.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/zstd-jni-1.5.2-3/zstd-jni-1.5.2-3-win_amd64.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/zstd-jni-1.5.2-3/zstd-jni-1.5.2-3-linux_amd64.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/zstd-jni-1.5.2-3/zstd-jni-1.5.2-3-darwin_x86_64.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/zstd-jni-1.5.2-3/zstd-jni-1.5.2-3-linux_aarch64.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/zstd-jni-1.5.2-3/zstd-jni-1.5.2-3-darwin_aarch64.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/rconnection/REngine.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/rconnection/RserveEngine.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

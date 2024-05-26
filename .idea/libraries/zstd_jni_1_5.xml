@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="zstd-jni-1.5">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/lib/zstd-jni-1.5.2-3" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/lib/zstd-jni-1.5.2-3" recursive="false" />
+  </library>
+</component>
