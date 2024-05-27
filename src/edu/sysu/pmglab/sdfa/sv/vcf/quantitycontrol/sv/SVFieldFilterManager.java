@@ -3,7 +3,7 @@ package edu.sysu.pmglab.sdfa.sv.vcf.quantitycontrol.sv;
 import edu.sysu.pmglab.container.ByteCode;
 import edu.sysu.pmglab.container.ReusableMap;
 import edu.sysu.pmglab.container.array.Array;
-import edu.sysu.pmglab.sdfa.sv.SVGenotype;
+import edu.sysu.pmglab.sdfa.sv.SVGenotypes;
 
 /**
  * @author Wenjie Peng
@@ -56,7 +56,7 @@ public class SVFieldFilterManager {
     }
 
     public boolean filter(ByteCode qualField, ByteCode filterField,
-                          ReusableMap<ByteCode, ByteCode> infoField, SVGenotype[] genotypes) {
+                          ReusableMap<ByteCode, ByteCode> infoField, SVGenotypes genotypes) {
         if (!init) {
             fieldFilterFailCount = new int[fieldFilterArray.size()];
             init = true;
@@ -84,7 +84,7 @@ public class SVFieldFilterManager {
                         return false;
                     }
                 } else if (abstractSVFieldFilter instanceof SVGenotypeFilter) {
-                    flag = ((SVGenotypeFilter) abstractSVFieldFilter).filter(genotypes);
+                    flag = ((SVGenotypeFilter) abstractSVFieldFilter).filter(genotypes.getGenotypes());
                     if (!flag) {
                         fieldFilterFailCount[count] += 1;
                         return false;

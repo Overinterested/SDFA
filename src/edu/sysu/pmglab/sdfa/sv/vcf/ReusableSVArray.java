@@ -6,6 +6,7 @@ import edu.sysu.pmglab.container.array.BaseArray;
 import edu.sysu.pmglab.sdfa.SDFEncode;
 import edu.sysu.pmglab.sdfa.SDFFormat;
 import edu.sysu.pmglab.sdfa.sv.UnifiedSV;
+import edu.sysu.pmglab.sdfa.toolkit.VCF2SDF;
 
 /**
  * @author Wenjie Peng
@@ -37,7 +38,11 @@ public class ReusableSVArray {
     }
 
     public void addVerifiedSVSize() {
-        for (UnifiedSV sv : unifiedSVArray) {
+        for (int i = 0; i < unifiedSVArray.size(); i++) {
+            UnifiedSV sv = unifiedSVArray.get(i);
+            if (!VCF2SDF.multiInfoForCSV && i != 0) {
+                sv.getGenotypes().setProperties(null);
+            }
             encodeSVArray.add(encodeSV.encode(record.clone(), sv));
         }
         unifiedSVArray.clear();
@@ -76,7 +81,8 @@ public class ReusableSVArray {
         this.encodeSV = encodeSV;
         return this;
     }
-    public Array<IRecord> getEncodeSVArrayByClear(){
+
+    public Array<IRecord> getEncodeSVArrayByClear() {
         return new Array<>(encodeSVArray.popFirst(encodeSVArray.size()));
     }
 }

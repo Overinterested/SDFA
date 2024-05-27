@@ -9,6 +9,7 @@ import edu.sysu.pmglab.container.ByteCode;
 import edu.sysu.pmglab.container.CallableSet;
 import edu.sysu.pmglab.container.File;
 import edu.sysu.pmglab.container.VolumeByteStream;
+import edu.sysu.pmglab.container.array.ArrayType;
 import edu.sysu.pmglab.container.array.ByteCodeArray;
 import edu.sysu.pmglab.container.array.IntArray;
 import edu.sysu.pmglab.container.array.ShortArray;
@@ -16,6 +17,8 @@ import edu.sysu.pmglab.easytools.ValueUtils;
 import edu.sysu.pmglab.easytools.container.ContigBlockContainer;
 import edu.sysu.pmglab.sdfa.sv.SVGenotype;
 import edu.sysu.pmglab.sdfa.sv.SVTypeSign;
+import edu.sysu.pmglab.sdfa.sv.vcf.calling.AbstractCallingParser;
+import edu.sysu.pmglab.sdfa.sv.vcf.calling.SvisionCallingParser;
 
 import java.io.IOException;
 
@@ -38,11 +41,14 @@ public class SDFViewer {
         int fieldSize;
         CCFReader reader;
         CallableSet<ByteCode> infoSet;
+        CallableSet<ByteCode> formatSet;
         ContigBlockContainer contigBlockContainer;
         VolumeByteStream chrCache = new VolumeByteStream();
         VolumeByteStream gtyCache = new VolumeByteStream();
         VolumeByteStream infoCache = new VolumeByteStream();
+        VolumeByteStream formatCache = new VolumeByteStream();
         static final ByteCode TRUE = new ByteCode("TRUE");
+        static final ByteCode FALSE = new ByteCode("FALSE");
         static final ByteCode CHR_BYTECODE = new ByteCode("CHR");
 
         public SDFViewerReader(SDFReader reader) {
@@ -50,8 +56,44 @@ public class SDFViewer {
             this.reader = reader.getReader();
             SDFMeta decode = SDFMeta.decode(reader);
             infoSet = decode.infoFieldSet;
+            this.formatSet = decode.formatFieldSet;
             this.fieldSize = this.reader.numOfFields();
             contigBlockContainer = decode.contigBlockContainer;
+            CallableSet<ByteCode> uniqueInfoSet = new CallableSet<>(infoSet.size());
+            for (ByteCode infoItem : infoSet) {
+                if (infoItem.startsWith(AbstractCallingParser.END_BYTECODE)) {
+                    continue;
+                }
+                if (infoItem.startsWith(AbstractCallingParser.CHR_BYTECODE)) {
+                    continue;
+                }
+                if (infoItem.startsWith(AbstractCallingParser.CHR2_BYTECODE)) {
+                    continue;
+                }
+                if (infoItem.startsWith(AbstractCallingParser.POS_BYTECODE)) {
+                    continue;
+                }
+                if (infoItem.startsWith(AbstractCallingParser.POS2_BYTECODE)) {
+                    continue;
+                }
+                if (infoItem.startsWith(AbstractCallingParser.SVLEN_BYTECODE)) {
+                    continue;
+                }
+                if (infoItem.startsWith(AbstractCallingParser.END2_BYTECODE)) {
+                    continue;
+                }
+                if (infoItem.startsWith(AbstractCallingParser.SVTYPE_BYTECODE)) {
+                    continue;
+                }
+                if (infoItem.startsWith(AbstractCallingParser.SVTYPE2_BYTECODE)) {
+                    continue;
+                }
+                if (infoItem.startsWith(SvisionCallingParser.BKPS_BYTECODE)) {
+                    continue;
+                }
+                uniqueInfoSet.add(infoItem);
+            }
+            this.infoSet = uniqueInfoSet;
         }
 
         @Override
@@ -97,6 +139,28 @@ public class SDFViewer {
                             objects[index++] = gtyCache.toUnmodifiableByteCode();
                             break;
                         case 4:
+                            // FORMAT:
+                            formatCache.reset();
+                            ByteCodeArray formatArray = ByteCodeArray.wrap((ByteCode[]) record.get(4));
+                            for (int i = 0; i < formatArray.size(); i++) {
+                                ByteCode formatField = formatArray.get(i);
+                                if (formatField.equals(ByteCode.EMPTY)) {
+                                    continue;
+                                }
+                                ByteCodeArray tmp = (ByteCodeArray) ArrayType.decode(formatField);
+                                for (int j = 0; j < tmp.size(); j++) {
+                                    ByteCode item = tmp.get(j);
+                                    if (item.equals(ByteCode.EMPTY)) {
+                                        tmp.set(j, FALSE);
+                                    }
+                                }
+                                formatCache.writeSafety(formatSet.getByIndex(i + 1));
+                                formatCache.writeSafety(ByteCode.COLON);
+                                formatCache.writeSafety(tmp.toString());
+                                formatCache.writeSafety(ByteCode.SEMICOLON);
+                            }
+                            objects[index++] = formatCache.toByteCode().asUnmodifiable();
+                            break;
                         case 5:
                         case 6:
                         case 7:
@@ -118,16 +182,16 @@ public class SDFViewer {
                                     continue;
                                 }
                                 if (tmp.equals(new byte[]{ByteCode.PERIOD})) {
-                                    tmp = TRUE;
+                                    infoCache.writeSafety(infoSet.getByIndex(i));
+                                    infoCache.writeSafety(ByteCode.SEMICOLON);
                                 }
-                                //TODO
-//                                ByteCode infoKey = infoSet.getByIndex(i);
-//                                infoCache.writeSafety(infoKey);
-//                                infoCache.writeSafety(ByteCode.EQUAL);
+                                ByteCode infoKey = infoSet.getByIndex(i);
+                                infoCache.writeSafety(infoKey);
+                                infoCache.writeSafety(ByteCode.EQUAL);
                                 infoCache.writeSafety(tmp);
                                 infoCache.writeSafety(ByteCode.SEMICOLON);
                             }
-                            objects[index++] = infoCache.toUnmodifiableByteCode();
+                            objects[index++] = infoCache.toByteCode().asUnmodifiable();
                             break;
                         case 12:
                             IntArray csvChrIndex = IntArray.wrap(record.get(12));

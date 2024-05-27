@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class ReusableVCFPool {
     final int thread;
-    ArrayBlockingQueue<VCFFile> pool;
+    ArrayBlockingQueue<VCFFileLatest> pool;
     private static boolean init = false;
     private static ReusableVCFPool instance;
 
@@ -18,7 +18,7 @@ public class ReusableVCFPool {
         this.thread = thread;
         this.pool = new ArrayBlockingQueue<>(thread);
         for (int i = 0; i < thread; i++) {
-            this.pool.add(new VCFFile());
+            this.pool.add(new VCFFileLatest());
         }
     }
 
@@ -37,7 +37,7 @@ public class ReusableVCFPool {
         return instance;
     }
 
-    public void cycle(VCFFile reusableVCF) {
+    public void cycle(VCFFileLatest reusableVCF) {
         try {
             pool.put(reusableVCF);
         } catch (InterruptedException e) {
@@ -45,8 +45,8 @@ public class ReusableVCFPool {
         }
     }
 
-    public VCFFile getReusableSVArray() {
-        VCFFile tmp;
+    public VCFFileLatest getReusableSVArray() {
+        VCFFileLatest tmp;
         try {
             tmp = pool.take();
         } catch (InterruptedException e) {
@@ -55,7 +55,7 @@ public class ReusableVCFPool {
         return tmp;
     }
 
-    public VCFFile getReusableSVArray(int second) {
+    public VCFFileLatest getReusableSVArray(int second) {
         try {
             return pool.poll(second, TimeUnit.SECONDS);
         } catch (InterruptedException e) {

@@ -29,7 +29,7 @@ public class VCFFormatField {
 
 
     /**
-     * parse a subject gt into a VCFFormatField subject
+     * parse a subject gty into a VCFFormatField subject
      *
      * @param gtyByteCode           a subject genotype field
      * @param genotypeFilterManager a genotype filter function manager
@@ -38,6 +38,9 @@ public class VCFFormatField {
     public static void parseOne(ByteCode gtyByteCode, GenotypeFilterManager genotypeFilterManager,
                                 VCFFormatField vcfFormatField) {
         vcfFormatField.properties.clear();
+        if (genotypeFilterManager == null){
+            // no gty and
+        }
         gtyByteCode.split(ByteCode.COLON, vcfFormatField.properties);
         SVGenotype gty;
         try {

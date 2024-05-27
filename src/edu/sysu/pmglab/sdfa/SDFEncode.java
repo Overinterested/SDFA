@@ -18,7 +18,7 @@ public class SDFEncode {
     final int encodeMode;
     final Array<FieldType> extendedEncodeMethods = new Array<>(7);
     private static final ByteCodeArray emptyByteCodeArray = new ByteCodeArray(new ByteCode[0]);
-    static final DefaultValueWrapper<ByteCode> wrapper = DefaultValueWrapper.emptyBytecodeWrapper;
+    private static final DefaultValueWrapper<ByteCode> wrapper = DefaultValueWrapper.emptyBytecodeWrapper;
 
     public SDFEncode(int encodeMode) {
         this.encodeMode = encodeMode;
@@ -51,16 +51,18 @@ public class SDFEncode {
         record.set(0, sv.getCoordinate().encode());
         record.set(1, sv.getLength());
         record.set(2, sv.getTypeIndex());
-        // format
+        // gty
         record.set(3, genotypes.encodeGTs());
+        //  gty format
         if (extendedEncodeMethods.get(0) == null) {
             if (VCF2SDF.dropFormat) {
                 record.set(4, ByteCode.EMPTY);
             } else {
-                record.set(4, wrapper.getValue(genotypes.encodeProperties()));
+                ByteCodeArray properties = genotypes.encodeProperties();
+                record.set(4, properties.popFirst(properties.size()));
             }
         } else {
-            record.set(4, extendedEncodeMethods.get(0).encode(genotypes.getProperty()));
+            record.set(4, extendedEncodeMethods.get(0).encode(genotypes.getProperties()));
         }
         // ID, Ref, Alt, Qual, Filter
         if (extendedEncodeMethods.get(1) == null) {
@@ -136,7 +138,7 @@ public class SDFEncode {
     }
 
     private static ByteCodeArray wrapWithEmpty(ByteCodeArray tmp) {
-        if (tmp == null || VCF2SDF.dropInfoField) {
+        if (tmp == null || VCF2SDF.dropInfoField || tmp.isEmpty()) {
             return emptyByteCodeArray;
         }
         for (int i = 0; i < tmp.size(); i++) {

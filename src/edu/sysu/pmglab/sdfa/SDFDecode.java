@@ -88,7 +88,7 @@ public class SDFDecode {
                     if (genotypes == null) {
                         sv.setGenotypes(new SVGenotypes(new SVGenotype[0]));
                     }
-                    sv.getGenotypes().setProperty(SVGenotypes.decodeProperties(record.get(i)));
+                    sv.getGenotypes().setProperties(SVGenotypes.decodeProperties(record.get(i)));
                     break;
                 case 5:
                     sv.setID(record.get(i));
@@ -145,7 +145,7 @@ public class SDFDecode {
         sv.setLength(record.get(1));
         sv.setType(SVTypeSign.getByIndex(record.get(2)));
         sv.setGenotypes(SVGenotypes.decodeGTs(record.get(3)));
-        sv.getGenotypes().setProperty(SVGenotypes.decodeProperties(record.get(4)));
+        sv.getGenotypes().setProperties(SVGenotypes.decodeProperties(record.get(4)));
         sv.setID(record.get(5));
         sv.setRef((ByteCode) altDecode.decode(record.get(6)));
         sv.setAlt((ByteCode) altDecode.decode(record.get(7)));

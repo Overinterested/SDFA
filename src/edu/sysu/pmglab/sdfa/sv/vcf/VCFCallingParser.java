@@ -8,10 +8,7 @@ import edu.sysu.pmglab.container.array.Array;
 import edu.sysu.pmglab.container.array.BaseArray;
 import edu.sysu.pmglab.container.array.ByteCodeArray;
 import edu.sysu.pmglab.gbc.genome.Chromosome;
-import edu.sysu.pmglab.sdfa.sv.ComplexSV;
-import edu.sysu.pmglab.sdfa.sv.SVFilterManager;
-import edu.sysu.pmglab.sdfa.sv.SVGenotype;
-import edu.sysu.pmglab.sdfa.sv.UnifiedSV;
+import edu.sysu.pmglab.sdfa.sv.*;
 import edu.sysu.pmglab.sdfa.sv.vcf.calling.AbstractCallingParser;
 import edu.sysu.pmglab.sdfa.sv.vcf.calling.VCFCallingParserFactory;
 import edu.sysu.pmglab.sdfa.sv.vcf.quantitycontrol.sv.SVLevelFilterManager;
@@ -40,21 +37,9 @@ public class VCFCallingParser {
             throw new UnsupportedOperationException("Please check " + vcfFile + " path!");
         }
     }
-
-    /**
-     * @param indexOfFile
-     * @param chromosome
-     * @param pos
-     * @param encodeNoneFieldArray a five-encoding fields array, consisting of ID, REF, ALT, QUAL, FILTER
-     * @param infoField
-     * @param vcfFormatFields
-     * @param genotypes
-     */
-    public void parse(int indexOfFile, Chromosome chromosome, int pos,
-                      ByteCodeArray encodeNoneFieldArray, ReusableMap<ByteCode, ByteCode> infoField,
-                      Array<VCFFormatField> vcfFormatFields, SVGenotype[] genotypes) {
-        SVParser.parse(indexOfFile, chromosome, pos, encodeNoneFieldArray,
-                infoField, vcfFormatFields, genotypes);
+    public void parse(int indexOfFile, Chromosome chromosome, int pos, ByteCodeArray encodeNoneFieldArray,
+                      ReusableMap<ByteCode, ByteCode> infoField, SVGenotypes svGenotypes) {
+        SVParser.parse(indexOfFile, chromosome, pos, encodeNoneFieldArray, infoField, svGenotypes);
     }
 
     public void filter(SVFilterManager filter) {

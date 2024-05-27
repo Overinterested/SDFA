@@ -60,7 +60,7 @@ public class SDFFormat extends CCFFormat {
             // 3
             .addField("Format::Genotypes", FieldType.int16Array)
             // 4
-            .addField("Format::Other", FieldType.bytecode)
+            .addField("Format::Other", FieldType.bytecodeArray)
             // 5
             .addField("Field::ID", FieldType.bytecode)
             // 6

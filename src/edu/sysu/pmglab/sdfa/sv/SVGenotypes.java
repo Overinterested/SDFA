@@ -12,15 +12,29 @@ import edu.sysu.pmglab.easytools.wrapper.DefaultValueWrapper;
  */
 public class SVGenotypes {
     SVGenotype[] genotypes;
-    Array<ByteCodeArray> property;
+    Array<ByteCodeArray> properties;
     static CallableSet<ByteCode> tag;
+    static ByteCodeArray emptyArray = new ByteCodeArray(new ByteCode[0]);
     static DefaultValueWrapper<SVGenotype> defaultGenotypeWrapper = new DefaultValueWrapper<>(SVGenotype.noneGenotye);
 
     public SVGenotypes(SVGenotype[] genotypes) {
         this.genotypes = genotypes;
-        property = null;
+        properties = null;
     }
 
+    public static SVGenotypes initSubjects(int numOfSubjects) {
+        return new SVGenotypes(new SVGenotype[numOfSubjects]);
+    }
+
+    public void initFormatField(int numOfFormatFields) {
+        if (genotypes != null && numOfFormatFields > 0) {
+            int numOfSubjects = genotypes.length;
+            properties = new Array<>(numOfFormatFields);
+            for (int i = 0; i < numOfFormatFields; i++) {
+                properties.add(new ByteCodeArray(numOfSubjects));
+            }
+        }
+    }
 
     public int numOfGenotypes() {
         return this.genotypes.length;
@@ -40,8 +54,8 @@ public class SVGenotypes {
     }
 
     public Object getProperty(ByteCode key) {
-        assert property != null;
-        return property.get(tag.indexOfValue(key));
+        assert properties != null;
+        return properties.get(tag.indexOfValue(key));
     }
 
     public void fillGenotypes(SVGenotype[] svGenotypes, ByteCode gtysByteCode) {
@@ -70,35 +84,37 @@ public class SVGenotypes {
         return new SVGenotypes(genotypes);
     }
 
-    public ByteCode encodeProperties() {
-        if (property == null || property.isEmpty()) {
-            return ByteCode.EMPTY;
+    public ByteCodeArray encodeProperties() {
+        if (properties == null || properties.isEmpty()) {
+            return emptyArray;
         }
-        BaseArrayEncoder encoder = ByteCodeArray.getEncoder(property.size() * property.get(0).size());
-        for (int i = 0; i < property.size(); i++) {
-            ByteCodeArray tmpFormat = property.get(i);
-            while (!tmpFormat.isEmpty()) {
-                encoder.add(tmpFormat.popFirst());
+        ByteCodeArray encodeProperties = new ByteCodeArray(properties.size());
+        for (int i = 0; i < properties.size(); i++) {
+            ByteCodeArray tmpFormatField = properties.get(i);
+            if (tmpFormatField == null || tmpFormatField.isEmpty()) {
+                encodeProperties.add(ByteCode.EMPTY);
+            } else {
+                encodeProperties.add(properties.get(i).encode().toByteCode());
             }
         }
-        return encoder.flush().toByteCode();
+        return encodeProperties;
     }
 
-    public static Array<ByteCodeArray> decodeProperties(ByteCode src) {
-        if (src.equals(ByteCode.EMPTY)) {
+    public static Array<ByteCodeArray> decodeProperties(ByteCode[] src) {
+        if (src.length == 0) {
             return null;
         }
-        ByteCodeArray sampleProperties = (ByteCodeArray) ArrayType.decode(src);
-        int size = sampleProperties.size();
-        Array<ByteCodeArray> properties = new Array<>(size);
-        for (int i = 0; i < size; i++) {
-            properties.add((ByteCodeArray) ArrayType.decode(sampleProperties.get(i)));
+        ByteCodeArray wrap = ByteCodeArray.wrap(src);
+        int formatSize = wrap.size();
+        Array<ByteCodeArray> properties = new Array<>(formatSize);
+        for (int i = 0; i < formatSize; i++) {
+            properties.add((ByteCodeArray) ArrayType.decode(wrap.get(i)));
         }
         return properties;
     }
 
-    public SVGenotypes setProperty(Array<ByteCodeArray> property) {
-        this.property = property;
+    public SVGenotypes setProperties(Array<ByteCodeArray> properties) {
+        this.properties = properties;
         return this;
     }
 
@@ -115,13 +131,28 @@ public class SVGenotypes {
     }
 
 
-    public Array<ByteCodeArray> getProperty() {
-        return property;
+    public Array<ByteCodeArray> getProperties() {
+        return properties;
     }
 
     public void reset() {
+        if (properties != null) {
+            properties.clear();
+        }
+    }
+
+    public void addGtyAndProperty(int indexOfSubject, SVGenotype genotype, BaseArray<ByteCode> property) {
+        genotypes[indexOfSubject] = genotype;
         if (property != null) {
-            property.clear();
+            for (int i = 0; i < property.size(); i++) {
+                properties.get(i).add(property.get(i));
+            }
+        }
+    }
+
+    public void clearProperties() {
+        for (int i = 0; i < properties.size(); i++) {
+            properties.get(i).clear();
         }
     }
 }

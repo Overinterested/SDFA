@@ -53,7 +53,8 @@ public class GenotypeFilterManager {
             if (index == -1) {
                 throw new UnsupportedOperationException(filterTag + " isn't in " + formatFieldSet + ".");
             }
-            filterIndexMap.set(count++, index-1);
+            // index-1 for the first GT is excluded
+            filterIndexMap.set(count++, index - 1);
         }
         gtyFilterCount = new int[gtyFilterFunctionArray.size()];
     }
@@ -73,7 +74,21 @@ public class GenotypeFilterManager {
             }
         }
     }
-
+    public SVGenotype filter(SVGenotype genotype, BaseArray<ByteCode> property){
+        if (genotype.equals(SVGenotype.noneGenotye)){
+            return genotype;
+        }
+        for (int i = 0; i < gtyFilterFunctionArray.size(); i++) {
+            Function<ByteCode, Boolean> gtyFunction = gtyFilterFunctionArray.get(i);
+            int filterIndex = filterIndexMap.get(i);
+            boolean filter = gtyFunction.apply(property.get(filterIndex));
+            if (!filter) {
+                gtyFilterCount[i] += 1;
+                return SVGenotype.noneGenotye;
+            }
+        }
+        return genotype;
+    }
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();

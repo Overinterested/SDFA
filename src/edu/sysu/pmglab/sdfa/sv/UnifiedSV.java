@@ -180,7 +180,7 @@ public class UnifiedSV implements Comparable<UnifiedSV> {
         if (genotypes == null) {
             genotypes = new SVGenotypes(new SVGenotype[0]);
         }
-        genotypes.setProperty(formatFieldArray);
+        genotypes.setProperties(formatFieldArray);
         return this;
     }
 
@@ -216,7 +216,7 @@ public class UnifiedSV implements Comparable<UnifiedSV> {
     }
 
     public Array<ByteCodeArray> getFormatField() {
-        return genotypes.property;
+        return genotypes.properties;
     }
 
     public CSVLocation getCsvLocation() {
@@ -364,6 +364,6 @@ public class UnifiedSV implements Comparable<UnifiedSV> {
     }
 
     public void clearGTProperties() {
-        genotypes.property = null;
+        genotypes.properties = null;
     }
 }

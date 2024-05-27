@@ -14,7 +14,7 @@ import edu.sysu.pmglab.sdfa.SDFWriter;
 import edu.sysu.pmglab.sdfa.sv.SVCoordinate;
 import edu.sysu.pmglab.sdfa.sv.SVFilterManager;
 import edu.sysu.pmglab.sdfa.sv.vcf.ReusableVCFPool;
-import edu.sysu.pmglab.sdfa.sv.vcf.VCFFile;
+import edu.sysu.pmglab.sdfa.sv.vcf.VCFFileLatest;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -53,12 +53,12 @@ public class VCF2SDF {
     }
 
     public File convert() throws IOException {
-        VCFFile vcfFileInstance = null;
+        VCFFileLatest vcfFileInstance = null;
         try {
             if (poolStrategy) {
                 vcfFileInstance = ReusableVCFPool.getInstance().getReusableSVArray();
             } else {
-                vcfFileInstance = new VCFFile();
+                vcfFileInstance = new VCFFileLatest();
             }
             if (filter != null) {
                 filter.init();
@@ -128,7 +128,6 @@ public class VCF2SDF {
                 }
                 return status;
             }));
-
             SDFWriter writer = SDFWriter.of(sdfFile, encodeMode);
             int[] chrSizeRecord = new int[vcfFileInstance.numOfContig()];
             // write sv

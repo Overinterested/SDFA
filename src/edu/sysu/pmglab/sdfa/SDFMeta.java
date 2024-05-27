@@ -11,7 +11,7 @@ import edu.sysu.pmglab.easytools.wrapper.DefaultValueWrapper;
 import edu.sysu.pmglab.gbc.genome.Chromosome;
 import edu.sysu.pmglab.sdfa.sv.idividual.Subject;
 import edu.sysu.pmglab.sdfa.sv.idividual.Subjects;
-import edu.sysu.pmglab.sdfa.sv.vcf.VCFFile;
+import edu.sysu.pmglab.sdfa.sv.vcf.VCFFileLatest;
 import edu.sysu.pmglab.sdfa.sv.vcf.VCFHeader;
 import edu.sysu.pmglab.sdfa.toolkit.Contig;
 
@@ -225,13 +225,13 @@ public class SDFMeta extends CCFMeta {
         return res;
     }
 
-    public static SDFMeta decode(VCFFile vcfFile) {
+    public static SDFMeta decode(VCFFileLatest vcfFile) {
         SDFMeta meta = new SDFMeta();
         meta.setFileID(vcfFile.getFileID())
                 .setSubjects(vcfFile.getSubjects())
                 .setHeader(vcfFile.getHeader());
         meta.contigBlockContainer.setContig(vcfFile.getContig());
-        meta.getInfoFieldSet();
+        meta.infoFieldSet = new CallableSet<>(vcfFile.getInfoFieldNameArray());
         meta.getFormatFieldSet();
         return meta;
     }

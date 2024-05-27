@@ -7,6 +7,7 @@ import edu.sysu.pmglab.container.array.ByteCodeArray;
 import edu.sysu.pmglab.gbc.genome.Chromosome;
 import edu.sysu.pmglab.sdfa.sv.CSVLocation;
 import edu.sysu.pmglab.sdfa.sv.SVGenotype;
+import edu.sysu.pmglab.sdfa.sv.SVGenotypes;
 import edu.sysu.pmglab.sdfa.sv.SVTypeSign;
 import edu.sysu.pmglab.sdfa.sv.vcf.VCFFormatField;
 
@@ -31,6 +32,21 @@ public class SnifflesCallingParser extends AbstractCallingParser {
         loadTwo(indexOfFile, chromosome, wrapToChr(infoField.get(CHR2_BYTECODE), chromosome),
                 svTypeSign1, svTypeSign1, pos, end1, -1, -1, len1, -1,
                 encodeNoneFieldArray, infoField, vcfFormatFields, genotypes);
+    }
+
+    @Override
+    public void parse(int indexOfFile, Chromosome chromosome, int pos, ByteCodeArray encodeNoneFieldArray, ReusableMap<ByteCode, ByteCode> infoField, SVGenotypes svGenotypes) {
+        int len1 = transferInt(infoField.get(SVLEN_BYTECODE));
+        int end1 = transferInt(infoField.get(END_BYTECODE));
+        SVTypeSign svTypeSign1 = SVTypeSign.get(infoField.get(SVTYPE_BYTECODE));
+        if (!svTypeSign1.isComplex()) {
+            loadOneLatest(svTypeSign1, len1, pos, end1, chromosome, encodeNoneFieldArray, infoField,
+                    svGenotypes, new CSVLocation(indexOfFile));
+            return;
+        }
+        loadTwoLatest(indexOfFile, chromosome, wrapToChr(infoField.get(CHR2_BYTECODE), chromosome),
+                svTypeSign1, svTypeSign1, pos, end1, -1, -1, len1, -1,
+                encodeNoneFieldArray, infoField, svGenotypes);
     }
 
 }

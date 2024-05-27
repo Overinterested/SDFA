@@ -40,6 +40,9 @@ public abstract class AbstractCallingParser {
                                ByteCodeArray encodeNoneFieldArray, ReusableMap<ByteCode, ByteCode> infoField,
                                Array<VCFFormatField> vcfFormatFields, SVGenotype[] genotypes);
 
+    abstract public void parse(int indexOfFile, Chromosome chromosome, int pos, ByteCodeArray encodeNoneFieldArray,
+                               ReusableMap<ByteCode, ByteCode> infoField, SVGenotypes svGenotypes);
+
     public void loadOne(SVTypeSign type, int len, int pos, int end, Chromosome chr,
                         ByteCodeArray encodeNoneFieldArray, ReusableMap<ByteCode, ByteCode> infoField,
                         Array<VCFFormatField> vcfFormatFields, SVGenotype[] genotypes, CSVLocation location) {
@@ -68,6 +71,24 @@ public abstract class AbstractCallingParser {
         infoField.clear();
     }
 
+    public void loadOneLatest(SVTypeSign type, int len, int pos, int end, Chromosome chr,
+                              ByteCodeArray encodeNoneFieldArray, ReusableMap<ByteCode, ByteCode> infoField,
+                              SVGenotypes svGenotypes, CSVLocation location) {
+        unifiedSVArray.getOneUnifiedSV()
+                .setType(type)
+                .setLength(len)
+                .setID(encodeNoneFieldArray.get(0))
+                .setRef(encodeNoneFieldArray.get(1))
+                .setAlt(encodeNoneFieldArray.get(2))
+                .setQual(encodeNoneFieldArray.get(3))
+                .setFilterField(encodeNoneFieldArray.get(4))
+                .setCoordinate(new SVCoordinate(pos, end, chr))
+                .setGenotypes(svGenotypes)
+                .setSpecificInfoField(asUnmodifiedInfoField(infoField.values()))
+                .setCSVLocation(location);
+        infoField.clear();
+    }
+
     public void loadEncodeOne(SVTypeSign type, int len, int pos, int end, Chromosome chr,
                               ByteCodeArray encodeNoneFieldArray, ByteCodeArray infoField,
                               Array<ByteCodeArray> vcfFormatFieldArray, SVGenotype[] genotypes, CSVLocation location) {
@@ -85,6 +106,45 @@ public abstract class AbstractCallingParser {
                     .setAlt(encodeNoneFieldArray.get(2))
                     .setQual(encodeNoneFieldArray.get(3))
                     .setFilterField(encodeNoneFieldArray.get(4));
+        }
+    }
+
+    public void loadEncodeOneLatest(SVTypeSign type, int len, int pos, int end, Chromosome chr,
+                                    ByteCodeArray encodeNoneFieldArray, ByteCodeArray infoField,
+                                    SVGenotypes svGenotypes, CSVLocation location) {
+        UnifiedSV unifiedSV = unifiedSVArray.getOneUnifiedSV()
+                .setType(type)
+                .setLength(len)
+                .setCoordinate(new SVCoordinate(pos, end, chr))
+                .setGenotypes(svGenotypes)
+                .setSpecificInfoField(infoField)
+                .setCSVLocation(location);
+        if (encodeNoneFieldArray != null) {
+            unifiedSV.setID(encodeNoneFieldArray.get(0))
+                    .setRef(encodeNoneFieldArray.get(1))
+                    .setAlt(encodeNoneFieldArray.get(2))
+                    .setQual(encodeNoneFieldArray.get(3))
+                    .setFilterField(encodeNoneFieldArray.get(4));
+        }
+    }
+
+    public void loadTwoLatest(int indexOfFile, Chromosome chr1, Chromosome chr2, SVTypeSign type1,
+                              SVTypeSign type2, int pos1, int pos2, int end1, int end2, int len1, int len2,
+                              ByteCodeArray encodeNoneFieldArray, ReusableMap<ByteCode, ByteCode> infoField,
+                              SVGenotypes svGenotypes) {
+        int compareStatus = compareTo(chr1, chr2, pos1, pos2, end1, end2, len1, len2);
+        ByteCodeArray unmodifiedInfoField = asUnmodifiedInfoField(infoField.values());
+        if (compareStatus < 0) {
+            loadEncodeOneLatest(type1, len1, pos1, end1, chr1, encodeNoneFieldArray, unmodifiedInfoField,
+                    svGenotypes, new CSVLocation(indexOfFile, Chromosome.unknown, chr2));
+            loadEncodeOneLatest(type2, len2, pos2, end2, chr2, encodeNoneFieldArray, unmodifiedInfoField,
+                    svGenotypes, new CSVLocation(indexOfFile, chr1, Chromosome.unknown));
+
+        } else {
+            loadEncodeOneLatest(type2, len2, pos2, end2, chr2, encodeNoneFieldArray, unmodifiedInfoField,
+                    svGenotypes, new CSVLocation(indexOfFile, Chromosome.unknown, chr1));
+            loadEncodeOneLatest(type1, len1, pos1, end1, chr1, encodeNoneFieldArray, unmodifiedInfoField,
+                    svGenotypes, new CSVLocation(indexOfFile, chr2, Chromosome.unknown));
         }
     }
 
@@ -117,6 +177,7 @@ public abstract class AbstractCallingParser {
             }
         }
     }
+
 
     public final int compareTo(Chromosome chr1, Chromosome chr2,
                                int pos1, int pos2,
@@ -192,12 +253,15 @@ public abstract class AbstractCallingParser {
         if (infoFields == null) {
             return ONE_EMPTY_BYTECODE_ARRAY;
         }
+        if (VCF2SDF.lineExtractAndSort){
+            return new ByteCodeArray(infoFields);
+        }
         ByteCodeArray res = new ByteCodeArray(infoFields.size());
         int count = 0;
         int maxIndex = ignoreInfoIndex.size() - 1;
         for (int i = 0; i < infoFields.size(); i++) {
             int tmp = Math.min(count, maxIndex);
-            if (i == tmp) {
+            if (i == ignoreInfoIndex.get(tmp)) {
                 count++;
                 continue;
             }
