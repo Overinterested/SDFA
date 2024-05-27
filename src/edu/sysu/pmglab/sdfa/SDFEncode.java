@@ -31,13 +31,13 @@ public class SDFEncode {
             case 1:
             case 2:
             case 3:
+                RefAndAltFieldType.mode = 1;
                 RefAndAltFieldType refAndAltFieldType = new RefAndAltFieldType();
                 extendedEncodeMethods.set(2, refAndAltFieldType);
                 extendedEncodeMethods.set(3, refAndAltFieldType);
                 VCF2SDF.dropFormat = encodeMode == 3;
-                VCF2SDF.multiInfoForCSV = encodeMode < 2;
+                VCF2SDF.multiInfoForCSV = encodeMode == 1;
                 break;
-
         }
     }
 

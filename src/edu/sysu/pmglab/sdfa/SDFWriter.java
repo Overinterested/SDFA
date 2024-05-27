@@ -7,7 +7,7 @@ import edu.sysu.pmglab.container.CallableSet;
 import edu.sysu.pmglab.container.File;
 import edu.sysu.pmglab.container.array.Array;
 import edu.sysu.pmglab.sdfa.sv.UnifiedSV;
-import edu.sysu.pmglab.sdfa.sv.vcf.VCFFileLatest;
+import edu.sysu.pmglab.sdfa.sv.vcf.VCFFile;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -68,8 +68,8 @@ public class SDFWriter {
 
     public static File vcf2sdf(Object vcfFile, Object outputFile) throws IOException {
         File output = new File(outputFile.toString());
-        if (vcfFile instanceof VCFFileLatest) {
-            return vcf2sdf((VCFFileLatest) vcfFile, output);
+        if (vcfFile instanceof VCFFile) {
+            return vcf2sdf((VCFFile) vcfFile, output);
         } else {
             File vcfFilePath = new File(vcfFile.toString());
             return vcf2sdf(vcfFilePath, output);
@@ -77,7 +77,7 @@ public class SDFWriter {
     }
 
     private static File vcf2sdf(File inputFile, File outputFile) throws IOException {
-        VCFFileLatest vcfFile = new VCFFileLatest(inputFile).parse();
+        VCFFile vcfFile = new VCFFile(inputFile).parse();
         SDFWriter.vcf2sdf(vcfFile, outputFile);
         return outputFile;
     }

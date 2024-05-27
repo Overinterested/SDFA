@@ -151,8 +151,10 @@ public class SVGenotypes {
     }
 
     public void clearProperties() {
-        for (int i = 0; i < properties.size(); i++) {
-            properties.get(i).clear();
+        if (properties != null) {
+            for (int i = 0; i < properties.size(); i++) {
+                properties.get(i).clear();
+            }
         }
     }
 }

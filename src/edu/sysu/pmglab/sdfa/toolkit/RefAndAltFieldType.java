@@ -31,9 +31,18 @@ public class RefAndAltFieldType implements FieldType {
         cache.reset();
         ByteCode altByteCode = (ByteCode) o;
         if (mode == 1) {
-            return multiEncode(altByteCode, cache).asUnmodifiable();
+            altByteCode = multiEncode(altByteCode, cache);
+            if (VCF2SDF.lineExtractAndSort){
+                return altByteCode;
+            }else {
+                return altByteCode.asUnmodifiable();
+            }
         }
-        return altByteCode.asUnmodifiable();
+        if (VCF2SDF.lineExtractAndSort){
+            return altByteCode;
+        }else {
+            return altByteCode.asUnmodifiable();
+        }
     }
 
     @Override

@@ -41,7 +41,8 @@ public class ReusableSVArray {
         for (int i = 0; i < unifiedSVArray.size(); i++) {
             UnifiedSV sv = unifiedSVArray.get(i);
             if (!VCF2SDF.multiInfoForCSV && i != 0) {
-                sv.getGenotypes().setProperties(null);
+                sv.getGenotypes().clearProperties();
+                sv.setSpecificInfoField(null);
             }
             encodeSVArray.add(encodeSV.encode(record.clone(), sv));
         }

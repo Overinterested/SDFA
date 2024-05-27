@@ -14,7 +14,7 @@ import edu.sysu.pmglab.sdfa.SDFWriter;
 import edu.sysu.pmglab.sdfa.sv.SVCoordinate;
 import edu.sysu.pmglab.sdfa.sv.SVFilterManager;
 import edu.sysu.pmglab.sdfa.sv.vcf.ReusableVCFPool;
-import edu.sysu.pmglab.sdfa.sv.vcf.VCFFileLatest;
+import edu.sysu.pmglab.sdfa.sv.vcf.VCFFile;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -53,12 +53,12 @@ public class VCF2SDF {
     }
 
     public File convert() throws IOException {
-        VCFFileLatest vcfFileInstance = null;
+        VCFFile vcfFileInstance = null;
         try {
             if (poolStrategy) {
                 vcfFileInstance = ReusableVCFPool.getInstance().getReusableSVArray();
             } else {
-                vcfFileInstance = new VCFFileLatest();
+                vcfFileInstance = new VCFFile();
             }
             if (filter != null) {
                 filter.init();

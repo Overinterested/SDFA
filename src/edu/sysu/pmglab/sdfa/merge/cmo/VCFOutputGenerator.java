@@ -7,7 +7,7 @@ import edu.sysu.pmglab.container.VolumeByteStream;
 import edu.sysu.pmglab.container.array.Array;
 import edu.sysu.pmglab.sdfa.sv.idividual.Subject;
 import edu.sysu.pmglab.sdfa.sv.idividual.SubjectManager;
-import edu.sysu.pmglab.sdfa.sv.vcf.VCFFileLatest;
+import edu.sysu.pmglab.sdfa.sv.vcf.VCFFile;
 import edu.sysu.pmglab.sdfa.toolkit.SDFManager;
 import edu.sysu.pmglab.unifyIO.FileStream;
 
@@ -90,7 +90,7 @@ public class VCFOutputGenerator extends AbstractSVMergeOutput {
         fs.write("##INFO=<ID=STDEV_END,Number=1,Type=Float,Description=\"Average of SV END.\"\n");
         fs.write("##INFO=<ID=STDEV_LEN,Number=1,Type=Float,Description=\"Average of SV LEN.\"\n");
         fs.write("##INFO=<ID=IDLIST,Number=1,Type=String,Description=\"Raw ID list of merged SV(default not show).\"\n");
-        cache.writeSafety(VCFFileLatest.HEADER_COLUMN);
+        cache.writeSafety(VCFFile.HEADER_COLUMN);
         CallableSet<Subject> indexableSubjects = SubjectManager.getInstance().getIndexableSubjects();
         int size = indexableSubjects.size();
         for (int i = 0; i < size; i++) {

@@ -78,7 +78,7 @@ public class ConvertTest {
                 "/Users/wenjiepeng/Desktop/SV/SVMerge/trio/wm_10md_PBCCS/HG004vGRCh38_wm_10md_PBCCS_sniffles.s2l20.refined.nSVtypes.ism.vcf",
                 "/Users/wenjiepeng/Desktop/SDFA/test/extract/test1")
                 .setFileID(0)
-                .setEncodeMode(0)
+                .setEncodeMode(3)
                 .setFilter(copy)
                 .setLogger(logger)
                 .convert();
