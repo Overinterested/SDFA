@@ -74,11 +74,12 @@ public class ConvertTest {
         };
         svFilterManager.init();
         SVFilterManager copy = svFilterManager.copy();
+        VCF2SDF.lineExtractAndSort = true;
         new VCF2SDF(
                 "/Users/wenjiepeng/Desktop/SV/SVMerge/trio/wm_10md_PBCCS/HG004vGRCh38_wm_10md_PBCCS_sniffles.s2l20.refined.nSVtypes.ism.vcf",
-                "/Users/wenjiepeng/Desktop/SDFA/test/extract/test1")
+                "/Users/wenjiepeng/Desktop/SDFA/test/extract/test2")
                 .setFileID(0)
-                .setEncodeMode(3)
+                .setEncodeMode(2)
                 .setFilter(copy)
                 .setLogger(logger)
                 .convert();
