@@ -2,7 +2,7 @@
 
 
 
-<div align="center"> <img src="./assets/image-20240526104918323.png" alt="SDFA Logo" width="800"height="200"> </div>
+<div align="center"> <img src="./assets/img_1.png" alt="SDFA Logo" width="800"height="200"> </div>
 
 
 SDFA (SDF-based Analyzer) is a comprehensive framework designed for accurate and rapid parsing, storage, and analysis of structural variation (SV) data within large population samples. It introduces a novel Standardized Decomposition Format (SDF) for efficient SV representation, and provides modules for merging, annotation, and quantitative gene feature assessment.
@@ -17,7 +17,7 @@ SDFA (SDF-based Analyzer) is a comprehensive framework designed for accurate and
 </p>
 
 ## Key Features
-![img.png](img.png)
+<img src="./assets/img.png" alt="SDFA Framework">
 - <kbd>**Standardized Decomposition Format(SDF)**</kbd>: A novel format for standardizing, compressing, and storing various types of SVs arranged in genomic coordinates with indexes.
 - <kbd>**Population-scale SV Merge**</kbd>: A chromosome-level merging procedure for analyzing population samples, ensuring stable merging independent of the input order of samples and enabling efficient parallel processing.
 - <kbd>**Incremental Index Annotation**</kbd>: A light and fast annotation algorithm for annotating SVs with multiple resources, without repeatedly scanning the resource data.
