@@ -146,6 +146,9 @@ public class SDFEncode {
                 tmp.set(i, ByteCode.EMPTY);
             }
         }
+        if (VCF2SDF.lineExtractAndSort){
+            return tmp;
+        }
         return new ByteCodeArray(tmp.popFirst(tmp.size()));
     }
 

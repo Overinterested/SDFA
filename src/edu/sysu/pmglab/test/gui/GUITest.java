@@ -12,6 +12,6 @@ import java.io.IOException;
  */
 public class GUITest {
     public static void main(String[] args) throws IOException {
-        SDFViewer.view(new File("/Users/wenjiepeng/Desktop/SDFA/test/extract/test1"));
+        SDFViewer.view(new File("/Users/wenjiepeng/Desktop/SDFA/test/extract/test2"));
     }
 }

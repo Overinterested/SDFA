@@ -114,11 +114,13 @@ public class VCFFile {
         GenotypeFilterManager gtyFilterManager = !nonSubjectMode && filter != null && filter.filterGty() ? filter.getGenotypeFilterManager() : null;
         SVFieldFilterManager fieldFilterManager = !nonSubjectMode && filter != null && filter.filterField() ? filter.getFieldFilterManager() : null;
         registerIgnoreInfoField(infoFieldMap);
+        infoFieldNameArray = new CallableSet<>(infoFieldMap.keySet());
+        ByteCodeArray lineCache = new ByteCodeArray(true);
         int pos;
         do {
             try {
                 ByteCode line = cache.toByteCode();
-                BaseArray<ByteCode> lineSplit = line.split(ByteCode.TAB);
+                BaseArray<ByteCode> lineSplit = line.split(ByteCode.TAB, lineCache);
                 Chromosome chromosome = contig.get(lineSplit.get(0));
                 //region parse genotypes
                 if (!nonSubjectMode) {
@@ -131,10 +133,9 @@ public class VCFFile {
                     }
                     genotypes.clearProperties();
                     for (int i = 0; i < subjectSize; i++) {
-                        tmp.clear();
                         BaseArray<ByteCode> split = lineSplit.get(i + 9).split(ByteCode.COLON, tmp);
-                        SVGenotype genotype = SVGenotype.of(split.get(0));
-                        BaseArray<ByteCode> property = split.get(1, split.size() - 1);
+                        SVGenotype genotype = SVGenotype.of(split.popFirst());
+                        BaseArray<ByteCode> property = split.popFirst(split.size());
                         if (gtyFilterManager != null) {
                             genotype = gtyFilterManager.filter(genotype, property);
                         }
@@ -183,9 +184,10 @@ public class VCFFile {
                         }
                     }
                 }
+                lineCache.clear();
+                tmp.clear();
             }
         } while (fs.readLine(cache) != -1);
-        infoFieldNameArray = new CallableSet<>(infoFieldMap.keySet());
         fs.close();
         parsed = true;
         return this;
@@ -221,7 +223,8 @@ public class VCFFile {
      * @param info         a info field
      */
     public void fillInfoFieldMap(ReusableMap<ByteCode, ByteCode> infoFieldMap, ByteCode info) {
-        BaseArray<ByteCode> splitInfo = info.split(ByteCode.SEMICOLON);
+        tmp.clear();
+        BaseArray<ByteCode> splitInfo = info.split(ByteCode.SEMICOLON, tmp);
         for (int i = 0; i < splitInfo.size(); i++) {
             ByteCode item = splitInfo.get(i);
             KVArray.clear();
@@ -234,11 +237,14 @@ public class VCFFile {
                 v = KVArray.get(1);
                 v = v == null ? ByteCode.EMPTY : v;
             }
-            if (infoFieldMap.containsKey(k)) {
-                infoFieldMap.put(k, v);
+            int indexOfKey = infoFieldNameArray.indexOfValue(k);
+            if (indexOfKey != -1) {
+                infoFieldMap.putByIndex(indexOfKey, v);
                 continue;
             }
-            infoFieldMap.put(k.asUnmodifiable(), v);
+            ByteCode newKey = k.asUnmodifiable();
+            infoFieldNameArray.add(newKey);
+            infoFieldMap.put(newKey, v);
         }
     }
 
@@ -287,6 +293,9 @@ public class VCFFile {
         infoFieldNameArray.clear();
         header.reset();
         KVArray.clear();
+        tmp.clear();
+        fieldArray.clear();
+        chrIndexBlock.clear();
     }
 
     public Chromosome getChr(ByteCode contigName) {
