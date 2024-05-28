@@ -53,6 +53,7 @@ public class VCFFile {
     private final ByteCodeArray tmp = new ByteCodeArray(true);
     private final ByteCodeArray fieldArray = new ByteCodeArray(5);
     private final BaseArray<ByteCode> KVArray = new ByteCodeArray(2, true);
+    private static final ByteCode GT = new ByteCode("GT");
     //region VCF header
     public static final ByteCode HEADER_COLUMN = new ByteCode(new byte[]{
             // #CHR
@@ -116,6 +117,9 @@ public class VCFFile {
         SVGenotypes genotypes = SVGenotypes.initSubjects(subjectSize);
         ReusableMap<ByteCode, ByteCode> infoFieldMap = header.getSpecificInfoFiledMap();
         allFormatFieldNameArray.addAll(header.getFormatConfig().getIndexableIDSet());
+        if (allFormatFieldNameArray.isEmpty()){
+            allFormatFieldNameArray.add(GT);
+        }
         GenotypeFilterManager gtyFilterManager = !nonSubjectMode && filter != null && filter.filterGty() ? filter.getGenotypeFilterManager() : null;
         SVFieldFilterManager fieldFilterManager = !nonSubjectMode && filter != null && filter.filterField() ? filter.getFieldFilterManager() : null;
         registerIgnoreInfoField(infoFieldMap);
@@ -123,7 +127,6 @@ public class VCFFile {
 
         ByteCodeArray lineCache = new ByteCodeArray(true);
         int pos;
-        int formatFieldSize = 0;
         do {
             try {
                 ByteCode line = cache.toByteCode();
@@ -133,7 +136,7 @@ public class VCFFile {
                 if (!nonSubjectMode) {
                     if (filter != null && !filter.isCheck()) {
                         filter.check(new ByteCodeArray(allFormatFieldNameArray));
-                        formatFieldSize = allFormatFieldNameArray.size() - 1;
+                        int formatFieldSize = allFormatFieldNameArray.size() - 1;
                         if (!VCF2SDF.dropFormat) {
                             genotypes.initFormatField(formatFieldSize);
                         }
@@ -323,6 +326,8 @@ public class VCFFile {
         tmp.clear();
         fieldArray.clear();
         chrIndexBlock.clear();
+        allFormatFieldNameArray.clear();
+        formatFieldMap.clear();
     }
 
     public Chromosome getChr(ByteCode contigName) {

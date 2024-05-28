@@ -11,6 +11,6 @@ import java.io.IOException;
  */
 public class Test3 {
     public static void main(String[] args) throws IOException {
-        SDFAEntry.main("--line-sort vcf2sdf -dir /Users/wenjiepeng/Downloads/CCS_CHM13_ngmlr_pbsv_CHM13等5个文件 -o /Users/wenjiepeng/Downloads/CCS_CHM13_ngmlr_pbsv_CHM13等5个文件 -c 0".split(" "));
+        SDFAEntry.main("--line-sort vcf2sdf -dir /Users/wenjiepeng/Downloads/CCS_CHM13_lra_svim_CHM13等5个文件 -o /Users/wenjiepeng/Downloads/CCS_CHM13_lra_svim_CHM13等5个文件 -c 0".split(" "));
     }
 }
