@@ -25,6 +25,9 @@ public class SDFEncode {
         for (int i = 0; i < 7; i++) {
             extendedEncodeMethods.add(null);
         }
+        RefAndAltFieldType refAndAltFieldType = new RefAndAltFieldType();
+        extendedEncodeMethods.set(2, refAndAltFieldType);
+        extendedEncodeMethods.set(3, refAndAltFieldType);
         switch (encodeMode) {
             case 0:
                 break;
@@ -32,9 +35,6 @@ public class SDFEncode {
             case 2:
             case 3:
                 RefAndAltFieldType.mode = 1;
-                RefAndAltFieldType refAndAltFieldType = new RefAndAltFieldType();
-                extendedEncodeMethods.set(2, refAndAltFieldType);
-                extendedEncodeMethods.set(3, refAndAltFieldType);
                 VCF2SDF.dropFormat = encodeMode == 3;
                 VCF2SDF.multiInfoForCSV = encodeMode == 1;
                 break;

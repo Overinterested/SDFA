@@ -253,9 +253,6 @@ public abstract class AbstractCallingParser {
         if (infoFields == null) {
             return ONE_EMPTY_BYTECODE_ARRAY;
         }
-        if (VCF2SDF.lineExtractAndSort){
-            return new ByteCodeArray(infoFields);
-        }
         ByteCodeArray res = new ByteCodeArray(infoFields.size());
         int count = 0;
         int maxIndex = ignoreInfoIndex.size() - 1;
@@ -270,7 +267,11 @@ public abstract class AbstractCallingParser {
                 res.add(ByteCode.EMPTY);
                 continue;
             }
-            res.add(info.asUnmodifiable());
+            if (VCF2SDF.lineExtractAndSort) {
+                res.add(info);
+            } else {
+                res.add(info.asUnmodifiable());
+            }
         }
         return res;
     }

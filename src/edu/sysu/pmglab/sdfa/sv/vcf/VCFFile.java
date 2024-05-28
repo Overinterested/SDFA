@@ -25,6 +25,8 @@ import edu.sysu.pmglab.unifyIO.FileStream;
 import org.slf4j.Logger;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 
 
 /**
@@ -42,7 +44,9 @@ public class VCFFile {
     VCFCallingParser vcfCallingParser;
     VCFHeader header = new VCFHeader();
     IntArray invalidSVIndexList = new IntArray();
-    CallableSet<ByteCode> infoFieldNameArray = new CallableSet<>();
+    IndexableSet<ByteCode> infoFieldNameArray = new IndexableSet<>();
+    HashMap<ByteCode, IntArray> formatFieldMap = new HashMap<>();
+    IndexableSet<ByteCode> allFormatFieldNameArray = new IndexableSet<>();
     private CCFWriter writer;
     private IntArray chrIndexBlock;
     private final ByteCode EXIST = new ByteCode(new byte[]{ByteCode.PERIOD});
@@ -111,12 +115,15 @@ public class VCFFile {
         boolean nonSubjectMode = subjectSize == 0;
         SVGenotypes genotypes = SVGenotypes.initSubjects(subjectSize);
         ReusableMap<ByteCode, ByteCode> infoFieldMap = header.getSpecificInfoFiledMap();
+        allFormatFieldNameArray.addAll(header.getFormatConfig().getIndexableIDSet());
         GenotypeFilterManager gtyFilterManager = !nonSubjectMode && filter != null && filter.filterGty() ? filter.getGenotypeFilterManager() : null;
         SVFieldFilterManager fieldFilterManager = !nonSubjectMode && filter != null && filter.filterField() ? filter.getFieldFilterManager() : null;
         registerIgnoreInfoField(infoFieldMap);
-        infoFieldNameArray = new CallableSet<>(infoFieldMap.keySet());
+        infoFieldNameArray = new IndexableSet<>(infoFieldMap.keySet());
+
         ByteCodeArray lineCache = new ByteCodeArray(true);
         int pos;
+        int formatFieldSize = 0;
         do {
             try {
                 ByteCode line = cache.toByteCode();
@@ -125,11 +132,31 @@ public class VCFFile {
                 //region parse genotypes
                 if (!nonSubjectMode) {
                     if (filter != null && !filter.isCheck()) {
-                        BaseArray<ByteCode> formatFieldArray = lineSplit.get(8).split(ByteCode.COLON);
-                        filter.check(formatFieldArray);
+                        filter.check(new ByteCodeArray(allFormatFieldNameArray));
+                        formatFieldSize = allFormatFieldNameArray.size() - 1;
                         if (!VCF2SDF.dropFormat) {
-                            genotypes.initFormatField(formatFieldArray.size() - 1);
+                            genotypes.initFormatField(formatFieldSize);
                         }
+                    }
+                    // FORMAT col
+                    ByteCode formatCol = lineSplit.get(8);
+                    IntArray fieldIndexArrayOfFormat = formatFieldMap.get(formatCol);
+                    if (fieldIndexArrayOfFormat == null){
+                        BaseArray<ByteCode> split = formatCol.split(ByteCode.COLON, tmp);
+                        IntArray tmpIndexArrayOfFormat = new IntArray();
+                        for (ByteCode formatItem : split) {
+                            int index = allFormatFieldNameArray.indexOf(formatItem);
+                            if (index == 0){
+                                continue;
+                            }
+                            if (index == -1){
+                                throw new UnsupportedEncodingException("Format item("+formatItem+") isn't recorded by VCF header.");
+                            }
+                            tmpIndexArrayOfFormat.add(index-1);
+                        }
+                        formatFieldMap.put(formatCol.asUnmodifiable(), tmpIndexArrayOfFormat);
+                        fieldIndexArrayOfFormat = tmpIndexArrayOfFormat;
+                        tmp.clear();
                     }
                     genotypes.clearProperties();
                     for (int i = 0; i < subjectSize; i++) {
@@ -139,7 +166,7 @@ public class VCFFile {
                         if (gtyFilterManager != null) {
                             genotype = gtyFilterManager.filter(genotype, property);
                         }
-                        genotypes.addGtyAndProperty(i, genotype, VCF2SDF.dropFormat ? null : property);
+                        genotypes.addGtyAndProperty(i, genotype, property, fieldIndexArrayOfFormat);
                     }
                 }
                 // endregion
@@ -237,7 +264,7 @@ public class VCFFile {
                 v = KVArray.get(1);
                 v = v == null ? ByteCode.EMPTY : v;
             }
-            int indexOfKey = infoFieldNameArray.indexOfValue(k);
+            int indexOfKey = infoFieldNameArray.indexOf(k);
             if (indexOfKey != -1) {
                 infoFieldMap.putByIndex(indexOfKey, v);
                 continue;
@@ -416,7 +443,11 @@ public class VCFFile {
         return this;
     }
 
-    public CallableSet<ByteCode> getInfoFieldNameArray() {
+    public IndexableSet<ByteCode> getInfoFieldNameArray() {
         return infoFieldNameArray;
+    }
+
+    public IndexableSet<ByteCode> getAllFormatFieldNameArray() {
+        return allFormatFieldNameArray;
     }
 }

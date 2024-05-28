@@ -232,7 +232,7 @@ public class SDFMeta extends CCFMeta {
                 .setHeader(vcfFile.getHeader());
         meta.contigBlockContainer.setContig(vcfFile.getContig());
         meta.infoFieldSet = new CallableSet<>(vcfFile.getInfoFieldNameArray());
-        meta.getFormatFieldSet();
+        meta.formatFieldSet = new CallableSet<>(vcfFile.getAllFormatFieldNameArray());
         return meta;
     }
 
@@ -257,7 +257,6 @@ public class SDFMeta extends CCFMeta {
     }
 
     public Interval<Integer> getChrBlockRange(Chromosome chromosome) {
-//        return chrBlockRange.get(chromosome);
         return contigBlockContainer.getChromosomeRange(chromosome);
     }
 

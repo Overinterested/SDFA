@@ -73,6 +73,7 @@ public class ConvertTest {
             }
         };
         svFilterManager.init();
+        VCF2SDF.lineExtractAndSort = true;
         for (int i = 0; i < 10; i++) {
             new VCF2SDF(
                     "/Users/wenjiepeng/Desktop/SV/SVMerge/trio/wm_10md_PBCCS/HG004vGRCh38_wm_10md_PBCCS_sniffles.s2l20.refined.nSVtypes.ism.vcf",

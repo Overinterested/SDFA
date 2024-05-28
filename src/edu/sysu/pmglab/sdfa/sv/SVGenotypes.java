@@ -141,11 +141,12 @@ public class SVGenotypes {
         }
     }
 
-    public void addGtyAndProperty(int indexOfSubject, SVGenotype genotype, BaseArray<ByteCode> property) {
+    public void addGtyAndProperty(int indexOfSubject, SVGenotype genotype,
+                                  BaseArray<ByteCode> property, IntArray fieldIndexArrayOfFormat) {
         genotypes[indexOfSubject] = genotype;
-        if (property != null) {
-            for (int i = 0; i < property.size(); i++) {
-                properties.get(i).add(property.get(i));
+        if (properties != null && !property.isEmpty()) {
+            for (int index : fieldIndexArrayOfFormat) {
+                properties.get(index).add(property.popFirst());
             }
         }
     }

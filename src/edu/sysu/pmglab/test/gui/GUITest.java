@@ -12,6 +12,6 @@ import java.io.IOException;
  */
 public class GUITest {
     public static void main(String[] args) throws IOException {
-        SDFViewer.view(new File("/Users/wenjiepeng/Desktop/SDFA/test/extract/test2"));
+        SDFViewer.view(new File("/Users/wenjiepeng/Downloads/CCS_CHM13_ngmlr_pbsv_CHM13等5个文件/CCS_HG002_minimap2_pbsv_HG002.vcf.sdf"));
     }
 }
