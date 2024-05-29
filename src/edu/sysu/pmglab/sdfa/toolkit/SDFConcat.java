@@ -5,20 +5,20 @@ import edu.sysu.pmglab.ccf.CCFWriter;
 import edu.sysu.pmglab.ccf.record.IRecord;
 import edu.sysu.pmglab.container.ByteCode;
 import edu.sysu.pmglab.container.CallableSet;
-import edu.sysu.pmglab.container.Entry;
 import edu.sysu.pmglab.container.File;
 import edu.sysu.pmglab.container.array.Array;
+import edu.sysu.pmglab.easytools.ProcessBar;
 import edu.sysu.pmglab.easytools.container.ContigBlockContainer;
 import edu.sysu.pmglab.executor.Workflow;
 import edu.sysu.pmglab.gbc.genome.Chromosome;
 import edu.sysu.pmglab.sdfa.SDFMeta;
 import edu.sysu.pmglab.sdfa.SDFReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author Wenjie Peng
@@ -27,14 +27,14 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class SDFConcat {
     int thread;
+    Logger logger;
     File outputPath;
+    boolean silent = true;
     Array<SDFReader> allSDFFile;
     private final File outputDir;
     private final int concatTime;
-    Lock putQueue = new ReentrantLock();
-    Lock updateQueue = new ReentrantLock();
+    Array<File> deleteFile = new Array<>();
     final AtomicInteger concatCount = new AtomicInteger();
-    Array<Entry<SDFReader, SDFReader>> tobeConcatenateQueue = new Array<>();
 
     private SDFConcat(File outputPath, Array<SDFReader> allSDFFile) {
         this.allSDFFile = allSDFFile;
@@ -56,9 +56,9 @@ public class SDFConcat {
         return new SDFConcat(outputDir.getSubFile("concatResult.sdf"), sdfReaderArray);
     }
 
-    private SDFReader concat(Entry<SDFReader, SDFReader> concatEntry) throws IOException {
-        SDFReader k = concatEntry.getKey();
-        SDFReader v = concatEntry.getValue();
+    private SDFReader concat(SDFReader k, SDFReader v) throws IOException {
+        k.restart();
+        v.restart();
         CCFReader kReader = k.getReader();
         CCFReader vReader = v.getReader();
         IRecord kRecord = kReader.getRecord();
@@ -68,6 +68,7 @@ public class SDFConcat {
         CCFWriter writer = CCFWriter.Builder.of(outputDir.getSubFile(concatCount.get() + ".sdf"))
                 .addFields(kReader.getAllFields())
                 .build();
+        concatCount.incrementAndGet();
         boolean endRead;
         for (int i = 0; i < allContig.size(); i++) {
             Chromosome chromosome = allContig.getByIndex(i);
@@ -75,9 +76,9 @@ public class SDFConcat {
             boolean vLimit = v.limitChrBlock(chromosome);
             if (kLimit || vLimit) {
                 if (kLimit && vLimit) {
-                    //region: both contain records of current contig
+                    //region both contain records of current contig
                     endRead = false;
-                    int count = 0;
+                    int writeCount = 0;
                     while (!endRead) {
                         boolean kRead = kReader.read(kRecord);
                         boolean vRead = vReader.read(vRecord);
@@ -94,11 +95,11 @@ public class SDFConcat {
                             if (compare < 0) {
                                 writer.write(kRecord);
                                 writer.write(vRecord);
-                                count += 2;
+                                writeCount += 2;
                             } else {
                                 writer.write(vRecord);
                                 writer.write(kRecord);
-                                count += 2;
+                                writeCount += 2;
                             }
                             //endregion
                         } else {
@@ -108,13 +109,13 @@ public class SDFConcat {
                                 int[] kCoordinate = kRecord.get(0);
                                 kRecord.set(0, kCoordinate);
                                 writer.write(kRecord);
-                                count++;
+                                writeCount++;
                             }
                             endRead = true;
                             //endregion
                         }
                     }
-                    globalContigRange[i] = count;
+                    globalContigRange[i] = writeCount;
                     //endregion
                 } else {
                     //region only one contain records of current contig
@@ -141,19 +142,63 @@ public class SDFConcat {
         meta.setContigBlockContainer(contigBlockContainer).initChrBlockRange(globalContigRange);
         writer.writeMeta(meta.write());
         writer.close();
-        return new SDFReader(writer.getOutputFile());
+        SDFReader res = new SDFReader(writer.getOutputFile());
+        res.close();
+        return res;
     }
 
     public void submit() throws IOException {
         Workflow workflow = new Workflow(thread);
-        //TODO while
-        while (!(allSDFFile.size() <= 1)) {
-            tobeConcatenateQueue.add(new Entry<>(allSDFFile.popFirst(), allSDFFile.popFirst()));
+        ProcessBar bar = null;
+        if (!silent && logger != null) {
+            logger.info("The concat task will spend " + concatTime + " rounds to concatenate all into one.");
+            bar = new ProcessBar(concatTime).setUnit(" rounds").start();
         }
+        do {
+            while (allSDFFile.size() >= 2) {
+                SDFReader k = allSDFFile.popFirst();
+                SDFReader v = allSDFFile.popFirst();
+                workflow.addTasks((status, context) -> updateArray(concat(k, v)));
+            }
+            workflow.execute();
+            workflow.clearTasks();
+            if (bar != null) {
+                bar.addProcessed(1);
+            }
+        } while (allSDFFile.size() != 1);
+        if (bar != null) {
+            bar.setFinish();
+        }
+        File file = deleteFile.popLast();
+        file.renameTo(outputPath);
+        deleteFile.forEach(File::delete);
+    }
+
+    private synchronized void updateArray(SDFReader reader) {
+        allSDFFile.add(reader);
+        deleteFile.add(reader.getFilePath());
     }
 
     public SDFConcat threads(int thread) {
         this.thread = thread;
+        return this;
+    }
+
+    public SDFConcat setLogger(Logger logger) {
+        this.logger = logger;
+        return this;
+    }
+
+    public static void main(String[] args) throws IOException {
+        Logger logger = LoggerFactory.getLogger("test");
+        SDFConcat.of(
+                new File("/Users/wenjiepeng/Desktop/SV/data/private/VCF/sniffles_output_sdf"),
+                new File("/Users/wenjiepeng/Desktop/SV/data/private/VCF/concat")
+        ).silent(false).setLogger(logger).submit();
+    }
+
+    public SDFConcat silent(boolean silent) {
+        this.silent = silent;
         return this;
     }
 }
