@@ -1,6 +1,8 @@
 package edu.sysu.pmglab.sdfa.command;
 
 import edu.sysu.pmglab.commandParser.CommandLineProgram;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Wenjie Peng
@@ -8,6 +10,7 @@ import edu.sysu.pmglab.commandParser.CommandLineProgram;
  * @description
  */
 public class SDFConcatProgram extends CommandLineProgram {
+    private static final Logger logger = LoggerFactory.getLogger(SDFConcatProgram.class);
     protected SDFConcatProgram(String[] args) {
         super(args);
     }
@@ -16,4 +19,5 @@ public class SDFConcatProgram extends CommandLineProgram {
     protected void work() throws Exception, Error {
 
     }
+
 }

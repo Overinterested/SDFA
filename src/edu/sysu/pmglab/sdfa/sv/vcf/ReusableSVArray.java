@@ -75,7 +75,7 @@ public class ReusableSVArray {
         if (decomposedSize == 0) {
             return null;
         }
-        return encodeSVArray.get(0, decomposedSize - 1);
+        return encodeSVArray.get(0, decomposedSize);
     }
 
     public ReusableSVArray setEncodeSV(SDFEncode encodeSV) {
