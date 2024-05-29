@@ -33,8 +33,9 @@ public class SDFConcat {
     Array<SDFReader> allSDFFile;
     private final File outputDir;
     private final int concatTime;
-    Array<File> deleteFile = new Array<>();
+    Array<File> deleteFileArray = new Array<>();
     final AtomicInteger concatCount = new AtomicInteger();
+    final AtomicInteger concatRound = new AtomicInteger();
 
     private SDFConcat(File outputPath, Array<SDFReader> allSDFFile) {
         this.allSDFFile = allSDFFile;
@@ -152,31 +153,54 @@ public class SDFConcat {
         ProcessBar bar = null;
         if (!silent && logger != null) {
             logger.info("The concat task will spend " + concatTime + " rounds to concatenate all into one.");
-            bar = new ProcessBar(concatTime).setUnit(" rounds").start();
         }
         do {
+            if (allSDFFile.size() >= 2) {
+                bar = new ProcessBar(allSDFFile.size() / 2)
+                        .setHeader("Start round " + concatRound.get() + " concat")
+                        .setUnit(" times")
+                        .start();
+                concatRound.incrementAndGet();
+            }
             while (allSDFFile.size() >= 2) {
                 SDFReader k = allSDFFile.popFirst();
                 SDFReader v = allSDFFile.popFirst();
-                workflow.addTasks((status, context) -> updateArray(concat(k, v)));
+                ProcessBar finalBar = bar;
+                workflow.addTasks((status, context) ->
+                        {
+                            updateArray(concat(k, v));
+                            if (!silent && logger != null) {
+                                finalBar.addProcessed(1);
+                            }
+                        }
+                );
             }
             workflow.execute();
             workflow.clearTasks();
             if (bar != null) {
-                bar.addProcessed(1);
+                bar.setFinish();
             }
         } while (allSDFFile.size() != 1);
         if (bar != null) {
             bar.setFinish();
         }
-        File file = deleteFile.popLast();
-        file.renameTo(outputPath);
-        deleteFile.forEach(File::delete);
+        File file = deleteFileArray.popLast();
+        boolean successRename = file.renameTo(outputPath);
+        if (!successRename) {
+            logger.warn("Concat result file fails to rename, which stores in " + file + " .");
+        }
+        for (File deleteFile : deleteFileArray) {
+            boolean delete = deleteFile.delete();
+            if (!delete) {
+                logger.warn("The intermediate file fails to be deleted. Please go to " + deleteFile.getParentFile() + " to delete it");
+                break;
+            }
+        }
     }
 
     private synchronized void updateArray(SDFReader reader) {
         allSDFFile.add(reader);
-        deleteFile.add(reader.getFilePath());
+        deleteFileArray.add(reader.getFilePath());
     }
 
     public SDFConcat threads(int thread) {

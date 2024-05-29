@@ -14,7 +14,6 @@ import edu.sysu.pmglab.sdfa.sv.idividual.Subject;
 import edu.sysu.pmglab.sdfa.sv.idividual.Subjects;
 import edu.sysu.pmglab.unifyIO.FileStream;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.function.Function;
@@ -30,11 +29,11 @@ public class SDFExtract {
     ByteCode separate;
     final File sdfFile;
     final File outputDir;
+    private Logger logger;
     final File subjectRecordFile;
     boolean storeAllHomGtys = false;
     IntArray filterCount = new IntArray();
     Array<Entry<Function<SVGenotype[], Boolean>, String>> filterConditionArray = new Array<>();
-    private static final Logger logger = LoggerFactory.getLogger(SDFExtract.class);
 
     private SDFExtract(File sdfFile, File subjectRecordFile, File outputDir) {
         this.sdfFile = sdfFile;
@@ -189,10 +188,14 @@ public class SDFExtract {
         }
         fs.close();
         cache.close();
+        logger.info("Totally collect " + extractSubjectSet.size() + " subjects from files.");
         return extractSubjectSet;
     }
 
     public SDFExtract setSeparate(String separate) {
+        if (separate.equals("\n")){
+            return this;
+        }
         this.separate = new ByteCode(separate);
         return this;
     }
@@ -203,11 +206,16 @@ public class SDFExtract {
         return this;
     }
 
+    public SDFExtract setLogger(Logger logger) {
+        this.logger = logger;
+        return this;
+    }
+
     public static void main(String[] args) throws IOException {
         new VCF2SDF(
                 "/Users/wenjiepeng/Desktop/SV/SVMerge/trio/wm_10md_PBCCS/sniffles_test.vcf",
                 "/Users/wenjiepeng/Desktop/SV/SVMerge/trio/wm_10md_PBCCS/sniffles.sdf"
-                ).setEncodeMode(1).convert();
+        ).setEncodeMode(1).convert();
         SDFExtract.of(
                 "/Users/wenjiepeng/Desktop/SV/SVMerge/trio/wm_10md_PBCCS/sniffles.sdf",
                 "/Users/wenjiepeng/Desktop/SV/SVMerge/trio/wm_10md_PBCCS/subject_extract_test.txt",

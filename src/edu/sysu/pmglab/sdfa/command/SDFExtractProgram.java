@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
                         description = "Specify the SDF file path."
                 ),
                 @Option(
-                        names = {"-dir", "--dir"},
+                        names = {"-o", "--output"},
                         type = {File.class},
                         description = "Specify the output dir of result file for extraction."
                 ),
@@ -46,6 +46,11 @@ import org.slf4j.LoggerFactory;
                         names = {"--store-fullHom"},
                         type = Void.class,
                         description = "Decide whether stores the the genotype with full homozygous."
+                ),
+                @Option(
+                        names = {"-sep", "--separator"},defaultTo = "\n",
+                        type = String.class,
+                        description = "Specify the file separator for separate subjects."
                 )
         }
 )
@@ -59,9 +64,12 @@ public class SDFExtractProgram extends CommandLineProgram {
     @Override
     protected void work() throws Exception, Error {
         SDFExtract.of(
-                options.value("-f"),
-                options.value("--extract-subject"),
-                options.value("-dir")
-        ).storeAllHomGtys(options.passed("--store-fullHom")).submit();
+                        options.value("-f"),
+                        options.value("--extract-subject"),
+                        options.value("-o"))
+                .storeAllHomGtys(options.passed("--store-fullHom"))
+                .setLogger(logger)
+                .setSeparate(options.value("-sep"))
+                .submit();
     }
 }
