@@ -117,7 +117,7 @@ public class VCFFile {
         SVGenotypes genotypes = SVGenotypes.initSubjects(subjectSize);
         ReusableMap<ByteCode, ByteCode> infoFieldMap = header.getSpecificInfoFiledMap();
         allFormatFieldNameArray.addAll(header.getFormatConfig().getIndexableIDSet());
-        if (allFormatFieldNameArray.isEmpty()){
+        if (allFormatFieldNameArray.isEmpty()) {
             allFormatFieldNameArray.add(GT);
         }
         GenotypeFilterManager gtyFilterManager = !nonSubjectMode && filter != null && filter.filterGty() ? filter.getGenotypeFilterManager() : null;
@@ -136,26 +136,26 @@ public class VCFFile {
                 if (!nonSubjectMode) {
                     if (filter != null && !filter.isCheck()) {
                         filter.check(new ByteCodeArray(allFormatFieldNameArray));
-                        int formatFieldSize = allFormatFieldNameArray.size() - 1;
-                        if (!VCF2SDF.dropFormat) {
-                            genotypes.initFormatField(formatFieldSize);
-                        }
+                    }
+                    int formatFieldSize = allFormatFieldNameArray.size() - 1;
+                    if (!VCF2SDF.dropFormat) {
+                        genotypes.initFormatField(formatFieldSize);
                     }
                     // FORMAT col
                     ByteCode formatCol = lineSplit.get(8);
                     IntArray fieldIndexArrayOfFormat = formatFieldMap.get(formatCol);
-                    if (fieldIndexArrayOfFormat == null){
+                    if (fieldIndexArrayOfFormat == null) {
                         BaseArray<ByteCode> split = formatCol.split(ByteCode.COLON, tmp);
                         IntArray tmpIndexArrayOfFormat = new IntArray();
                         for (ByteCode formatItem : split) {
                             int index = allFormatFieldNameArray.indexOf(formatItem);
-                            if (index == 0){
+                            if (index == 0) {
                                 continue;
                             }
-                            if (index == -1){
-                                throw new UnsupportedEncodingException("Format item("+formatItem+") isn't recorded by VCF header.");
+                            if (index == -1) {
+                                throw new UnsupportedEncodingException("Format item(" + formatItem + ") isn't recorded by VCF header.");
                             }
-                            tmpIndexArrayOfFormat.add(index-1);
+                            tmpIndexArrayOfFormat.add(index - 1);
                         }
                         formatFieldMap.put(formatCol.asUnmodifiable(), tmpIndexArrayOfFormat);
                         fieldIndexArrayOfFormat = tmpIndexArrayOfFormat;

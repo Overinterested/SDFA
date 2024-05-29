@@ -5,5 +5,8 @@ package edu.sysu.pmglab.sdfa.toolkit;
  * @create 2024-05-25 22:14
  * @description
  */
-public class SDF2Plink {
+public class SDF2BED {
+    public static void main(String[] args) {
+
+    }
 }

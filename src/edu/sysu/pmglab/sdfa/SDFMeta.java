@@ -445,4 +445,5 @@ public class SDFMeta extends CCFMeta {
     public Contig getContig() {
         return contigBlockContainer.getContig();
     }
+
 }

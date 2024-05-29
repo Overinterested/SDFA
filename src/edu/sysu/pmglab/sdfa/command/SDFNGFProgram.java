@@ -116,7 +116,6 @@ public class SDFNGFProgram extends CommandLineProgram {
         outputDir.mkdirs();
         LogBackOptions.addFileAppender(outputDir.getSubFile("annotation.track").toString(),
                 level -> level.isGreaterOrEqual(Level.ALL));
-        logger.info(options.toString());
         if (options.passed("--coverage-cutoff")) {
             byte[] cutoffValues = options.value("--coverage-cutoff");
             if (cutoffValues.length == 5) {

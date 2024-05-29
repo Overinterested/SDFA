@@ -106,7 +106,6 @@ public class Vcf2SdfProgram extends CommandLineProgram {
 
     @Override
     protected void work() throws Exception, Error {
-        logger.info(options.toString());
         File outputDir = options.value("-o");
         int compressMode = options.value("-c");
         //region output the track file

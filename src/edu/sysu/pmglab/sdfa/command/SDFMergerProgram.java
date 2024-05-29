@@ -61,7 +61,6 @@ public class SDFMergerProgram extends CommandLineProgram {
         LogBackOptions.addFileAppender(outputDir.getSubFile("merge_track.log").toString(),level -> level.isGreaterOrEqual(Level.ALL));
         int thread = this.options.value("--threads");
         PosSVMergeStrategy.mergePosRange = options.value("--max--mergeSize");
-        logger.info(options.toString());
         new SDFAMergeManager()
                 .setCollectorMode(SVCollectorMode.CHR_LEVEL)
                 .setMergeMode(SVMergeMode.POS_LEVEL)

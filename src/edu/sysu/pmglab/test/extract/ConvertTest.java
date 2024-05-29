@@ -2,6 +2,7 @@ package edu.sysu.pmglab.test.extract;
 
 import ch.qos.logback.classic.Level;
 import edu.sysu.pmglab.LogBackOptions;
+import edu.sysu.pmglab.container.ByteCode;
 import edu.sysu.pmglab.gbc.genome.Chromosome;
 import edu.sysu.pmglab.sdfa.sv.ComplexSV;
 import edu.sysu.pmglab.sdfa.sv.SVFilterManager;
@@ -65,7 +66,18 @@ public class ConvertTest {
 
             @Override
             protected void initGenotypeFilter() {
-
+                genotypeFilterManager.addFilter("DV",
+                        adByteCode -> {
+                            if (adByteCode.startsWith(ByteCode.PERIOD) && adByteCode.length() == 1) {
+                                return true;
+                            }
+                            try {
+                                return adByteCode.toInt() > 8;
+                            } catch (NumberFormatException e) {
+                                return true;
+                            }
+                        }, "DV>8"
+                );
             }
 
             @Override

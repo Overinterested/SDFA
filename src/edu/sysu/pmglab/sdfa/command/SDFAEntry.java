@@ -52,6 +52,10 @@ import org.slf4j.LoggerFactory;
                         greedy = true, arity = -1, format = "concat <input> [options]",
                         description = {"Concatenate SV file(s) into one SDF file(s)."}
                 ),
+                @Option(names = {"extract"}, type = {String[].class}, splitter = EmptySplitter.class,
+                        greedy = true, arity = -1, format = "extract <input> [options]",
+                        description = {"Extract some specific subjects from all subjects in raw SDF file.."}
+                ),
                 @Option(names = "--line-sort", type = Void.class, hidden = true,
                         description = "Convert VCF(s) to SDF(s) by first extracting line, then writing finally sorting"
                 )
@@ -60,7 +64,7 @@ import org.slf4j.LoggerFactory;
 )
 @OptionRule(
         basic = {@Rule(
-                items = {"vcf2sdf", "gui", "annotate", "merge", "ngf", "concat"},
+                items = {"vcf2sdf", "gui", "annotate", "merge", "ngf", "concat","extract"},
                 count = 1,
                 rule = EQUAL.class
         )}
@@ -95,6 +99,8 @@ public class SDFAEntry extends CommandLineProgram {
             ICommandLineProgram.execute(SDFNGFProgram.class, this.options.value("ngf"));
         } else if (this.options.passed("concat")) {
             ICommandLineProgram.execute(SDFConcatProgram.class, this.options.value("concat"));
+        } else if (this.options.passed("extract")) {
+            ICommandLineProgram.execute(SDFExtractProgram.class, this.options.value("extract"));
         }
     }
 

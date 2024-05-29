@@ -56,7 +56,6 @@ public class SDFAnnotatorProgram extends CommandLineProgram {
         outputDir.mkdirs();
         LogBackOptions.addFileAppender(outputDir.getSubFile("annotation.track").toString(),
                 level -> level.isGreaterOrEqual(Level.ALL));
-        logger.info(options.toString());
         new SDFAAnnotator(
                 options.value("-dir"),
                 options.value("--annot-config"),
