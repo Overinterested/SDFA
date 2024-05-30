@@ -38,6 +38,11 @@ import org.slf4j.LoggerFactory;
                         description = "Specify the output dir of result file for extraction."
                 ),
                 @Option(
+                        names = {"--ped-file"},
+                        type = {Void.class},
+                        description = "Specify that the file is ped file."
+                ),
+                @Option(
                         names = {"--extract-subject"},
                         type = {File.class},
                         description = "Specify the subjects name for extraction."
@@ -70,6 +75,7 @@ public class SDFExtractProgram extends CommandLineProgram {
                 .storeAllHomGtys(options.passed("--store-fullHom"))
                 .setLogger(logger)
                 .setSeparate(options.value("-sep"))
+                .isPedFile(options.value("--ped-file"))
                 .submit();
     }
 }

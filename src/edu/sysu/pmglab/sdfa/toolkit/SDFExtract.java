@@ -26,12 +26,14 @@ import java.util.stream.Collectors;
  */
 
 public class SDFExtract {
+    boolean isPedFile;
     ByteCode separate;
     final File sdfFile;
     final File outputDir;
     private Logger logger;
     final File subjectRecordFile;
     boolean storeAllHomGtys = false;
+    boolean noCheckForUnMapSubject = true;
     IntArray filterCount = new IntArray();
     Array<Entry<Function<SVGenotype[], Boolean>, String>> filterConditionArray = new Array<>();
 
@@ -157,10 +159,17 @@ public class SDFExtract {
         if (subjectNameSet.size() != 0) {
             for (ByteCode extractSubject : extractSubjectSet) {
                 int indexOfSubject = subjectNameSet.indexOfValue(extractSubject);
-                if (indexOfSubject == -1) {
+                if (indexOfSubject == -1 && !noCheckForUnMapSubject) {
                     throw new UnsupportedOperationException(extractSubject.toString() + " isn't in subject set of raw file");
                 }
                 indexOfExtractSubject.add(indexOfSubject);
+            }
+        }
+        if (logger != null) {
+            if (extractSubjectSet.size() == indexOfExtractSubject.size()) {
+                logger.info("Mapping " + extractSubjectSet + " subjects to raw sdf file.");
+            } else {
+                logger.error("Mapping " + indexOfExtractSubject.size() + " subjects(totally " + extractSubjectSet.size() + ") to raw sdf file.");
             }
         }
         return indexOfExtractSubject;
@@ -175,7 +184,11 @@ public class SDFExtract {
                 cache.reset();
                 continue;
             }
-            if (separate == null) {
+            if (isPedFile) {
+                ByteCode line = cache.toByteCode();
+                BaseArray<ByteCode> split = line.split(ByteCode.TAB);
+                extractSubjectSet.add(split.get(1).trim().asUnmodifiable());
+            } else if (separate == null) {
                 extractSubjectSet.add(cache.toByteCode().trim().asUnmodifiable());
             } else {
                 ByteCode line = cache.toByteCode();
@@ -193,7 +206,7 @@ public class SDFExtract {
     }
 
     public SDFExtract setSeparate(String separate) {
-        if (separate.equals("\n")){
+        if (separate.equals("\n")) {
             return this;
         }
         this.separate = new ByteCode(separate);
@@ -208,6 +221,11 @@ public class SDFExtract {
 
     public SDFExtract setLogger(Logger logger) {
         this.logger = logger;
+        return this;
+    }
+
+    public SDFExtract isPedFile(boolean isPedFile) {
+        this.isPedFile = isPedFile;
         return this;
     }
 
