@@ -2,7 +2,6 @@ package edu.sysu.pmglab.sdfa.command;
 
 import edu.sysu.pmglab.LogBackOptions;
 import edu.sysu.pmglab.commandParser.CommandLineProgram;
-import edu.sysu.pmglab.commandParser.CommandParser;
 import edu.sysu.pmglab.commandParser.ICommandLineProgram;
 import edu.sysu.pmglab.commandParser.annotation.Synopsis;
 import edu.sysu.pmglab.commandParser.annotation.option.Option;
@@ -71,8 +70,6 @@ import org.slf4j.LoggerFactory;
 )
 public class SDFAEntry extends CommandLineProgram {
     public static final Logger logger = LoggerFactory.getLogger(SDFAEntry.class);
-    public static final CommandParser parser = new CommandParser(SDFAEntry.class, LogBackOptions.class);
-
 
     public static void main(String[] args) {
         LogBackOptions.init();
@@ -101,6 +98,8 @@ public class SDFAEntry extends CommandLineProgram {
             ICommandLineProgram.execute(SDFConcatProgram.class, this.options.value("concat"));
         } else if (this.options.passed("extract")) {
             ICommandLineProgram.execute(SDFExtractProgram.class, this.options.value("extract"));
+        } else if (this.options.passed("sdf2plink")){
+            ICommandLineProgram.execute(SDF2PlinkProgram.class, this.options.value("sdf2plink"));
         }
     }
 

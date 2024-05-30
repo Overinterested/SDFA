@@ -48,7 +48,6 @@ import org.slf4j.LoggerFactory;
 )
 
 public class SDFMergerProgram extends CommandLineProgram {
-    private static final CommandParser parser = new CommandParser(SDFMergerProgram.class);
     private static final Logger logger = LoggerFactory.getLogger("SDFA Merger - Command Line");
 
     private SDFMergerProgram(String[] args) {

@@ -3,7 +3,6 @@ package edu.sysu.pmglab.sdfa.command;
 import ch.qos.logback.classic.Level;
 import edu.sysu.pmglab.LogBackOptions;
 import edu.sysu.pmglab.commandParser.CommandLineProgram;
-import edu.sysu.pmglab.commandParser.CommandParser;
 import edu.sysu.pmglab.commandParser.annotation.Synopsis;
 import edu.sysu.pmglab.commandParser.annotation.option.Option;
 import edu.sysu.pmglab.commandParser.annotation.option.OptionGroup;
@@ -97,7 +96,6 @@ import java.util.Random;
         }
 )
 public class Vcf2SdfProgram extends CommandLineProgram {
-    private static final CommandParser parser = new CommandParser(Vcf2SdfProgram.class);
     private static final Logger logger = LoggerFactory.getLogger("SDFA Convertor - Command Line");
 
     private Vcf2SdfProgram(String[] args) {
