@@ -3,7 +3,6 @@ package edu.sysu.pmglab.sdfa.command;
 import ch.qos.logback.classic.Level;
 import edu.sysu.pmglab.LogBackOptions;
 import edu.sysu.pmglab.commandParser.CommandLineProgram;
-import edu.sysu.pmglab.commandParser.CommandParser;
 import edu.sysu.pmglab.commandParser.annotation.Synopsis;
 import edu.sysu.pmglab.commandParser.annotation.option.Option;
 import edu.sysu.pmglab.commandParser.annotation.option.OptionGroup;
@@ -20,7 +19,7 @@ import edu.sysu.pmglab.sdfa.annotation.collector.sv.BriefSVAnnotationManager;
 import edu.sysu.pmglab.sdfa.annotation.genome.RefGeneManager;
 import edu.sysu.pmglab.sdfa.ngf.*;
 import edu.sysu.pmglab.sdfa.sv.idividual.SubjectManager;
-import edu.sysu.pmglab.sdfa.toolkit.GlobalVCFContigConvertor;
+import edu.sysu.pmglab.sdfa.toolkit.SDFGlobalContig;
 import edu.sysu.pmglab.sdfa.toolkit.SDFManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,13 +96,11 @@ import org.slf4j.LoggerFactory;
         basic = {
                 @Rule(
                         items = {"--sample-level", "--sv-level"},
-                        count = 1,
                         description = "Choose one of summary level as the unit of object for numeric gene feature."
                 )
         }
 )
 public class SDFNGFProgram extends CommandLineProgram {
-    private static final CommandParser parser = new CommandParser(SDFNGFProgram.class);
     private static final Logger logger = LoggerFactory.getLogger("SDFA NGF(Numeric Gene Feature) - Command Line");
 
     protected SDFNGFProgram(String[] args) {
@@ -145,7 +142,7 @@ public class SDFNGFProgram extends CommandLineProgram {
             // sample level ngf
             of.load();
             // init parameters
-            GlobalVCFContigConvertor.Builder.getInstance().build();
+            SDFGlobalContig.Builder.getInstance().build();
             // annotate and output6t7
             BriefSVAnnotationManager.getInstance().initChromosomes();
             BriefSVAnnotationManager.getInstance().load(SDFManager.getInstance().getSdfReaderArray(), 1);
@@ -168,8 +165,8 @@ public class SDFNGFProgram extends CommandLineProgram {
             Array<SDFReader> sdfReaderArray = SDFManager.getInstance().getSdfReaderArray();
             for (SDFReader sdfReader : sdfReaderArray) {
                 sdfReader.setFileID(0);
-                GlobalVCFContigConvertor.reset();
-                GlobalVCFContigConvertor.Builder.getInstance().addVCFContig(sdfReader.getContig()).build();
+                SDFGlobalContig.reset();
+                SDFGlobalContig.Builder.getInstance().addVCFContig(sdfReader.getContig()).build();
                 Array<SDFReader> array = Array.wrap(new SDFReader[]{sdfReader});
                 BriefSVAnnotationManager.getInstance().clear();
                 BriefSVAnnotationManager.getInstance().initChromosomes().load(array, 1);

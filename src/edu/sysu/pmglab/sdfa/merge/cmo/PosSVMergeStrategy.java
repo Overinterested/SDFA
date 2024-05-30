@@ -88,7 +88,7 @@ public abstract class PosSVMergeStrategy extends AbstractSVMergeStrategy {
 
 
     @Override
-    public MergedSV mergeSimpleSVArray(Array<UnifiedSV> simpleSVArray) {
+    public void mergeSimpleSVArray(Array<UnifiedSV> simpleSVArray) {
         MergedSV mergedSV = mergeSimpleSVs(simpleSVArray, containSupportVector, containIDList, getTmpMergeSV());
         ByteCodeArray info = mergedSV.sv.getSpecificInfoField();
         if (info == null) {
@@ -122,11 +122,10 @@ public abstract class PosSVMergeStrategy extends AbstractSVMergeStrategy {
             info.add(cache.toByteCode().asUnmodifiable());
             cache.reset();
         }
-        return mergedSV;
     }
 
     @Override
-    public MergedSV mergeCSVArray(Array<ComplexSV> csvArray) {
+    public void mergeCSVArray(Array<ComplexSV> csvArray) {
         int mergedSVSize = csvArray.size();
         ComplexSV middleComplexSV = csvArray.get(mergedSVSize / 2);
         UnifiedSV firstSimpleSVInMiddleSV = middleComplexSV.getSVs().get(0);
@@ -248,7 +247,6 @@ public abstract class PosSVMergeStrategy extends AbstractSVMergeStrategy {
         cache.reset();
         MergedSV res = getTmpMergeSV();
         res.sv = firstSimpleSVInMiddleSV;
-        return res;
     }
 
     public MergedSV mergeSimpleSVs(Array<UnifiedSV> simpleSVs, boolean containSupportVector, boolean containIDList, MergedSV res) {

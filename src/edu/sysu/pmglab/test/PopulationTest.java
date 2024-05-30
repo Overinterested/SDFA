@@ -9,7 +9,7 @@ import edu.sysu.pmglab.sdfa.annotation.genome.RefGeneManager;
 import edu.sysu.pmglab.sdfa.ngf.FeatureType;
 import edu.sysu.pmglab.sdfa.ngf.NumericGeneFeature;
 import edu.sysu.pmglab.sdfa.ngf.PopulationLevelNumericGeneFeature;
-import edu.sysu.pmglab.sdfa.toolkit.GlobalVCFContigConvertor;
+import edu.sysu.pmglab.sdfa.toolkit.SDFGlobalContig;
 import edu.sysu.pmglab.sdfa.toolkit.SDFManager;
 
 import java.io.IOException;
@@ -25,8 +25,8 @@ public class PopulationTest {
         GlobalResourceManager.getInstance().putResource(of);
         SDFReader sdfReader = new SDFReader("/Users/wenjiepeng/Desktop/SV/data/public/sdf/Pacbio_winnowmap_NanoSV_NA12778.15x.vcf.gz.sdf");
         sdfReader.close();
-        GlobalVCFContigConvertor.Builder.getInstance().addVCFContig(sdfReader.getContig());
-        GlobalVCFContigConvertor.Builder.getInstance().build();
+        SDFGlobalContig.Builder.getInstance().addVCFContig(sdfReader.getContig());
+        SDFGlobalContig.Builder.getInstance().build();
         SDFManager.of(
                 new File("/Users/wenjiepeng/Desktop/SV/data/private/VCF/curated_data/sv_calls_2023-06-10/托尔斯泰"),
                 new File("/Users/wenjiepeng/Desktop/SV/data/private/VCF/curated_data/sv_calls_2023-06-10/ngf_46"))

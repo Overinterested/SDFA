@@ -10,7 +10,7 @@ import edu.sysu.pmglab.sdfa.merge.base.SimpleSVMergeQueue;
 import edu.sysu.pmglab.sdfa.sv.ComplexSV;
 import edu.sysu.pmglab.sdfa.sv.SVTypeSign;
 import edu.sysu.pmglab.sdfa.sv.UnifiedSV;
-import edu.sysu.pmglab.sdfa.toolkit.GlobalVCFContigConvertor;
+import edu.sysu.pmglab.sdfa.toolkit.SDFGlobalContig;
 
 import java.util.HashMap;
 import java.util.concurrent.locks.Lock;
@@ -38,7 +38,8 @@ public abstract class AbstractSVMergeStrategy {
         for (int i = 0; i < capacity; i++) {
             mergedSVArray.add(new MergedSV());
         }
-        for (SVTypeSign type : SVTypeSign.support()) {
+        int size = SVTypeSign.support().size();
+        for (int i = 0; i < size; i++) {
             copyOfCollectionSimpleSVQueue.add(new SimpleSVMergeQueue());
         }
     }
@@ -51,7 +52,7 @@ public abstract class AbstractSVMergeStrategy {
      * get complete SVs(unified SVs and complex SVs) from collector
      */
     public void acceptAllCompleteSVsFromCollection() {
-        chromosome = GlobalVCFContigConvertor.getGlobalChromosome(AbstractSVCollector.getChrIndex() - 1);
+        chromosome = SDFGlobalContig.getGlobalChromosome(AbstractSVCollector.getChrIndex() - 1);
         Array<SimpleSVMergeQueue> collectedSimpleSVs = AbstractSVCollector.simpleSVTypeSVMergeQueueMap;
         for (int i = 0; i < collectedSimpleSVs.size(); i++) {
             BaseArray<UnifiedSV> toBeMerged = collectedSimpleSVs.get(i).popAll();
@@ -70,9 +71,9 @@ public abstract class AbstractSVMergeStrategy {
 
     abstract public Array<ComplexSV> popFirstCanBeMergedCSVArray(Array<ComplexSV> specificTypeCSVArray);
 
-    abstract public MergedSV mergeSimpleSVArray(Array<UnifiedSV> simpleSVArray);
+    abstract public void mergeSimpleSVArray(Array<UnifiedSV> simpleSVArray);
 
-    abstract public MergedSV mergeCSVArray(Array<ComplexSV> csvArray);
+    abstract public void mergeCSVArray(Array<ComplexSV> csvArray);
 
     abstract public ByteCode getMergeMethodName();
 

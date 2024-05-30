@@ -16,7 +16,7 @@ import edu.sysu.pmglab.sdfa.annotation.collector.AbstractResourceManager;
 import edu.sysu.pmglab.sdfa.annotation.collector.GlobalResourceManager;
 import edu.sysu.pmglab.sdfa.annotation.toolkit.OutputFrame;
 import edu.sysu.pmglab.sdfa.sv.SVTypeSign;
-import edu.sysu.pmglab.sdfa.toolkit.GlobalVCFContigConvertor;
+import edu.sysu.pmglab.sdfa.toolkit.SDFGlobalContig;
 import edu.sysu.pmglab.unifyIO.FileStream;
 import org.slf4j.Logger;
 
@@ -86,9 +86,9 @@ public class UnifiedOutput {
             // load thread SVs
             executeSingleOutput();
         }
-        workflow.addTasks(((status, context) -> {
-            ((ProcessBar)context.get(ProcessBar.class)).setFinish();
-        })).execute();
+        workflow.addTasks(((status, context) ->
+            ((ProcessBar)context.get(ProcessBar.class)).setFinish()
+        )).execute();
         workflow.clearTasks();
     }
 
@@ -98,7 +98,7 @@ public class UnifiedOutput {
         FileStream fs = new FileStream(outputDir.getSubFile("annot.tsv"), FileStream.DEFAULT_WRITER);
         fs.write(getHeaderColNames());
         // load all SVs
-        for (Chromosome chromosome : GlobalVCFContigConvertor.support()) {
+        for (Chromosome chromosome : SDFGlobalContig.support()) {
             Array<SVRecordWithID> svRecordWithIDArray = new Array<>();
             //region load all SVs
             for (SDFReader sdfReader : outputQueue) {
@@ -156,9 +156,9 @@ public class UnifiedOutput {
                 }
                 cache.reset();
             }
-            workflow.addTasks(((status, context) -> {
-                ((ProcessBar)context.get(ProcessBar.class)).addProcessed(1);
-            }));
+            workflow.addTasks(((status, context) ->
+                ((ProcessBar)context.get(ProcessBar.class)).addProcessed(1)
+            ));
             workflow.execute();
             workflow.clearTasks();
         }
@@ -200,7 +200,7 @@ public class UnifiedOutput {
             }
             //endregion
             // load thread SVs
-            for (Chromosome chromosome : GlobalVCFContigConvertor.support()) {
+            for (Chromosome chromosome : SDFGlobalContig.support()) {
                 Array<SVRecordWithID> svRecordWithIDArray = new Array<>();
                 //region load all SVs
                 for (SDFReader sdfReader : sdfReaderArray) {
@@ -263,9 +263,9 @@ public class UnifiedOutput {
             while (!outputFileStreamArray.isEmpty()) {
                 outputFileStreamArray.popFirst().close();
             }
-            workflow.addTasks(((status, context) -> {
-                ((ProcessBar)context.get(ProcessBar.class)).addProcessed(sdfReaderArray.size());
-            }));
+            workflow.addTasks(((status, context) ->
+                ((ProcessBar)context.get(ProcessBar.class)).addProcessed(sdfReaderArray.size())
+            ));
             workflow.execute();
             workflow.clearTasks();
         }

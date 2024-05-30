@@ -53,7 +53,7 @@ public class SDFConcat {
         if (sdfReaderArray.size() == 1) {
             throw new UnsupportedEncodingException("Only 1 file and no need to concat.");
         }
-        GlobalVCFContigConvertor.getInstance();
+        SDFGlobalContig.getInstance();
         return new SDFConcat(outputDir.getSubFile("concatResult.sdf"), sdfReaderArray);
     }
 
@@ -64,7 +64,7 @@ public class SDFConcat {
         CCFReader vReader = v.getReader();
         IRecord kRecord = kReader.getRecord();
         IRecord vRecord = vReader.getRecord();
-        CallableSet<Chromosome> allContig = GlobalVCFContigConvertor.support();
+        CallableSet<Chromosome> allContig = SDFGlobalContig.support();
         int[] globalContigRange = new int[allContig.size()];
         CCFWriter writer = CCFWriter.Builder.of(outputDir.getSubFile(concatCount.get() + ".sdf"))
                 .addFields(kReader.getAllFields())

@@ -10,7 +10,7 @@ import edu.sysu.pmglab.sdfa.annotation.genome.RefGeneManager;
 import edu.sysu.pmglab.sdfa.ngf.FeatureType;
 import edu.sysu.pmglab.sdfa.ngf.NumericGeneFeature;
 import edu.sysu.pmglab.sdfa.ngf.SVLevelNumericGeneFeature;
-import edu.sysu.pmglab.sdfa.toolkit.GlobalVCFContigConvertor;
+import edu.sysu.pmglab.sdfa.toolkit.SDFGlobalContig;
 import edu.sysu.pmglab.sdfa.toolkit.SDFManager;
 
 import java.io.IOException;
@@ -35,8 +35,8 @@ public class SVNGFTest {
         outputDir.mkdirs();
         for (SDFReader sdfReader : sdfReaderArray) {
             sdfReader.setFileID(0);
-            GlobalVCFContigConvertor.reset();
-            GlobalVCFContigConvertor.Builder.getInstance().addVCFContig(sdfReader.getContig()).build();
+            SDFGlobalContig.reset();
+            SDFGlobalContig.Builder.getInstance().addVCFContig(sdfReader.getContig()).build();
             Array<SDFReader> array = Array.wrap(new SDFReader[]{sdfReader});
             BriefSVAnnotationManager.getInstance().clear();
             BriefSVAnnotationManager.getInstance().initChromosomes().load(array, 1);
@@ -56,7 +56,7 @@ public class SVNGFTest {
 
         SDFReader sdfReader = new SDFReader("/Users/wenjiepeng/Desktop/SV/tmp/未命名文件夹/HG002_HiFi_aligned_GRCh38_winnowmap.cuteSV2.vcf.sdf");
         sdfReader.close();
-        GlobalVCFContigConvertor.Builder.getInstance().addVCFContig(sdfReader.getContig()).build();
+        SDFGlobalContig.Builder.getInstance().addVCFContig(sdfReader.getContig()).build();
         Array<SDFReader> array = Array.wrap(new SDFReader[]{sdfReader});
         BriefSVAnnotationManager.getInstance().initChromosomes().load(array, 1);
         of.setAnnotationLevel(GeneFeatureAnnotationType.HGVS_GENE_LEVEL).load().annotateAll(0);

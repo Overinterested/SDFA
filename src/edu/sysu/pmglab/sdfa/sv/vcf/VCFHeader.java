@@ -9,7 +9,7 @@ import edu.sysu.pmglab.easytools.ValueUtils;
 import edu.sysu.pmglab.easytools.wrapper.DefaultValueWrapper;
 import edu.sysu.pmglab.gbc.genome.Chromosome;
 import edu.sysu.pmglab.sdfa.sv.idividual.Subject;
-import edu.sysu.pmglab.sdfa.toolkit.RefAndAltFieldType;
+import edu.sysu.pmglab.sdfa.toolkit.SDFRefAltFieldType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,7 +55,7 @@ public class VCFHeader {
         // ID, REF, ALT, QUAL, FILTER
         noneInfoField.add(new HeaderFeature("ID", FieldType.bytecode, 1, "ID"));
         noneInfoField.add(new HeaderFeature("REF", FieldType.bytecode, 1, "REF"));
-        noneInfoField.add(new HeaderFeature("ALT", new RefAndAltFieldType(), 1, "ALT"));
+        noneInfoField.add(new HeaderFeature("ALT", new SDFRefAltFieldType(), 1, "ALT"));
         noneInfoField.add(new HeaderFeature("QUAL", FieldType.bytecode, 1, "QUAL"));
         noneInfoField.add(new HeaderFeature("FILTER", FieldType.bytecode, 1, "FILTER"));
     }
@@ -211,8 +211,6 @@ public class VCFHeader {
 
         /**
          * here we keep a fake unmodified mode, just store its citations
-         *
-         * @return
          */
         public Contig asUnmodified() {
             Contig contig = new Contig();
@@ -277,8 +275,6 @@ public class VCFHeader {
 
         /**
          * here we keep a fake unmodified mode, just store its citations
-         *
-         * @return
          */
         public AltConfig asUnmodified() {
             AltConfig altConfig = new AltConfig();
@@ -342,8 +338,6 @@ public class VCFHeader {
 
         /**
          * here we keep a fake unmodified mode, just store its citations
-         *
-         * @return
          */
         public FilterConfig asUnmodifiedMode() {
             FilterConfig filterConfig = new FilterConfig();

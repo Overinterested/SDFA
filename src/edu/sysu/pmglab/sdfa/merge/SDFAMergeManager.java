@@ -7,7 +7,7 @@ import edu.sysu.pmglab.executor.Workflow;
 import edu.sysu.pmglab.gbc.genome.Chromosome;
 import edu.sysu.pmglab.sdfa.SDFReader;
 import edu.sysu.pmglab.sdfa.merge.cmo.*;
-import edu.sysu.pmglab.sdfa.toolkit.GlobalVCFContigConvertor;
+import edu.sysu.pmglab.sdfa.toolkit.SDFGlobalContig;
 import edu.sysu.pmglab.sdfa.toolkit.SDFManager;
 import edu.sysu.pmglab.sdfa.toolkit.VCF2SDF;
 import org.slf4j.Logger;
@@ -67,7 +67,7 @@ public class SDFAMergeManager {
                 workflow.addTasks(((status, context) -> merger.acceptAllCompleteSVsFromCollection()));
                 workflow.execute();
                 workflow.clearTasks();
-                workflow.addTasks(((status, context) -> {collector.collect();}));
+                workflow.addTasks(((status, context) -> collector.collect()));
                 workflow.addTasks(((status, context) -> {
                     merger.merge();
                     outputGenerator.acceptMergedSV();
@@ -134,7 +134,7 @@ public class SDFAMergeManager {
             sdfReader.redirectSVFeature();
             sdfReader.close();
         }
-        GlobalVCFContigConvertor.Builder.getInstance().build();
+        SDFGlobalContig.Builder.getInstance().build();
         collector.buildCSVAssembly();
         collector.setSdfReaderArray(sdfReaderArray);
     }
@@ -158,7 +158,7 @@ public class SDFAMergeManager {
             sdfReader.redirectSVFeature();
             sdfReader.close();
         }
-        GlobalVCFContigConvertor.Builder.getInstance().build();
+        SDFGlobalContig.Builder.getInstance().build();
         collector.buildCSVAssembly();
         collector.setSdfReaderArray(sdfReaderArray);
     }

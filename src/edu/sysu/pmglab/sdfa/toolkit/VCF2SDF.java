@@ -95,7 +95,7 @@ public class VCF2SDF {
                         .setRefinedBucketSize((int) Math.sqrt(sdfSize))
                         .submit();
                 if (globalContig) {
-                    GlobalVCFContigConvertor.Builder.getInstance().addVCFContig(vcfFileInstance.getContig());
+                    SDFGlobalContig.Builder.getInstance().addVCFContig(vcfFileInstance.getContig());
                 }
                 SDFMeta copy;
                 if (storeMeta) {
@@ -145,7 +145,7 @@ public class VCF2SDF {
             writer.close();
 
             if (globalContig) {
-                GlobalVCFContigConvertor.Builder.getInstance().addVCFContig(vcfFileInstance.getContig());
+                SDFGlobalContig.Builder.getInstance().addVCFContig(vcfFileInstance.getContig());
             }
             SDFMeta copy;
             if (storeMeta) {

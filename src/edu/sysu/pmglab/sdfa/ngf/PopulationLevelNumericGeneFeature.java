@@ -16,7 +16,7 @@ import edu.sysu.pmglab.sdfa.genome.RefRNA;
 import edu.sysu.pmglab.sdfa.sv.UnifiedSV;
 import edu.sysu.pmglab.sdfa.sv.idividual.Subject;
 import edu.sysu.pmglab.sdfa.sv.idividual.SubjectManager;
-import edu.sysu.pmglab.sdfa.toolkit.GlobalVCFContigConvertor;
+import edu.sysu.pmglab.sdfa.toolkit.SDFGlobalContig;
 import edu.sysu.pmglab.unifyIO.FileStream;
 
 import java.io.IOException;
@@ -45,7 +45,7 @@ public class PopulationLevelNumericGeneFeature {
         VolumeByteStream cache = new VolumeByteStream();
         FileStream fs = new FileStream(outputFile, FileStream.DEFAULT_WRITER);
         initHeader(fs);
-        for (Chromosome chromosome : GlobalVCFContigConvertor.support()) {
+        for (Chromosome chromosome : SDFGlobalContig.support()) {
             loadGenes(chromosome);
             if (geneFeatureArray.isEmpty()) {
                 continue;

@@ -37,6 +37,7 @@ public class SDFReader {
     private IRecord templateRecord;
     Array<CCFFieldMeta> loadFieldArray;
     private final AtomicBoolean ALL_FEATURE_MODE = new AtomicBoolean(false);
+    private final AtomicBoolean PLINK_CONVERT_MODE = new AtomicBoolean(false);
     private final AtomicBoolean COORDINATE_FIELDS_MODE = new AtomicBoolean(false);
     private final AtomicBoolean SV_FEATURE_ANNOTATION_MODE = new AtomicBoolean(false);
     private final AtomicBoolean COORDINATE_SVLEN_SVTYPE_FIELDS_MODE = new AtomicBoolean(false);
@@ -277,6 +278,30 @@ public class SDFReader {
         changeMode(SV_FEATURE_ANNOTATION_MODE);
     }
 
+    public void redirectPlinkConvertFeatures() throws IOException {
+        if (PLINK_CONVERT_MODE.get()) {
+            reader = reader.newInstance();
+            return;
+        }
+        close();
+        resetLoadFields();
+        reader = new CCFReader(filePath);
+        // PLINK: CHR, POS, ID, REF, ALT, GTY
+        this.loadFieldIndexArray.addAll(IntArray.wrap(new int[]{0, 1, 2, 3, 5, 6}));
+        Array<CCFFieldMeta> plinkFeatures = new Array<>();
+        plinkFeatures.add(SDFFormat.SDFFields.getField(0));
+        plinkFeatures.add(SDFFormat.SDFFields.getField(1));
+        plinkFeatures.add(SDFFormat.SDFFields.getField(2));
+        plinkFeatures.add(SDFFormat.SDFFields.getField(3));
+        plinkFeatures.add(SDFFormat.SDFFields.getField(5));
+        plinkFeatures.add(SDFFormat.SDFFields.getField(6));
+        this.loadFieldArray.addAll(plinkFeatures);
+        reader = new CCFReader(filePath, plinkFeatures);
+        templateRecord = reader.getRecord();
+        decoder.setLoadFieldArray(loadFieldIndexArray);
+        changeMode(PLINK_CONVERT_MODE);
+    }
+
     public void redirectAllFeatures() throws IOException {
         if (ALL_FEATURE_MODE.get()) {
             reader = reader.newInstance();
@@ -345,15 +370,16 @@ public class SDFReader {
         modeArray.add(COORDINATE_SVLEN_SVTYPE_FIELDS_MODE);
         modeArray.add(SV_FEATURE_ANNOTATION_MODE);
         modeArray.add(ALL_FEATURE_MODE);
+        modeArray.add(PLINK_CONVERT_MODE);
         int excludeIndex = -1;
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < modeArray.size(); i++) {
             if (mode == modeArray.get(i)) {
                 excludeIndex = i;
                 break;
             }
         }
         if (excludeIndex != -1) {
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < modeArray.size(); i++) {
                 if (i != excludeIndex) {
                     modeArray.get(i).set(false);
                 }

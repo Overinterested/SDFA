@@ -23,13 +23,11 @@ public class PositionOverlapMergeStrategy extends AbstractSVMergeStrategy{
     }
 
     @Override
-    public MergedSV mergeSimpleSVArray(Array<UnifiedSV> simpleSVArray) {
-        return null;
+    public void mergeSimpleSVArray(Array<UnifiedSV> simpleSVArray) {
     }
 
     @Override
-    public MergedSV mergeCSVArray(Array<ComplexSV> csvArray) {
-        return null;
+    public void mergeCSVArray(Array<ComplexSV> csvArray) {
     }
 
     @Override

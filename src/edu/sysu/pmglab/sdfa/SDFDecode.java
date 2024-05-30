@@ -9,7 +9,7 @@ import edu.sysu.pmglab.easytools.annotation.Future;
 import edu.sysu.pmglab.sdfa.annotation.collector.sv.BriefSVAnnotationFeature;
 import edu.sysu.pmglab.sdfa.sv.*;
 import edu.sysu.pmglab.sdfa.toolkit.Contig;
-import edu.sysu.pmglab.sdfa.toolkit.RefAndAltFieldType;
+import edu.sysu.pmglab.sdfa.toolkit.SDFRefAltFieldType;
 
 /**
  * @author Wenjie Peng
@@ -20,7 +20,7 @@ public class SDFDecode {
     final int decodeMode;
     private Contig contig;
     private IntArray loadFieldArray;
-    final static RefAndAltFieldType altDecode = new RefAndAltFieldType();
+    final static SDFRefAltFieldType altDecode = new SDFRefAltFieldType();
 
     public SDFDecode(int decodeMode) {
         this.decodeMode = decodeMode;
@@ -173,8 +173,7 @@ public class SDFDecode {
         return this;
     }
 
-    public SDFDecode setLoadFieldArray(IntArray loadFieldArray) {
+    public void setLoadFieldArray(IntArray loadFieldArray) {
         this.loadFieldArray = loadFieldArray;
-        return this;
     }
 }

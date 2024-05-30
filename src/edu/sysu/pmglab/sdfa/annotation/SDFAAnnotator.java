@@ -10,7 +10,7 @@ import edu.sysu.pmglab.sdfa.SDFReader;
 import edu.sysu.pmglab.sdfa.annotation.collector.GlobalResourceManager;
 import edu.sysu.pmglab.sdfa.annotation.index.IndexAnnotator;
 import edu.sysu.pmglab.sdfa.annotation.output.UnifiedOutput;
-import edu.sysu.pmglab.sdfa.toolkit.GlobalVCFContigConvertor;
+import edu.sysu.pmglab.sdfa.toolkit.SDFGlobalContig;
 import edu.sysu.pmglab.sdfa.toolkit.SDFManager;
 import edu.sysu.pmglab.sdfa.toolkit.VCF2SDF;
 import org.slf4j.Logger;
@@ -79,7 +79,6 @@ public class SDFAAnnotator {
     /**
      * prepare SV(in sdf) and annotation resources
      *
-     * @throws IOException
      */
     public void check() throws IOException {
         // region load resource
@@ -110,7 +109,7 @@ public class SDFAAnnotator {
         //endregion
         allFullAnnotateWaitQueue.addAll(SDFManager.getInstance().getSdfReaderArray());
         allFullAnnotateWaitQueue.sort(Comparator.comparingInt(SDFReader::getFileID));
-        GlobalVCFContigConvertor.Builder.getInstance().build();
+        SDFGlobalContig.Builder.getInstance().build();
     }
 
     int loadIndexAnnotateFileQueue() {

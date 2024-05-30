@@ -7,7 +7,7 @@ import edu.sysu.pmglab.sdfa.merge.SDFAMergeManager;
 import edu.sysu.pmglab.sdfa.merge.base.CSVAssemblerInFile;
 import edu.sysu.pmglab.sdfa.sv.ComplexSV;
 import edu.sysu.pmglab.sdfa.sv.UnifiedSV;
-import edu.sysu.pmglab.sdfa.toolkit.GlobalVCFContigConvertor;
+import edu.sysu.pmglab.sdfa.toolkit.SDFGlobalContig;
 
 import java.io.IOException;
 
@@ -19,7 +19,7 @@ import java.io.IOException;
 public class ChromosomeLevelCollector extends AbstractSVCollector {
     @Override
     public boolean collect() throws IOException {
-        Chromosome currChr = GlobalVCFContigConvertor.getGlobalChromosome(currChrIndex.get());
+        Chromosome currChr = SDFGlobalContig.getGlobalChromosome(currChrIndex.get());
         //region check all csv of all chr when ending loop
         if (currChr.equals(Chromosome.unknown)) {
             // only extract csv

@@ -72,7 +72,7 @@ public class SDFManager {
                 GlobalTemporaryContainer.add(file, sdfReader.getMeta());
             }
             if (globalContig) {
-                GlobalVCFContigConvertor.Builder.getInstance().addVCFContig(sdfReader.getContig());
+                SDFGlobalContig.Builder.getInstance().addVCFContig(sdfReader.getContig());
             }
             if (globalSubject) {
                 SubjectManager.getInstance().register(sdfReader);
@@ -112,7 +112,7 @@ public class SDFManager {
                 GlobalTemporaryContainer.add(file, sdfReader.getMeta());
             }
             if (globalContig) {
-                GlobalVCFContigConvertor.Builder.getInstance().addVCFContig(sdfReader.getContig());
+                SDFGlobalContig.Builder.getInstance().addVCFContig(sdfReader.getContig());
             }
             if (globalSubject) {
                 SubjectManager.getInstance().register(sdfReader);
@@ -154,7 +154,7 @@ public class SDFManager {
                     GlobalTemporaryContainer.add(file, sdfReader.getMeta());
                 }
                 if (globalContig) {
-                    GlobalVCFContigConvertor.Builder.getInstance().addVCFContig(sdfReader.getContig());
+                    SDFGlobalContig.Builder.getInstance().addVCFContig(sdfReader.getContig());
                 }
                 if (globalSubject){
                     SubjectManager.getInstance().register(sdfReader);

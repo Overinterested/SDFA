@@ -7,7 +7,7 @@ import edu.sysu.pmglab.sdfa.annotation.collector.GlobalResourceManager;
 import edu.sysu.pmglab.sdfa.annotation.collector.resource.GeneFeatureAnnotationType;
 import edu.sysu.pmglab.sdfa.annotation.collector.sv.BriefSVAnnotationManager;
 import edu.sysu.pmglab.sdfa.annotation.genome.RefGeneManager;
-import edu.sysu.pmglab.sdfa.toolkit.GlobalVCFContigConvertor;
+import edu.sysu.pmglab.sdfa.toolkit.SDFGlobalContig;
 import edu.sysu.pmglab.sdfa.toolkit.SDFManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,8 +35,8 @@ public class NGFTest {
 
         SDFReader sdfReader = null;
         sdfReader.close();
-        GlobalVCFContigConvertor.Builder.getInstance().addVCFContig(sdfReader.getContig());
-        GlobalVCFContigConvertor.Builder.getInstance().build();
+        SDFGlobalContig.Builder.getInstance().addVCFContig(sdfReader.getContig());
+        SDFGlobalContig.Builder.getInstance().build();
         BriefSVAnnotationManager.getInstance().load(Array.wrap(new SDFReader[]{sdfReader}),1);
         //endregion
     }

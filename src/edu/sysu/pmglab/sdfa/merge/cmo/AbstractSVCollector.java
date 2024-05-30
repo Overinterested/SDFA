@@ -12,7 +12,7 @@ import edu.sysu.pmglab.sdfa.merge.base.SimpleSVMergeQueue;
 import edu.sysu.pmglab.sdfa.sv.ComplexSV;
 import edu.sysu.pmglab.sdfa.sv.SVTypeSign;
 import edu.sysu.pmglab.sdfa.sv.UnifiedSV;
-import edu.sysu.pmglab.sdfa.toolkit.GlobalVCFContigConvertor;
+import edu.sysu.pmglab.sdfa.toolkit.SDFGlobalContig;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -45,7 +45,8 @@ public abstract class AbstractSVCollector {
         loadFieldMap.put(new ByteCode("info"), CCFFieldMeta.of("Field::InfoField", FieldType.bytecodeArray));
         loadFieldMap.put(new ByteCode("svindex"), CCFFieldMeta.of("CSVLocation::IndexOfFile", FieldType.varInt32));
         loadFieldMap.put(new ByteCode("chrindexarray"), CCFFieldMeta.of("CSVLocation::CSVIndexArray", FieldType.int32Array));
-        for (SVTypeSign sv : SVTypeSign.support()) {
+        int size = SVTypeSign.support().size();
+        for (int i = 0; i < size; i++) {
             simpleSVTypeSVMergeQueueMap.add(new SimpleSVMergeQueue());
         }
     }
@@ -62,11 +63,13 @@ public abstract class AbstractSVCollector {
     abstract public boolean filterSimpleSV(UnifiedSV sv);
 
     public static Chromosome getChromosome() {
-        return GlobalVCFContigConvertor.getGlobalChromosome(currChrIndex.get());
+        return SDFGlobalContig.getGlobalChromosome(currChrIndex.get());
     }
-    public static int getChrIndex(){
+
+    public static int getChrIndex() {
         return currChrIndex.get();
     }
+
     /**
      * load meta, contig and subjects of sdf readers
      */

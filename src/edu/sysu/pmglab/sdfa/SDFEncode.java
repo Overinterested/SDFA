@@ -9,7 +9,7 @@ import edu.sysu.pmglab.easytools.annotation.Future;
 import edu.sysu.pmglab.easytools.wrapper.DefaultValueWrapper;
 import edu.sysu.pmglab.sdfa.sv.SVGenotypes;
 import edu.sysu.pmglab.sdfa.sv.UnifiedSV;
-import edu.sysu.pmglab.sdfa.toolkit.RefAndAltFieldType;
+import edu.sysu.pmglab.sdfa.toolkit.SDFRefAltFieldType;
 import edu.sysu.pmglab.sdfa.toolkit.VCF2SDF;
 
 @Future(value = "Transfer it as Enum class",
@@ -25,16 +25,16 @@ public class SDFEncode {
         for (int i = 0; i < 7; i++) {
             extendedEncodeMethods.add(null);
         }
-        RefAndAltFieldType refAndAltFieldType = new RefAndAltFieldType();
-        extendedEncodeMethods.set(2, refAndAltFieldType);
-        extendedEncodeMethods.set(3, refAndAltFieldType);
+        SDFRefAltFieldType SDFRefAltFieldType = new SDFRefAltFieldType();
+        extendedEncodeMethods.set(2, SDFRefAltFieldType);
+        extendedEncodeMethods.set(3, SDFRefAltFieldType);
         switch (encodeMode) {
             case 0:
                 break;
             case 1:
             case 2:
             case 3:
-                RefAndAltFieldType.mode = 1;
+                SDFRefAltFieldType.mode = 1;
                 VCF2SDF.dropFormat = encodeMode == 3;
                 VCF2SDF.multiInfoForCSV = encodeMode == 1;
                 break;

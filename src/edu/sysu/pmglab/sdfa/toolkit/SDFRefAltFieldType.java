@@ -13,7 +13,7 @@ import edu.sysu.pmglab.sdfa.sv.SVTypeSign;
  * @create 2024-04-02 22:09
  * @description
  */
-public class RefAndAltFieldType implements FieldType {
+public class SDFRefAltFieldType implements FieldType {
     public static int mode;
     SeqEncoder seqEncoder = new SeqEncoder();
     private static final byte[] TYPE_ALT = new byte[]{0};
@@ -22,7 +22,7 @@ public class RefAndAltFieldType implements FieldType {
     private final VolumeByteStream cache = new VolumeByteStream();
 
     static {
-        FieldType.add("alt", new RefAndAltFieldType());
+        FieldType.add("alt", new SDFRefAltFieldType());
     }
 
 

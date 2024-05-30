@@ -13,14 +13,14 @@ import java.util.Collection;
 import java.util.Set;
 
 
-public class GlobalVCFContigConvertor {
+public class SDFGlobalContig {
     final int fileSize;
-    private static GlobalVCFContigConvertor instance;
+    private static SDFGlobalContig instance;
     private static final Array<Contig> contigArray = new Array<>();
     private static final CallableSet<Chromosome> allChromosomes = new CallableSet<>();
     private static final ReusableMap<ByteCode, Chromosome> chrNameMap = new ReusableMap<>(200);
 
-    private GlobalVCFContigConvertor(int fileSize) {
+    private SDFGlobalContig(int fileSize) {
         this.fileSize = fileSize;
     }
 
@@ -51,7 +51,7 @@ public class GlobalVCFContigConvertor {
             }
         }
 
-        public synchronized GlobalVCFContigConvertor build() {
+        public synchronized SDFGlobalContig build() {
             if (close) {
                 throw new UnsupportedOperationException("Global contig had been built and can't be rebuilt.");
             }
@@ -69,10 +69,10 @@ public class GlobalVCFContigConvertor {
                         }
                     }
                 }
-                GlobalVCFContigConvertor.instance = new GlobalVCFContigConvertor(fileSize);
-                GlobalVCFContigConvertor.allChromosomes.addAll(allChromosomes);
-                GlobalVCFContigConvertor.contigArray.addAll(contigArray);
-                return GlobalVCFContigConvertor.instance;
+                SDFGlobalContig.instance = new SDFGlobalContig(fileSize);
+                SDFGlobalContig.allChromosomes.addAll(allChromosomes);
+                SDFGlobalContig.contigArray.addAll(contigArray);
+                return SDFGlobalContig.instance;
             } else if (!sdfReaderArray.isEmpty()) {
                 // TODO
                 return null;
@@ -134,7 +134,7 @@ public class GlobalVCFContigConvertor {
         );
     }
 
-    public static synchronized GlobalVCFContigConvertor getInstance() {
+    public static synchronized SDFGlobalContig getInstance() {
         if (instance == null) {
             Builder.getInstance().build();
         }

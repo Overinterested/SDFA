@@ -5,7 +5,6 @@ import edu.sysu.pmglab.ccf.CCFWriter;
 import edu.sysu.pmglab.ccf.record.IRecord;
 import edu.sysu.pmglab.container.ByteCode;
 import edu.sysu.pmglab.container.File;
-import edu.sysu.pmglab.container.VolumeByteStream;
 import edu.sysu.pmglab.container.array.Array;
 import edu.sysu.pmglab.container.array.ByteCodeArray;
 import edu.sysu.pmglab.executor.Pipeline;
@@ -13,7 +12,7 @@ import edu.sysu.pmglab.gbc.genome.Chromosome;
 import edu.sysu.pmglab.sdfa.SDFFormat;
 import edu.sysu.pmglab.sdfa.SDFReader;
 import edu.sysu.pmglab.sdfa.annotation.collector.GlobalResourceManager;
-import edu.sysu.pmglab.sdfa.toolkit.GlobalVCFContigConvertor;
+import edu.sysu.pmglab.sdfa.toolkit.SDFGlobalContig;
 import edu.sysu.pmglab.sdfa.toolkit.SDFManager;
 
 import java.io.IOException;
@@ -42,7 +41,7 @@ public class BriefSVAnnotationManager {
     }
 
     public BriefSVAnnotationManager initChromosomes() {
-        for (Chromosome chromosome : GlobalVCFContigConvertor.support()) {
+        for (Chromosome chromosome : SDFGlobalContig.support()) {
             briefSVContainer.put(chromosome, new Array<>());
         }
         return this;
@@ -51,7 +50,6 @@ public class BriefSVAnnotationManager {
     public void initAnnotationFeature(Chromosome chromosome, int resourceSize) {
         Array<BriefSVAnnotationFeature> briefSVAnnotationFeatures = briefSVContainer.get(chromosome);
         if (briefSVAnnotationFeatures != null && !briefSVAnnotationFeatures.isEmpty()) {
-            VolumeByteStream cache;
             for (BriefSVAnnotationFeature briefSVAnnotationFeature : briefSVAnnotationFeatures) {
                 briefSVAnnotationFeature.initAnnotationFeature(resourceSize);
             }
@@ -64,7 +62,7 @@ public class BriefSVAnnotationManager {
                 fileID, coordinate[1], coordinate[2], record.get(1), line
         );
         newSVPos.initAnnotationFeature(numOfResource);
-        Chromosome chr = GlobalVCFContigConvertor.convertByRawIndex(fileID, coordinate[0]);
+        Chromosome chr = SDFGlobalContig.convertByRawIndex(fileID, coordinate[0]);
         Array<BriefSVAnnotationFeature> briefSVAnnotationFeatures;
         synchronized (briefSVContainer) {
             briefSVAnnotationFeatures = briefSVContainer.get(chr);

@@ -9,7 +9,7 @@ import edu.sysu.pmglab.sdfa.ngf.FeatureType;
 import edu.sysu.pmglab.sdfa.ngf.NumericGeneFeature;
 import edu.sysu.pmglab.sdfa.ngf.PopulationLevelNumericGeneFeature;
 import edu.sysu.pmglab.sdfa.sv.idividual.SubjectManager;
-import edu.sysu.pmglab.sdfa.toolkit.GlobalVCFContigConvertor;
+import edu.sysu.pmglab.sdfa.toolkit.SDFGlobalContig;
 import edu.sysu.pmglab.sdfa.toolkit.SDFManager;
 
 import java.io.IOException;
@@ -31,7 +31,7 @@ public class PopulationTestForMulti {
         File outputDir = new File("/Users/wenjiepeng/Desktop/SV/data/private/VCF/curated_data/sv_calls_2023-06-10/cutesv_ngf_46");
         SDFManager.of(vcfDir, outputDir).collectSDF();
         // init parameters
-        GlobalVCFContigConvertor.Builder.getInstance().build();
+        SDFGlobalContig.Builder.getInstance().build();
         // annotate and output6t7
         BriefSVAnnotationManager.getInstance().initChromosomes();
         BriefSVAnnotationManager.getInstance().load(SDFManager.getInstance().getSdfReaderArray(), 1);

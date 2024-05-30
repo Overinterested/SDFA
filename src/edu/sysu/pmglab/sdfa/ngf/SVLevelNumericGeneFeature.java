@@ -13,9 +13,8 @@ import edu.sysu.pmglab.sdfa.annotation.collector.GlobalResourceManager;
 import edu.sysu.pmglab.sdfa.annotation.genome.RefGeneManager;
 import edu.sysu.pmglab.sdfa.genome.RefGene;
 import edu.sysu.pmglab.sdfa.genome.RefRNA;
-import edu.sysu.pmglab.sdfa.merge.base.CSVAssemblerInFile;
 import edu.sysu.pmglab.sdfa.sv.UnifiedSV;
-import edu.sysu.pmglab.sdfa.toolkit.GlobalVCFContigConvertor;
+import edu.sysu.pmglab.sdfa.toolkit.SDFGlobalContig;
 import edu.sysu.pmglab.unifyIO.FileStream;
 
 import java.io.IOException;
@@ -32,7 +31,6 @@ public class SVLevelNumericGeneFeature {
     boolean containCoverage = true;
     RefGeneManager geneResourceManager;
     Array<SVRelatedGeneIndexRecord> SVQueue = new Array<>();
-    CSVAssemblerInFile csvAssemblerInFile = new CSVAssemblerInFile();
     Array<NumericGeneFeature> numericGeneFeatureArray = new Array<>();
 
     public SVLevelNumericGeneFeature() {
@@ -43,7 +41,7 @@ public class SVLevelNumericGeneFeature {
         VolumeByteStream cache = new VolumeByteStream();
         FileStream fs = new FileStream(outputFile, FileStream.DEFAULT_WRITER);
         initHeader(fs);
-        for (Chromosome chromosome : GlobalVCFContigConvertor.support()) {
+        for (Chromosome chromosome : SDFGlobalContig.support()) {
             loadGenes(chromosome);
             if (numericGeneFeatureArray.isEmpty()) {
                 continue;
