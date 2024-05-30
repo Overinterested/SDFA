@@ -287,7 +287,7 @@ public class SDFReader {
         resetLoadFields();
         reader = new CCFReader(filePath);
         // PLINK: CHR, POS, ID, REF, ALT, GTY
-        this.loadFieldIndexArray.addAll(IntArray.wrap(new int[]{0, 1, 2, 3, 5, 6}));
+        this.loadFieldIndexArray.addAll(IntArray.wrap(new int[]{0, 1, 2, 3, 5, 6, 7}));
         Array<CCFFieldMeta> plinkFeatures = new Array<>();
         plinkFeatures.add(SDFFormat.SDFFields.getField(0));
         plinkFeatures.add(SDFFormat.SDFFields.getField(1));
@@ -295,6 +295,7 @@ public class SDFReader {
         plinkFeatures.add(SDFFormat.SDFFields.getField(3));
         plinkFeatures.add(SDFFormat.SDFFields.getField(5));
         plinkFeatures.add(SDFFormat.SDFFields.getField(6));
+        plinkFeatures.add(SDFFormat.SDFFields.getField(7));
         this.loadFieldArray.addAll(plinkFeatures);
         reader = new CCFReader(filePath, plinkFeatures);
         templateRecord = reader.getRecord();

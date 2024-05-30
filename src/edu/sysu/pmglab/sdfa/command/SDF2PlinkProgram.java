@@ -1,10 +1,13 @@
 package edu.sysu.pmglab.sdfa.command;
 
+import edu.sysu.pmglab.commandParser.CommandLineProgram;
 import edu.sysu.pmglab.commandParser.annotation.Synopsis;
 import edu.sysu.pmglab.commandParser.annotation.option.Option;
 import edu.sysu.pmglab.commandParser.annotation.option.OptionGroup;
 import edu.sysu.pmglab.commandParser.usage.DefaultUsageStyle;
+import edu.sysu.pmglab.container.ByteCode;
 import edu.sysu.pmglab.container.File;
+import edu.sysu.pmglab.sdfa.toolkit.SDF2Plink;
 
 /**
  * @author Wenjie Peng
@@ -35,21 +38,36 @@ import edu.sysu.pmglab.container.File;
                         description = "Specify the output directory."
                 ),
                 @Option(
-                        names = {"--disable-bed", "--no-bed"},
-                        type = Void.class,
-                        description = "No output bed file."
+                        names = {"--fam-id"},
+                        type = String.class,
+                        description = "Specify a family ID for all subjects in file. "
                 ),
                 @Option(
-                        names = {"--disable-fam", "--no-bed"},
-                        type = Void.class,
-                        description = "No output family file."
-                ),
-                @Option(
-                        names = {"--disable-bim", "--no-bed"},
-                        type = Void.class,
-                        description = "No output bim file."
+                        names = {"--fam-id-separator"},
+                        type = String.class, defaultTo = "_",
+                        description = "Specify a separator for parse family ID from subject name (default `_`)."
                 )
         }
 )
-public class SDF2PlinkProgram {
+public class SDF2PlinkProgram extends CommandLineProgram {
+
+    protected SDF2PlinkProgram(String[] args) {
+        super(args);
+    }
+
+    @Override
+    protected void work() throws Exception, Error {
+        Boolean control = options.passed("--control-sample") ? Boolean.TRUE : options.passed("--case-sample") ? Boolean.FALSE : null;
+        SDF2Plink sdf2Plink = SDF2Plink.of(options.value("-f"), options.value("-o"))
+                .setControlSample(control)
+                .setFamilyID(new ByteCode());
+        if (options.passed("--fam-id")) {
+            sdf2Plink.setFamilyID(options.value("--fam-id"));
+        } else {
+            if (options.passed("--fam-id-separator")) {
+                sdf2Plink.setSeparatorForFamily(new ByteCode((String) options.value("--fam-id-separator")));
+            }
+        }
+        sdf2Plink.submit();
+    }
 }

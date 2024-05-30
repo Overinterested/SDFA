@@ -24,12 +24,26 @@ public class SDF2Plink {
     Boolean controlSample;
     ByteCode separatorForFamily;
 
+    private SDF2Plink(File sdfFile, File outputDir) {
+        this.sdfFile = sdfFile;
+        this.outputDir = outputDir;
+    }
+
     private static final byte[] BED_HEADER = {0x6C, 0x1B, 0x01};
     private static final byte[] FATHER_MOTHER_SEX_TAG = {ByteCode.ZERO, ByteCode.TAB, ByteCode.ZERO, ByteCode.TAB, ByteCode.ZERO};
     private static final byte[] default_family_id = new byte[]{ByteCode.F, ByteCode.a, ByteCode.m, ByteCode.I, ByteCode.D};
 
+    public static SDF2Plink of(Object sdfFile, Object outputDir) {
+        return new SDF2Plink(
+                new File(sdfFile.toString()),
+                new File(outputDir.toString())
+        );
+    }
+
     public void submit() throws IOException {
+        outputDir.mkdirs();
         SDFReader sdfReader = new SDFReader(sdfFile);
+        sdfReader.redirectPlinkConvertFeatures();
         SDFMeta meta = sdfReader.getMeta();
         writeFamFile(meta.getSubjects());
         int subjectSize = meta.getSubjects().numOfSubjects();
@@ -90,7 +104,7 @@ public class SDF2Plink {
         return genotypeBytes;
     }
 
-    public void writeFamFile(Subjects subjects) throws IOException {
+    private void writeFamFile(Subjects subjects) throws IOException {
         File famFile = outputDir.getSubFile(".fam");
         CallableSet<Subject> subjectSet = subjects.getSubjectSet();
         FileStream fs = new FileStream(famFile, FileStream.DEFAULT_WRITER);
@@ -146,7 +160,26 @@ public class SDF2Plink {
         fs.close();
     }
 
-    public static void main(String[] args) {
 
+    public SDF2Plink setFamilyID(ByteCode familyID) {
+        this.familyID = familyID;
+        return this;
+    }
+
+    public SDF2Plink setControlSample(Boolean controlSample) {
+        this.controlSample = controlSample;
+        return this;
+    }
+
+    public SDF2Plink setSeparatorForFamily(ByteCode separatorForFamily) {
+        this.separatorForFamily = separatorForFamily;
+        return this;
+    }
+
+    public static void main(String[] args) throws IOException {
+        SDF2Plink.of(
+                "/Users/wenjiepeng/Desktop/SV/SVMerge/sniffles.sdf",
+                "/Users/wenjiepeng/Desktop/SV/data/private/VCF/test"
+        ).submit();
     }
 }
