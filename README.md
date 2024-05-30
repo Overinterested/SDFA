@@ -4,7 +4,6 @@
 
 <div align="center"> <img src="./assets/image-20240526104918323.png" alt="SDFA Logo" width="800"height="200"> </div>
 
-
 SDFA (SDF-based Analyzer) is a comprehensive framework designed for accurate and rapid parsing, storage, and analysis of structural variation (SV) data within large population samples. 
 It introduces a novel Standardized Decomposition Format (SDF) for efficient SV representation, and provides modules for merging, annotation, and quantitative gene feature assessment.
 
@@ -54,34 +53,56 @@ mvn clean install
 
 The SDFA command-line tool supports various functionalities, including VCF to SDF conversion, merging, annotation, and numeric gene feature annotation. Here are some examples:
 
-**VCF to SDF Conversion**
+- <a href="#vcf2sdf">VCF2SDF Convertor</a>
+- <a href="#gui">SDF GUI</a>
+- <a href="#merge">SDF for Merge</a>
+- <a href="#annotation">SDFA for Annotation</a>
+- <a href="#ngf">SDFA for NGF</a>
+- <a href="#extract">Partial Subjects Extraction</a>
+- <a href="#concat">Multiply SDF files Concat </a>
+- <a href="#sdf2plink">SDF2Plink </a>
+
+<a name="vcf2sdf"></a>**VCF to SDF Conversion**
 
 ```bash
 java -jar SDFA.jar vcf2sdf -f input.vcf -o output_dir
 ```
 
-**Show SDF file Content**
+<a name="gui"></a>**Show SDF file Content**
 
 ```shell
 java -jar SDFA.jar gui -f input.sdf
 ```
 
-**Merging**
+<a name="merge"></a>**Merging**
 
 ```bash
 java -jar SDFA.jar merge -dir input_dir -o output_dir
 ```
 
-**Annotation**
+<a name="annotation"></a>**Annotation**
 
 ```bash
 java -jar SDFA.jar annotate -dir input_dir -o output_dir --annot-config annotation.config
 ```
 
-**Numeric Gene Feature Annotation**
+<a name="ngf"></a>**Numeric Gene Feature Annotation**
 
 ```bash
 java -jar SDFA.jar ngf -dir input_dir -o output_dir --hg38 --gene-level
+```
+<a name="extract"></a>**Extract part subject from SDF**
+```bash
+java -jar SDFA.jar extract -f input.sdf --extract-subject ped.file --ped-file -o output_dir
+```
+<a name="concat"></a>**SDF Concat**
+```bash
+java -jar SDFA.jar concat -dir sdf_dir -o output_dir -threads 4
+```
+<a name="sdf2plink"></a>**SDF2Plink**
+> Produce `.fam`, `.bed` and `.bim`
+```bash
+java -jar SDFA.jar sdf2plink -f sdf_file_path -o output_dir
 ```
 
 For more detailed information on available options and configurations, refer to the command-line help:
