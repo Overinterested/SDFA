@@ -150,9 +150,9 @@ public class UkbbFilter extends CommandLineProgram {
                                 int bb = 0;
                                 int ab = 0;
                                 for (SVGenotype genotype : genotypes) {
-                                    if (genotype == SVGenotype.homozygousWildType) {
+                                    if (genotype == SVGenotype.homozygousVariantType) {
                                         aa++;
-                                    } else if (genotype == SVGenotype.homozygousVariantType) {
+                                    } else if (genotype == SVGenotype.homozygousWildType) {
                                         bb++;
                                     } else {
                                         ab++;

@@ -5,9 +5,11 @@ import edu.sysu.pmglab.ccf.CCFWriter;
 import edu.sysu.pmglab.ccf.record.IRecord;
 import edu.sysu.pmglab.container.*;
 import edu.sysu.pmglab.container.array.*;
+import edu.sysu.pmglab.easytools.ProcessBar;
 import edu.sysu.pmglab.sdfa.SDFMeta;
 import edu.sysu.pmglab.sdfa.SDFReader;
 import edu.sysu.pmglab.sdfa.SDFViewer;
+import edu.sysu.pmglab.sdfa.command.SDFAEntry;
 import edu.sysu.pmglab.sdfa.sv.SVGenotype;
 import edu.sysu.pmglab.sdfa.sv.SVGenotypes;
 import edu.sysu.pmglab.sdfa.sv.idividual.Subject;
@@ -64,13 +66,19 @@ public class SDFExtract {
         IntArray indexOfExtractSubject = checkSubjectName(extractSubjectSet, subjects);
         CCFReader ccfReader = reader.getReader();
         IRecord record = ccfReader.getRecord();
-        File outputFile = outputDir.getSubFile(sdfFile.getName());
+        File outputFile = outputDir.getSubFile("extract_" + sdfFile.getName());
         CCFWriter writer = CCFWriter.Builder.of(outputFile)
                 .addFields(ccfReader.getAllFields())
                 .build();
         SVGenotype[] svGenotypes = new SVGenotype[indexOfExtractSubject.size()];
         boolean dropSV;
         int[] countSVOfContig = new int[meta.getContig().getAllChromosomes().size()];
+        int dropSVCount = 0;
+        ccfReader.remaining();
+        ProcessBar bar = null;
+        if (logger != null) {
+            bar = new ProcessBar().setHeader("Extraction Speed").setUnit("SV(s)").start();
+        }
         while (ccfReader.read(record)) {
             dropSV = false;
             ShortArray tmp = ShortArray.wrap(record.get(3));
@@ -84,12 +92,13 @@ public class SDFExtract {
             if (!storeAllHomGtys) {
                 dropSV = true;
                 for (SVGenotype svGenotype : svGenotypes) {
-                    if (!svGenotype.equals(SVGenotype.noneGenotye)) {
+                    if (!svGenotype.equals(SVGenotype.homozygousVariantType)) {
                         dropSV = false;
                         break;
                     }
                 }
                 if (dropSV) {
+                    dropSVCount++;
                     continue;
                 }
             }
@@ -102,14 +111,22 @@ public class SDFExtract {
                 }
             }
             if (dropSV) {
+                dropSVCount++;
                 continue;
             }
             //endregion
             record.set(3, new SVGenotypes(svGenotypes).encodeGTs());
             record.set(4, resetGtyFormat(record.get(4), indexOfExtractSubject));
             writer.write(record);
+            if (bar != null) {
+                bar.addProcessed(1);
+            }
             int[] coordinate = record.get(0);
             countSVOfContig[coordinate[0]]++;
+        }
+        if (bar != null) {
+            bar.setFinish();
+            logger.info("Finish extraction task and drop " + dropSVCount + " SVs.");
         }
         Subjects extractSubjectInFile = new Subjects(outputFile)
                 .addAll(
@@ -159,17 +176,18 @@ public class SDFExtract {
         if (subjectNameSet.size() != 0) {
             for (ByteCode extractSubject : extractSubjectSet) {
                 int indexOfSubject = subjectNameSet.indexOfValue(extractSubject);
-                if (indexOfSubject == -1 && !noCheckForUnMapSubject) {
+                if (indexOfSubject != -1) {
+                    indexOfExtractSubject.add(indexOfSubject);
+                } else if (!noCheckForUnMapSubject) {
                     throw new UnsupportedOperationException(extractSubject.toString() + " isn't in subject set of raw file");
                 }
-                indexOfExtractSubject.add(indexOfSubject);
             }
         }
         if (logger != null) {
             if (extractSubjectSet.size() == indexOfExtractSubject.size()) {
                 logger.info("Mapping " + extractSubjectSet + " subjects to raw sdf file.");
             } else {
-                logger.error("Mapping " + indexOfExtractSubject.size() + " subjects(totally " + extractSubjectSet.size() + ") to raw sdf file.");
+                logger.info("Mapping " + indexOfExtractSubject.size() + " subjects(totally " + extractSubjectSet.size() + ") to raw sdf file.");
             }
         }
         return indexOfExtractSubject;
@@ -230,15 +248,24 @@ public class SDFExtract {
     }
 
     public static void main(String[] args) throws IOException {
-        new VCF2SDF(
-                "/Users/wenjiepeng/Desktop/SV/SVMerge/trio/wm_10md_PBCCS/sniffles_test.vcf",
-                "/Users/wenjiepeng/Desktop/SV/SVMerge/trio/wm_10md_PBCCS/sniffles.sdf"
-        ).setEncodeMode(1).convert();
-        SDFExtract.of(
-                "/Users/wenjiepeng/Desktop/SV/SVMerge/trio/wm_10md_PBCCS/sniffles.sdf",
-                "/Users/wenjiepeng/Desktop/SV/SVMerge/trio/wm_10md_PBCCS/subject_extract_test.txt",
-                "/Users/wenjiepeng/Desktop/SV/SVMerge"
-        ).storeAllHomGtys(false).submit();
-        SDFViewer.view(new File("/Users/wenjiepeng/Desktop/SV/SVMerge/sniffles.sdf"));
+//        new VCF2SDF(
+//                "/Users/wenjiepeng/Desktop/SV/SVMerge/trio/wm_10md_PBCCS/sniffles_test.vcf",
+//                "/Users/wenjiepeng/Desktop/SV/SVMerge/trio/wm_10md_PBCCS/sniffles.sdf"
+//        ).setEncodeMode(1).convert();
+//        SDFExtract.of(
+//                "/Users/wenjiepeng/Desktop/SV/SVMerge/trio/wm_10md_PBCCS/sniffles.sdf",
+//                "/Users/wenjiepeng/Desktop/SV/SVMerge/trio/wm_10md_PBCCS/subject_extract_test.txt",
+//                "/Users/wenjiepeng/Desktop/SV/SVMerge"
+//        ).storeAllHomGtys(false).submit();
+//        SDFViewer.view(new File("/Users/wenjiepeng/Desktop/SV/SVMerge/sniffles.sdf"));
+//        VCF2SDF.lineExtractAndSort = true;
+//        new VCF2SDF("/Users/wenjiepeng/Downloads/ukb23353_c1_b123_v1.vcf.gz", "/Users/wenjiepeng/Desktop/SDFA/test/extract/ukbb.sdf")
+//                .setEncodeMode(2)
+//                .convert();
+        // ukbb F32 extract
+        SDFAEntry.main(("extract -f /Users/wenjiepeng/Desktop/tmp/RAW_ukbb.sdf " +
+                "--extract-subject /Users/wenjiepeng/Desktop/tmp/F32_fam.ped " +
+                "-o /Users/wenjiepeng/Desktop/tmp --ped-file").split(" "));
+        SDFViewer.view("/Users/wenjiepeng/Desktop/tmp/ukbb.sdf");
     }
 }

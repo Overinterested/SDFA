@@ -13,6 +13,7 @@ import edu.sysu.pmglab.executor.Workflow;
 import edu.sysu.pmglab.gbc.genome.Chromosome;
 import edu.sysu.pmglab.sdfa.SDFMeta;
 import edu.sysu.pmglab.sdfa.SDFReader;
+import edu.sysu.pmglab.sdfa.SDFViewer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -215,10 +216,12 @@ public class SDFConcat {
 
     public static void main(String[] args) throws IOException {
         Logger logger = LoggerFactory.getLogger("test");
-        SDFConcat.of(
-                new File("/Users/wenjiepeng/Desktop/SV/data/private/VCF/sniffles_output_sdf"),
-                new File("/Users/wenjiepeng/Desktop/SV/data/private/VCF/concat")
-        ).silent(false).setLogger(logger).submit();
+//        SDFConcat.of(
+//                new File("/Users/wenjiepeng/Desktop/SV/data/private/VCF/sniffles_output_sdf"),
+//                new File("/Users/wenjiepeng/Desktop/SV/data/private/VCF/concat")
+//        ).silent(false).setLogger(logger).submit();
+//        SDFAEntry.main("concat -dir /Users/wenjiepeng/Desktop/tmp -o /Users/wenjiepeng/Desktop/tmp --threads 1".split(" "));
+        SDFViewer.view("/Users/wenjiepeng/Desktop/tmp/concatResult.sdf");
     }
 
     public SDFConcat silent(boolean silent) {

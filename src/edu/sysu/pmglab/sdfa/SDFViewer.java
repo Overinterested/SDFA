@@ -28,6 +28,10 @@ import java.io.IOException;
  * @description
  */
 public class SDFViewer {
+    public static void view(String sdfFile) throws IOException {
+        view(new File(sdfFile));
+    }
+
     public static void view(File sdfFile) throws IOException {
         new CCFViewer(new SDFViewerReader(new SDFReader(sdfFile)), 20, false);
     }

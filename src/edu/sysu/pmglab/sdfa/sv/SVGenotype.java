@@ -83,8 +83,8 @@ public class SVGenotype {
         noneGenotye = genotypeEncoder[0][0];
     }
 
-    public static final SVGenotype homozygousWildType = SVGenotype.of(0, 0);
-    public static final SVGenotype homozygousVariantType = SVGenotype.of(1, 1);
+    public static final SVGenotype homozygousVariantType = SVGenotype.of(0, 0);
+    public static final SVGenotype homozygousWildType = SVGenotype.of(1, 1);
 
     public int hashCode() {
         return this.byteCode;

@@ -75,7 +75,7 @@ public class SDFExtractProgram extends CommandLineProgram {
                 .storeAllHomGtys(options.passed("--store-fullHom"))
                 .setLogger(logger)
                 .setSeparate(options.value("-sep"))
-                .isPedFile(options.value("--ped-file"))
+                .isPedFile(options.passed("--ped-file"))
                 .submit();
     }
 }

@@ -150,15 +150,20 @@ public class Vcf2SdfProgram extends CommandLineProgram {
                             }, "GQ>" + gq);
                 }
             }
+
             @Override
-            protected void initFieldFilter() {}
+            protected void initFieldFilter() {
+            }
         };
         int thread = this.options.value("--threads");
         if (this.options.passed("-f")) {
             ReusableVCFPool.init(1);
             File vcfFile = options.value("-f");
-            new VCF2SDF(FileTool.checkFileExist(vcfFile, this.getLogger()),
-                    FileTool.checkDirWithCreate(outputDir, this.getLogger()))
+            FileTool.checkDirWithCreate(outputDir);
+            new VCF2SDF(
+                    FileTool.checkFileExist(vcfFile, this.getLogger()),
+                    outputDir.getSubFile(vcfFile.getName()).addExtension(".sdf")
+            )
                     .setFileID(0)
                     .setLogger(this.getLogger())
                     .storeMeta(false)
@@ -209,7 +214,7 @@ public class Vcf2SdfProgram extends CommandLineProgram {
     }
 
     public static void main(String[] args) {
-        System.out.println((byte)0b11100000);
+        System.out.println((byte) 0b11100000);
     }
 
     public static void shuffleFiles(File[] files) {

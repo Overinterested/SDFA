@@ -39,6 +39,6 @@ public class SDFGuiProgram extends CommandLineProgram {
 
     @Override
     protected void work() throws Exception, Error {
-        SDFViewer.view(options.value("-f"));
+        SDFViewer.view((File) options.value("-f"));
     }
 }
