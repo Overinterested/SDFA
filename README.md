@@ -41,12 +41,7 @@ git clone https://github.com/Overinterested/SDFA.git
 
 ```bash
 cd SDFA
-```
-
-3. Compile the project:
-
-```bash
-mvn clean install
+# the latest .jar is SDFA.jar in current dir
 ```
 
 ## Usage
