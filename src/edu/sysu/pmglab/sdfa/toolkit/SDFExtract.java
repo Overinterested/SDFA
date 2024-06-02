@@ -185,9 +185,9 @@ public class SDFExtract {
         }
         if (logger != null) {
             if (extractSubjectSet.size() == indexOfExtractSubject.size()) {
-                logger.info("Mapping " + extractSubjectSet + " subjects to raw sdf file.");
+                logger.info("Mapping " + extractSubjectSet + " subjects to raw sdf file("+subjects.numOfSubjects()+" subjects).");
             } else {
-                logger.info("Mapping " + indexOfExtractSubject.size() + " subjects(totally " + extractSubjectSet.size() + ") to raw sdf file.");
+                logger.info("Mapping " + indexOfExtractSubject.size() + " subjects(totally " + extractSubjectSet.size() + ") to raw sdf file("+subjects.numOfSubjects()+" subjects).");
             }
         }
         return indexOfExtractSubject;
@@ -266,6 +266,6 @@ public class SDFExtract {
         SDFAEntry.main(("extract -f /Users/wenjiepeng/Desktop/tmp/RAW_ukbb.sdf " +
                 "--extract-subject /Users/wenjiepeng/Desktop/tmp/F32_fam.ped " +
                 "-o /Users/wenjiepeng/Desktop/tmp --ped-file").split(" "));
-        SDFViewer.view("/Users/wenjiepeng/Desktop/tmp/ukbb.sdf");
+        SDFViewer.view("/Users/wenjiepeng/Desktop/tmp/RAW_ukbb.sdf");
     }
 }
