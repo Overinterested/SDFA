@@ -1,6 +1,5 @@
 package edu.sysu.pmglab.easytools.container;
 
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -25,5 +24,19 @@ public class GlobalTemporaryContainer {
             container.remove(key);
         }
         return o;
+    }
+
+    public static boolean remove(Object key) {
+        if (key == null) {
+            return false;
+        }
+        if (container.contains(key)) {
+            container.remove(key);
+            return true;
+        }
+        return false;
+    }
+    public static void clearAll(){
+        container.clear();
     }
 }

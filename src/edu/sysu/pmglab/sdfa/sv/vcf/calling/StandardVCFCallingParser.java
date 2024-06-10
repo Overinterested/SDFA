@@ -34,7 +34,7 @@ public class StandardVCFCallingParser extends AbstractCallingParser {
     public void parse(int indexOfFile, Chromosome chromosome, int pos, ByteCodeArray encodeNoneFieldArray,
                       ReusableMap<ByteCode, ByteCode> infoField, SVGenotypes svGenotypes) {
         SVTypeSign type = SVTypeSign.getByName(infoField.get(SVTYPE_BYTECODE));
-        if (type.getIndex() == BND_TYPE_INDEX) {
+        if (type.getIndex() == BND_TYPE_INDEX || type.getIndex() == TRA_TYPE_INDEX) {
             loadOneLatest(type, -1, pos, -1, chromosome, encodeNoneFieldArray,
                     infoField, svGenotypes, new CSVLocation(indexOfFile));
         }

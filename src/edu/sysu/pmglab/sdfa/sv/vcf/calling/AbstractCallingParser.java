@@ -33,7 +33,7 @@ public abstract class AbstractCallingParser {
     public static final ByteCode SVTYPE_BYTECODE = new ByteCode(new byte[]{ByteCode.S, ByteCode.V, ByteCode.T, ByteCode.Y, ByteCode.P, ByteCode.E});
     public static final ByteCode SVTYPE2_BYTECODE = new ByteCode(new byte[]{ByteCode.S, ByteCode.V, ByteCode.T, ByteCode.Y, ByteCode.P, ByteCode.E, ByteCode.TWO});
     public static final int BND_TYPE_INDEX = SVTypeSign.get("BND").getIndex();
-    private static final ByteCodeArray EMPTY_BYTECODE_ARRAY = new ByteCodeArray(new ByteCode[0]);
+    public static final int TRA_TYPE_INDEX = SVTypeSign.get("TRA").getIndex();
     private static final ByteCodeArray ONE_EMPTY_BYTECODE_ARRAY = new ByteCodeArray(new ByteCode[0]);
 
     abstract public void parse(int indexOfFile, Chromosome chromosome, int pos,

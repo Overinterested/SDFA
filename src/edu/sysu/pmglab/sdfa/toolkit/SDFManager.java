@@ -264,4 +264,9 @@ public class SDFManager {
     public Array<File> getVcfFileArray() {
         return vcfFileArray;
     }
+
+    public SDFManager globalSubject(boolean globalSubject){
+        this.globalSubject = globalSubject;
+        return this;
+    }
 }

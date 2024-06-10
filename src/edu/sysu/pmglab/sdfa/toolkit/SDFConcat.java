@@ -1,6 +1,7 @@
 package edu.sysu.pmglab.sdfa.toolkit;
 
 import edu.sysu.pmglab.ccf.CCFReader;
+import edu.sysu.pmglab.ccf.CCFTable;
 import edu.sysu.pmglab.ccf.CCFWriter;
 import edu.sysu.pmglab.ccf.record.IRecord;
 import edu.sysu.pmglab.container.ByteCode;
@@ -9,11 +10,14 @@ import edu.sysu.pmglab.container.File;
 import edu.sysu.pmglab.container.array.Array;
 import edu.sysu.pmglab.easytools.ProcessBar;
 import edu.sysu.pmglab.easytools.container.ContigBlockContainer;
+import edu.sysu.pmglab.easytools.container.GlobalTemporaryContainer;
 import edu.sysu.pmglab.executor.Workflow;
 import edu.sysu.pmglab.gbc.genome.Chromosome;
 import edu.sysu.pmglab.sdfa.SDFMeta;
 import edu.sysu.pmglab.sdfa.SDFReader;
 import edu.sysu.pmglab.sdfa.SDFViewer;
+import edu.sysu.pmglab.sdfa.sv.idividual.SubjectManager;
+import edu.sysu.pmglab.sdfa.sv.idividual.Subjects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,10 +49,18 @@ public class SDFConcat {
         this.concatTime = (int) (Math.log(allSDFFile.size()) / Math.log(2)) + 1;
     }
 
+    public static SDFConcat of(String concatSDFDir, String outputDir) throws IOException {
+        return of(new File(concatSDFDir), new File(outputDir));
+    }
+
     public static SDFConcat of(File concatSDFDir, File outputDir) throws IOException {
-        SDFManager.of(concatSDFDir, outputDir).globalContig(true).collectSDF();
+        SDFManager.of(concatSDFDir, outputDir).globalSubject(false).globalContig(true).collectSDF();
         Array<SDFReader> sdfReaderArray = SDFManager.getInstance().getSdfReaderArray();
-        if (sdfReaderArray == null) {
+        SDFReader sdfReader = sdfReaderArray.get(0);
+        sdfReader.restart();
+        SubjectManager.getInstance().register(sdfReader);
+        sdfReader.close();
+        if (sdfReaderArray.isEmpty()) {
             throw new UnsupportedEncodingException("No sdf files in " + outputDir + ".");
         }
         if (sdfReaderArray.size() == 1) {
@@ -142,8 +154,15 @@ public class SDFConcat {
             contigBlockContainer.getChromosomeByName(new ByteCode(chromosome.getName()));
         }
         meta.setContigBlockContainer(contigBlockContainer).initChrBlockRange(globalContigRange);
+        if (concatRound.get() == concatTime - 1) {
+            meta.setSubjects(new Subjects(writer.getOutputFile()).addAll(SubjectManager.getInstance().getIndexableSubjects()));
+        }
         writer.writeMeta(meta.write());
         writer.close();
+        CCFTable.clear(k);
+        CCFTable.clear(v);
+        GlobalTemporaryContainer.remove(k.getFilePath());
+        GlobalTemporaryContainer.remove(v.getFilePath());
         SDFReader res = new SDFReader(writer.getOutputFile());
         res.close();
         return res;

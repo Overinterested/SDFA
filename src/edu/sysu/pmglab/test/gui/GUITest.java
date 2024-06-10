@@ -13,7 +13,7 @@ import java.io.IOException;
 public class GUITest {
     public static void main(String[] args) throws IOException {
         SDFViewer.view(new File(
-                "/Users/wenjiepeng/Desktop/SV/SVMerge/test/0.sdf"
+                "/Users/wenjiepeng/Desktop/SV/data/private/xz_家系/test/M546.2.10x.vcf.sdf"
         ));
     }
 }

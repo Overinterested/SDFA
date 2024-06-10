@@ -1,8 +1,5 @@
 package edu.sysu.pmglab.test;
 
-import edu.sysu.pmglab.sdfa.command.SDFAEntry;
-import edu.sysu.pmglab.sdfa.toolkit.VCF2SDF;
-
 import java.io.IOException;
 
 /**
@@ -12,13 +9,8 @@ import java.io.IOException;
  */
 public class UKBB {
     public static void main(String[] args) throws IOException {
-        VCF2SDF.multiInfoForCSV = true;
-        long l = System.currentTimeMillis();
-        SDFAEntry.main(("vcf2sdf -dir " +
-                "/Users/wenjiepeng/Desktop/tmp/ukb -o " +
-                "/Users/wenjiepeng/Desktop/SV/test/tmp " +
-                "-c 1 --pool--threshold 200000,500000,700000 --pool").split(" "));
-        System.out.println(System.currentTimeMillis()-l);
+        byte feature = (byte) 0b00001000;
+        System.out.println((byte)(feature|0b10000000));
 //        FileStream fs = new FileStream("/Users/wenjiepeng/Desktop/tmp/ukb/ukbb.vcf.gz");
 //        VolumeByteStream cache = new VolumeByteStream();
 //        int count = 0;

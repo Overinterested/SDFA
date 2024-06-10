@@ -1,8 +1,6 @@
 package edu.sysu.pmglab.sdfa.toolkit;
 
 import edu.sysu.pmglab.container.File;
-import edu.sysu.pmglab.sdfa.sv.vcf.VCFFile;
-import edu.sysu.pmglab.sdfa.sv.vcf.VCFFormatField;
 
 /**
  * @author Wenjie Peng

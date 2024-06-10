@@ -82,7 +82,7 @@ public class NumericTranscriptFeature {
         parsed = true;
         rnaFeature |= rnaQuantificationAnnotation.rnaFeature;
         for (int i = 0; i < coverage.length; i++) {
-            coverage[i] += rnaQuantificationAnnotation.coverage[i];
+            coverage[i] += Math.min(100, rnaQuantificationAnnotation.coverage[i]);
         }
     }
 
@@ -153,15 +153,18 @@ public class NumericTranscriptFeature {
         NumericTranscriptFeature.filterForCoding = filterForCoding;
     }
 
-    public byte getRnaFeature() {
+    public byte getRnaFeatureValue() {
+        if (rnaFeature==-76){
+            int a = 1;
+        }
+        return rnaFeature;
+    }
+
+    public byte getAbsRnaFeature() {
         // Check if the sign bit (MSB) is set
         boolean isNegative = (rnaFeature & 0x80) != 0;
-        // Extract the numeric value (7 bits)
-        byte value = (byte) (rnaFeature & 0x7F);
-        // Adjust the value based on the sign bit
-        if (isNegative) {
-            value = (byte) -value;
-        }
-        return value;
+
+        // Extract the numeric value (7 bits) and adjust the value based on the sign bit
+        return isNegative ? (byte) (rnaFeature + 128) : rnaFeature;
     }
 }

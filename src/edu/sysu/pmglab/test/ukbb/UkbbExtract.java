@@ -3,7 +3,6 @@ package edu.sysu.pmglab.test.ukbb;
 import ch.qos.logback.classic.Level;
 import edu.sysu.pmglab.LogBackOptions;
 import edu.sysu.pmglab.commandParser.CommandLineProgram;
-import edu.sysu.pmglab.commandParser.CommandParser;
 import edu.sysu.pmglab.container.File;
 import edu.sysu.pmglab.container.array.Array;
 import edu.sysu.pmglab.easytools.ProcessBar;
@@ -19,7 +18,6 @@ import org.slf4j.LoggerFactory;
  * @description
  */
 public class UkbbExtract extends CommandLineProgram {
-    private static final CommandParser parser = new CommandParser(UkbbExtract.class);
     private static final Logger logger = LoggerFactory.getLogger("UKBB Extract - Command Line");
 
     protected UkbbExtract(String[] args) {

@@ -13,7 +13,6 @@ public class SDFFormat extends CCFFormat {
     /**
      * SVF 版本: CCF  Version + SVF Version
      */
-    public final static String VERSION = "stable-0.0";
     public final static String EXTENSION = ".sdf";
 
     /**

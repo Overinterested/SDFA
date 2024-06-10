@@ -50,7 +50,7 @@ public class SDFConcatProgram extends CommandLineProgram {
 
     @Override
     protected void work() throws Exception, Error {
-        SDFConcat.of(options.value("-dir"), options.value("-o"))
+        SDFConcat.of((File) options.value("-dir"), (File) options.value("-o"))
                 .setLogger(logger)
                 .silent(false)
                 .threads(options.value("--threads"))

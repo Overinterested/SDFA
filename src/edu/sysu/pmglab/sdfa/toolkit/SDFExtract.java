@@ -148,6 +148,11 @@ public class SDFExtract {
         ByteCode[] res = new ByteCode[formatField.length];
         ByteCodeArray tmp = new ByteCodeArray();
         for (int i = 0; i < formatField.length; i++) {
+            ByteCode byteCode = formatField[i];
+            if (byteCode.length() == 0){
+                res[i] = empty;
+                continue;
+            }
             ByteCodeArray decodeItem = (ByteCodeArray) ArrayType.decode(formatField[i]);
             if (decodeItem.isEmpty()) {
                 res[i] = empty;

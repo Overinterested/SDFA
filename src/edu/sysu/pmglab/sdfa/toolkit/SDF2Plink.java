@@ -1,9 +1,7 @@
 package edu.sysu.pmglab.sdfa.toolkit;
 
-import edu.sysu.pmglab.container.ByteCode;
-import edu.sysu.pmglab.container.CallableSet;
-import edu.sysu.pmglab.container.File;
-import edu.sysu.pmglab.container.VolumeByteStream;
+import edu.sysu.pmglab.container.*;
+import edu.sysu.pmglab.container.array.Array;
 import edu.sysu.pmglab.container.array.BaseArray;
 import edu.sysu.pmglab.easytools.ValueUtils;
 import edu.sysu.pmglab.sdfa.SDFMeta;
@@ -19,6 +17,7 @@ import java.util.Arrays;
 
 public class SDF2Plink {
     File sdfFile;
+    File pedFile;
     File outputDir;
     ByteCode familyID;
     Boolean controlSample;
@@ -105,6 +104,37 @@ public class SDF2Plink {
     }
 
     private void writeFamFile(Subjects subjects) throws IOException {
+        if (pedFile != null) {
+            Array<FamRecord> pedRecord = new Array<>();
+            VolumeByteStream cache = new VolumeByteStream();
+            IndexableSet<ByteCode> indexableSubjectNameSet = new IndexableSet<>();
+            CallableSet<Subject> subjectSet = subjects.getSubjectSet();
+            for (Subject subject : subjectSet) {
+                indexableSubjectNameSet.add(subject.getName());
+            }
+            FileStream fs = new FileStream(pedFile, FileStream.DEFAULT_READER);
+            while (fs.readLine(cache) != -1) {
+                FamRecord famRecord = new FamRecord(cache.toByteCode());
+                int index = indexableSubjectNameSet.indexOf(famRecord.iid);
+                if (index == -1) {
+                    cache.reset();
+                    continue;
+                }
+                famRecord.ID = index;
+                famRecord.asUnmodified();
+                pedRecord.add(famRecord);
+            }
+            fs.close();
+            pedRecord.sort(FamRecord::compareTo);
+            File famFile = outputDir.getSubFile(".fam");
+            fs = new FileStream(famFile, FileStream.DEFAULT_WRITER);
+            for (FamRecord famRecord : pedRecord) {
+                fs.write(famRecord.toString());
+                fs.write(ByteCode.NEWLINE);
+            }
+            fs.close();
+            return;
+        }
         File famFile = outputDir.getSubFile(".fam");
         CallableSet<Subject> subjectSet = subjects.getSubjectSet();
         FileStream fs = new FileStream(famFile, FileStream.DEFAULT_WRITER);
@@ -176,10 +206,50 @@ public class SDF2Plink {
         return this;
     }
 
+    public SDF2Plink setPedFile(File pedFile) {
+        this.pedFile = pedFile;
+        return this;
+    }
+
     public static void main(String[] args) throws IOException {
         SDF2Plink.of(
-                "/Users/wenjiepeng/Desktop/SV/SVMerge/sniffles.sdf",
-                "/Users/wenjiepeng/Desktop/SV/data/private/VCF/test"
-        ).submit();
+                "/Users/wenjiepeng/Downloads/extract_concatResult_new.sdf",
+                "/Users/wenjiepeng/Desktop/SDFA/ukbb"
+        ).setPedFile(new File("/Users/wenjiepeng/Desktop/SDFA/ukbb/F32_fam.ped")).submit();
+    }
+}
+
+class FamRecord implements Comparable<FamRecord> {
+    int ID;
+    ByteCode famid;
+    ByteCode iid;
+    ByteCode fid;
+    ByteCode mid;
+    int sex;
+    int phenotype;
+
+    @Override
+    public int compareTo(FamRecord o) {
+        return Integer.compare(ID, o.ID);
+    }
+
+    public FamRecord(ByteCode eachRecordInPed) {
+        BaseArray<ByteCode> split = eachRecordInPed.split(ByteCode.TAB);
+        famid = split.get(0);
+        iid = split.get(1);
+        fid = split.get(2);
+        mid = split.get(3);
+        sex = split.get(4).toInt();
+        phenotype = split.get(5).toInt();
+    }
+    public void asUnmodified(){
+        famid = famid.asUnmodifiable();
+        iid = iid.asUnmodifiable();
+        fid = fid.asUnmodifiable();
+        mid = mid.asUnmodifiable();
+    }
+    @Override
+    public String toString() {
+        return famid + "\t" + iid + "\t" + famid + "\t" + mid + "\t" + sex + "\t" + phenotype;
     }
 }

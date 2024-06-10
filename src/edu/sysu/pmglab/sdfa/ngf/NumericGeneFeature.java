@@ -80,7 +80,10 @@ public class NumericGeneFeature {
     public void writeRNALevelForOne(RefRNA refRNA, VolumeByteStream cache, boolean containCoverage) {
         cache.writeSafety(refRNA.getRNAName());
         cache.writeSafety(ByteCode.COLON);
-        cache.writeSafety(ValueUtils.Value2Text.byte2bytes(SVLevel.getRnaFeature()));
+        if (SVLevel.getRnaFeatureValue() < 0) {
+            cache.writeSafety(ByteCode.MINUS);
+        }
+        cache.writeSafety(ValueUtils.Value2Text.byte2bytes(SVLevel.getAbsRnaFeature()));
         if (containCoverage) {
             cache.writeSafety(ByteCode.COLON);
             SVLevel.writeCoverage(cache);
@@ -90,7 +93,10 @@ public class NumericGeneFeature {
     public void writeGeneLevelForOne(VolumeByteStream cache, boolean containCoverage) {
         cache.writeSafety(refGene.getGeneName());
         cache.writeSafety(ByteCode.COLON);
-        cache.writeSafety(ValueUtils.Value2Text.byte2bytes(SVLevel.getRnaFeature()));
+        if (SVLevel.getRnaFeatureValue() < 0) {
+            cache.writeSafety(ByteCode.MINUS);
+        }
+        cache.writeSafety(ValueUtils.Value2Text.byte2bytes(SVLevel.getAbsRnaFeature()));
         if (containCoverage) {
             cache.writeSafety(ByteCode.COLON);
             SVLevel.writeCoverage(cache);
@@ -119,7 +125,10 @@ public class NumericGeneFeature {
                 cache.writeSafety(ByteCode.PERIOD);
             } else {
                 nonNGFCount++;
-                cache.writeSafety(ValueUtils.Value2Text.byte2bytes(item.getRnaFeature()));
+                if (item.getRnaFeatureValue() < 0) {
+                    cache.writeSafety(ByteCode.MINUS);
+                }
+                cache.writeSafety(ValueUtils.Value2Text.byte2bytes(item.getAbsRnaFeature()));
                 if (containCoverage) {
                     item.writeCoverage(cache);
                 }

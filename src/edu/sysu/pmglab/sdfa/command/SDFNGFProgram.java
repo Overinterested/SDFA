@@ -109,9 +109,14 @@ public class SDFNGFProgram extends CommandLineProgram {
 
     @Override
     protected void work() throws Exception, Error {
+        logger.info(options.toString());
+        LogBackOptions.stop();
+        LogBackOptions.reset();
+        LogBackOptions.setLevel(Level.ALL);
+        LogBackOptions.addConsoleAppender(level -> level.isGreaterOrEqual(Level.INFO));
         File outputDir = options.value("-o");
         outputDir.mkdirs();
-        LogBackOptions.addFileAppender(outputDir.getSubFile("annotation.track").toString(),
+        LogBackOptions.addFileAppender(outputDir.getSubFile("ngf.track").toString(),
                 level -> level.isGreaterOrEqual(Level.ALL));
         if (options.passed("--coverage-cutoff")) {
             byte[] cutoffValues = options.value("--coverage-cutoff");
@@ -133,12 +138,13 @@ public class SDFNGFProgram extends CommandLineProgram {
         //region load SVs
         SDFManager.of(options.value("-dir"), options.value("-o")).setLogger(logger).collectSDF();
         //endregion
-        File genomeFile = new File(options.passed("--hg19") ? "/Users/wenjiepeng/projects/sdfa_latest/resource/hg19_refGene.ccf" : "/Users/wenjiepeng/projects/sdfa_latest/resource/hg38_refGene.ccf");
+        File genomeFile = new File(options.passed("--hg19") ? "./resource/hg19_refGene.ccf" : "./resource/hg38_refGene.ccf");
         RefGeneManager of = RefGeneManager.of(genomeFile).setAnnotationLevel(GeneFeatureAnnotationType.HGVS_GENE_LEVEL);
         GlobalResourceManager.getInstance().putResource(of);
         FeatureType featureType = options.passed("--rna-level") ? FeatureType.RNA_LEVEL : FeatureType.GENE_LEVEL;
         boolean showCoverage = options.passed("--show-coverage");
         if (options.passed("--sample-level")) {
+            logger.info("Start calculate NGF in sample level.");
             // sample level ngf
             of.load();
             // init parameters
@@ -159,9 +165,11 @@ public class SDFNGFProgram extends CommandLineProgram {
                     .addSDFReaders(SDFManager.getInstance().getAnnotatedSDFArray())
                     .setGeneResourceManager(of);
             populationLevelNumericGeneFeature.execute();
+            logger.info("Finish NGF function and see output dir: "+outputDir);
         } else {
             //region sv level ngf
             // load SV to brief coordinate
+            logger.info("Start calculate NGF in SV level.");
             Array<SDFReader> sdfReaderArray = SDFManager.getInstance().getSdfReaderArray();
             for (SDFReader sdfReader : sdfReaderArray) {
                 sdfReader.setFileID(0);

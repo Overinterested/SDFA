@@ -1,5 +1,6 @@
 package edu.sysu.pmglab.sdfa.sv.idividual;
 
+import edu.sysu.pmglab.container.ByteCode;
 import edu.sysu.pmglab.container.CallableSet;
 import edu.sysu.pmglab.container.File;
 import edu.sysu.pmglab.container.array.Array;
@@ -16,6 +17,7 @@ public class Subjects {
     int fileID;
     File filePath;
     final CallableSet<Subject> subjectSet;
+    private static final byte[] EMPTY_SUBJECT_NAME = "NULL".getBytes();
 
     public Subjects(File filePath) {
         this.filePath = filePath;
@@ -32,6 +34,12 @@ public class Subjects {
     }
 
     public Subjects addAll(Array<Subject> subjects) {
+        int missingCount = 0;
+        for (Subject subject : subjects) {
+            if (subject.getName().equals(EMPTY_SUBJECT_NAME)) {
+                subject.setName(new ByteCode(filePath.getName() + "_subject" + missingCount++));
+            }
+        }
         this.subjectSet.addAll(subjects);
         return this;
     }

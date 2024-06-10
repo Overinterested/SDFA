@@ -6,6 +6,7 @@ import edu.sysu.pmglab.container.CallableSet;
 import edu.sysu.pmglab.container.File;
 import edu.sysu.pmglab.container.VolumeByteStream;
 import edu.sysu.pmglab.container.array.Array;
+import edu.sysu.pmglab.easytools.ProcessBar;
 import edu.sysu.pmglab.gbc.genome.Chromosome;
 import edu.sysu.pmglab.sdfa.SDFReader;
 import edu.sysu.pmglab.sdfa.annotation.collector.AbstractResourceManager;
@@ -45,9 +46,15 @@ public class PopulationLevelNumericGeneFeature {
         VolumeByteStream cache = new VolumeByteStream();
         FileStream fs = new FileStream(outputFile, FileStream.DEFAULT_WRITER);
         initHeader(fs);
-        for (Chromosome chromosome : SDFGlobalContig.support()) {
+        CallableSet<Chromosome> contigSupport = SDFGlobalContig.support();
+        ProcessBar bar = new ProcessBar(contigSupport.size())
+                .setHeader("Speed for calculating chromosome ngf")
+                .setUnit("chr")
+                .start();
+        for (Chromosome chromosome : contigSupport) {
             loadGenes(chromosome);
             if (geneFeatureArray.isEmpty()) {
+                bar.addProcessed(1);
                 continue;
             }
             loadSVAndCollectRelatedGene(chromosome);
@@ -56,7 +63,6 @@ public class PopulationLevelNumericGeneFeature {
                 if (numericGeneFeature.containRelatedSV()) {
                     if (featureLevel.equals(FeatureType.RNA_LEVEL)) {
                         RefGene refGene = numericGeneFeature.refGene;
-
                         for (RefRNA refRNA : refGene.getRNAList()) {
                             boolean overlap = numericGeneFeature.buildRNALevelNGF(refRNA);
                             if (!overlap) {
@@ -85,8 +91,9 @@ public class PopulationLevelNumericGeneFeature {
                 }
                 numericGeneFeature.clearAll();
             }
-
+            bar.addProcessed(1);
         }
+        bar.setFinish();
         cache.close();
         fs.close();
     }

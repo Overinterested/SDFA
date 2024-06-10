@@ -30,7 +30,7 @@ public class VCFHeader {
     InfoConfig infoConfig = new InfoConfig();
     FormatConfig formatConfig = new FormatConfig();
     Array<Subject> subjectArray = new Array<>();
-
+    public static final byte[] EMPTY_SUBJECT_NAME = "NULL".getBytes();
     public static final byte[] CONTIG_HEADER = new byte[]{ByteCode.NUMBER_SIGN, ByteCode.NUMBER_SIGN,
             ByteCode.c, ByteCode.o, ByteCode.n, ByteCode.t, ByteCode.i, ByteCode.g};
     public static final byte[] ALT_HEADER = new byte[]{ByteCode.NUMBER_SIGN, ByteCode.NUMBER_SIGN,
@@ -118,7 +118,6 @@ public class VCFHeader {
 
     public static class KVConfig {
         ReusableMap<ByteCode, ByteCode> kvMap = new ReusableMap<>();
-
         public void add(ByteCode src) {
             ByteCode pure = src.subByteCode(2);
             BaseArray<ByteCode> split = pure.split(ByteCode.EQUAL);
