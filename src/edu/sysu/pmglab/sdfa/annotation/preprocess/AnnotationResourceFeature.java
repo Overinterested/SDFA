@@ -54,7 +54,7 @@ public class AnnotationResourceFeature implements Comparable<AnnotationResourceF
         record.set(3, decode.get(0).toInt());
         record.set(4, SVTypeSign.get(1).getIndex());
         for (int i = 5; i < record.size(); i++) {
-            record.set(i, decode.get(i - 5));
+            record.set(i, decode.get(i - 3));
         }
     }
     public void clear(){

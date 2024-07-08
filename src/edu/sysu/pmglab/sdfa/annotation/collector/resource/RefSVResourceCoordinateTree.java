@@ -62,7 +62,7 @@ public class RefSVResourceCoordinateTree {
         return coordinateSVTree;
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return size == 0;
     }
 }

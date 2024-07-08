@@ -2,7 +2,6 @@ package edu.sysu.pmglab.test.ukbb;
 
 import edu.sysu.pmglab.LogBackOptions;
 import edu.sysu.pmglab.commandParser.CommandLineProgram;
-import edu.sysu.pmglab.commandParser.CommandParser;
 import edu.sysu.pmglab.commandParser.ICommandLineProgram;
 import edu.sysu.pmglab.commandParser.annotation.Synopsis;
 import edu.sysu.pmglab.commandParser.annotation.option.Option;
@@ -49,7 +48,6 @@ import org.slf4j.LoggerFactory;
 )
 public class UkbbEntry extends CommandLineProgram {
     public static final Logger logger = LoggerFactory.getLogger(UkbbEntry.class);
-    public static final CommandParser parser = new CommandParser(UkbbEntry.class, LogBackOptions.class);
 
     protected UkbbEntry(String[] args) {
         super(args);

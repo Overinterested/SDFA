@@ -19,7 +19,6 @@ import edu.sysu.pmglab.sdfa.SDFViewer;
 import edu.sysu.pmglab.sdfa.sv.idividual.SubjectManager;
 import edu.sysu.pmglab.sdfa.sv.idividual.Subjects;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -43,6 +42,7 @@ public class SDFConcat {
     final AtomicInteger concatRound = new AtomicInteger();
 
     private SDFConcat(File outputPath, Array<SDFReader> allSDFFile) {
+        this.thread = 1;
         this.allSDFFile = allSDFFile;
         this.outputPath = outputPath;
         this.outputDir = outputPath.getParentFile();
@@ -60,6 +60,8 @@ public class SDFConcat {
         sdfReader.restart();
         SubjectManager.getInstance().register(sdfReader);
         sdfReader.close();
+        sdfReader.getMeta().clear();
+        CCFTable.clear(sdfReader.getReader());
         if (sdfReaderArray.isEmpty()) {
             throw new UnsupportedEncodingException("No sdf files in " + outputDir + ".");
         }
@@ -73,6 +75,8 @@ public class SDFConcat {
     private SDFReader concat(SDFReader k, SDFReader v) throws IOException {
         k.restart();
         v.restart();
+        k.getMeta().getSubjects().clear();
+        v.getMeta().getSubjects().clear();
         CCFReader kReader = k.getReader();
         CCFReader vReader = v.getReader();
         IRecord kRecord = kReader.getRecord();
@@ -83,57 +87,57 @@ public class SDFConcat {
                 .addFields(kReader.getAllFields())
                 .build();
         concatCount.incrementAndGet();
-        boolean endRead;
         for (int i = 0; i < allContig.size(); i++) {
+            int writeCount = 0;
             Chromosome chromosome = allContig.getByIndex(i);
             boolean kLimit = k.limitChrBlock(chromosome);
             boolean vLimit = v.limitChrBlock(chromosome);
             if (kLimit || vLimit) {
                 if (kLimit && vLimit) {
                     //region both contain records of current contig
-                    endRead = false;
-                    int writeCount = 0;
-                    while (!endRead) {
-                        boolean kRead = kReader.read(kRecord);
-                        boolean vRead = vReader.read(vRecord);
-                        if (kRead && vRead) {
-                            //region successful read the two
-                            int[] kCoordinate = kRecord.get(0);
-                            int[] vCoordinate = vRecord.get(0);
+                    boolean kRead = kReader.read(kRecord);
+                    boolean vRead = vReader.read(vRecord);
+                    if (kRead && vRead) {
+                        int compare;
+                        int[] kCoordinate;
+                        int[] vCoordinate;
+                        while (true) {
+                            kCoordinate = kRecord.get(0);
+                            vCoordinate = vRecord.get(0);
                             kCoordinate[0] = i;
                             kRecord.set(0, kCoordinate);
                             vCoordinate[0] = i;
                             vRecord.set(0, vCoordinate);
-                            int compare = Integer.compare(kCoordinate[1], vCoordinate[1]);
+                            compare = Integer.compare(kCoordinate[1], vCoordinate[1]);
                             compare = compare == 0 ? Integer.compare(kCoordinate[2], vCoordinate[2]) : compare;
                             if (compare < 0) {
                                 writer.write(kRecord);
-                                writer.write(vRecord);
-                                writeCount += 2;
+                                writeCount++;
+                                kRead = kReader.read(kRecord);
+                                if (!kRead) {
+                                    while (vReader.read(vRecord)) {
+                                        writer.write(vRecord);
+                                        writeCount++;
+                                    }
+                                    break;
+                                }
                             } else {
                                 writer.write(vRecord);
-                                writer.write(kRecord);
-                                writeCount += 2;
-                            }
-                            //endregion
-                        } else {
-                            //region only read one
-                            CCFReader tmp = kRead ? kReader : vReader;
-                            while (tmp.read(kRecord)) {
-                                int[] kCoordinate = kRecord.get(0);
-                                kRecord.set(0, kCoordinate);
-                                writer.write(kRecord);
                                 writeCount++;
+                                vRead = vReader.read(vRecord);
+                                if (!vRead) {
+                                    while (kReader.read(kRecord)) {
+                                        writer.write(kRecord);
+                                        writeCount++;
+                                    }
+                                    break;
+                                }
                             }
-                            endRead = true;
-                            //endregion
                         }
                     }
-                    globalContigRange[i] = writeCount;
                     //endregion
                 } else {
                     //region only one contain records of current contig
-                    int count = 0;
                     CCFReader tmp = kLimit ? kReader : vReader;
                     IRecord record = tmp.getRecord();
                     while (tmp.read(record)) {
@@ -141,11 +145,11 @@ public class SDFConcat {
                         coordinate[0] = i;
                         record.set(0, coordinate);
                         writer.write(record);
-                        count++;
+                        writeCount++;
                     }
-                    globalContigRange[i] = count;
                     //endregion
                 }
+                globalContigRange[i] = writeCount;
             }
         }
         SDFMeta meta = k.getMeta();
@@ -154,7 +158,7 @@ public class SDFConcat {
             contigBlockContainer.getChromosomeByName(new ByteCode(chromosome.getName()));
         }
         meta.setContigBlockContainer(contigBlockContainer).initChrBlockRange(globalContigRange);
-        if (concatRound.get() == concatTime - 1) {
+        if (concatRound.get() >= concatTime - 1) {
             meta.setSubjects(new Subjects(writer.getOutputFile()).addAll(SubjectManager.getInstance().getIndexableSubjects()));
         }
         writer.writeMeta(meta.write());
@@ -234,13 +238,13 @@ public class SDFConcat {
     }
 
     public static void main(String[] args) throws IOException {
-        Logger logger = LoggerFactory.getLogger("test");
+//        Logger logger = LoggerFactory.getLogger("test");
 //        SDFConcat.of(
-//                new File("/Users/wenjiepeng/Desktop/SV/data/private/VCF/sniffles_output_sdf"),
-//                new File("/Users/wenjiepeng/Desktop/SV/data/private/VCF/concat")
+//                new File("/Users/wenjiepeng/Desktop/tmp/concat"),
+//                new File("/Users/wenjiepeng/Desktop/tmp/concat/")
 //        ).silent(false).setLogger(logger).submit();
 //        SDFAEntry.main("concat -dir /Users/wenjiepeng/Desktop/tmp -o /Users/wenjiepeng/Desktop/tmp --threads 1".split(" "));
-        SDFViewer.view("/Users/wenjiepeng/Desktop/tmp/concatResult.sdf");
+        SDFViewer.view("/Users/wenjiepeng/Desktop/tmp/concat/concatResult.sdf");
     }
 
     public SDFConcat silent(boolean silent) {

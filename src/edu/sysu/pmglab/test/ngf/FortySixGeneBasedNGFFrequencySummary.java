@@ -18,10 +18,10 @@ import java.util.HashMap;
 public class FortySixGeneBasedNGFFrequencySummary {
     public static void main(String[] args) throws IOException {
         VolumeByteStream cache = new VolumeByteStream();
-        File file = new File("/Users/wenjiepeng/Desktop/SV/data/private/VCF/curated_data/46_sample_ngf_exon_0.05_AF_0.1/gene_summary.txt");
+        File file = new File("/Users/wenjiepeng/Desktop/SV/data/private/VCF/curated_data/46_samples_ngf_sample_exon_5/gene_summary.txt");
         FileStream fs = new FileStream(file);
         FileStream output = new FileStream(
-                "/Users/wenjiepeng/Desktop/SV/data/private/VCF/curated_data/sample_level_exon>5/AF.count",
+                "/Users/wenjiepeng/Desktop/SV/data/private/VCF/curated_data/46_samples_ngf_sample_exon_5/AF.count",
                 FileStream.DEFAULT_WRITER
         );
         HashMap<Integer, Integer> AFCount = new HashMap<>();

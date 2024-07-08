@@ -30,10 +30,10 @@ public class ConcatMultiAnnotationOutputFunction extends AnnotationOutputFunctio
         for (int i = 0; i < relatedRefRecords.size(); i++) {
             for (int j = 0; j < fieldSize; j++) {
                 try {
-                    cache.writeSafety((ByteCode) relatedRefRecords.get(i).get(rawFieldIndexArray.get(j)));
+                    ByteCode value = relatedRefRecords.get(i).get(rawFieldIndexArray.get(j));
+                    cache.writeSafety(value);
                 } catch (Exception e) {
                     cache.writeSafety((ByteCode) relatedRefRecords.get(i).get(rawFieldIndexArray.get(j)));
-
                 }
                 if (j != fieldSize - 1) {
                     cache.writeSafety(separator);

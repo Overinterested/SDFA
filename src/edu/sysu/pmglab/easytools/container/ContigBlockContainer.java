@@ -119,4 +119,6 @@ public class ContigBlockContainer {
     public Contig getContig() {
         return contig;
     }
+
+
 }

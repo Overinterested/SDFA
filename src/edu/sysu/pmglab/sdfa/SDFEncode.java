@@ -25,9 +25,9 @@ public class SDFEncode {
         for (int i = 0; i < 7; i++) {
             extendedEncodeMethods.add(null);
         }
-        SDFRefAltFieldType SDFRefAltFieldType = new SDFRefAltFieldType();
-        extendedEncodeMethods.set(2, SDFRefAltFieldType);
-        extendedEncodeMethods.set(3, SDFRefAltFieldType);
+        SDFRefAltFieldType sdfRefAltFieldType = new SDFRefAltFieldType();
+        extendedEncodeMethods.set(2, sdfRefAltFieldType);
+        extendedEncodeMethods.set(3, sdfRefAltFieldType);
         switch (encodeMode) {
             case 0:
                 break;
@@ -146,7 +146,7 @@ public class SDFEncode {
                 tmp.set(i, ByteCode.EMPTY);
             }
         }
-        if (VCF2SDF.lineExtractAndSort){
+        if (VCF2SDF.lineExtractAndSort) {
             return tmp;
         }
         return new ByteCodeArray(tmp.popFirst(tmp.size()));

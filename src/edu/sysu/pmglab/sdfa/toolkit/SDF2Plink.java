@@ -60,9 +60,9 @@ public class SDF2Plink {
             bimFile.write(ByteCode.TAB);
             bimFile.write(ValueUtils.Value2Text.int2bytes(sv.getPos()));
             bimFile.write(ByteCode.TAB);
-            bimFile.write(sv.getRef());
-            bimFile.write(ByteCode.TAB);
             bimFile.write(sv.getAlt());
+            bimFile.write(ByteCode.TAB);
+            bimFile.write(sv.getRef());
             bimFile.write(ByteCode.NEWLINE);
             // write bed: genotypes
             bedFile.write(gty2BEDBytes(sv.getGenotypes().getGenotypes(), subjectSize));
@@ -85,18 +85,18 @@ public class SDF2Plink {
         byte genoCode;
         for (int i = 0; i < gtys.length; i++) {
             SVGenotype gty = gtys[i];
-            if (gty == hom1 || gty == hom2) {
+            if (gty.equals(hom1) || gty.equals(hom2)) {
                 // 0/0
                 genoCode = 0b00;
-            } else if (gty == wildGty1 || gty == wildGty2) {
+            } else if (gty.equals(wildGty1) || gty.equals(wildGty2)) {
                 // 1/1
                 genoCode = 0b11;
-            } else if (gty == het1 || gty == het2 || gty == het3 || gty == het4) {
+            } else if (gty.equals(het1) || gty.equals(het2) || gty.equals(het3) || gty.equals(het4)) {
                 // 0/1
-                genoCode = 0b01;
+                genoCode = 0b10;
             } else {
                 // missing
-                genoCode = 0b10;
+                genoCode = 0b01;
             }
             genotypeBytes[i / 4] |= (genoCode << ((i % 4) * 2));
         }
@@ -213,9 +213,10 @@ public class SDF2Plink {
 
     public static void main(String[] args) throws IOException {
         SDF2Plink.of(
-                "/Users/wenjiepeng/Downloads/extract_concatResult_new.sdf",
-                "/Users/wenjiepeng/Desktop/SDFA/ukbb"
-        ).setPedFile(new File("/Users/wenjiepeng/Desktop/SDFA/ukbb/F32_fam.ped")).submit();
+                "/Users/wenjiepeng/Downloads/I10_extract_concatResult.sdf",
+                "/Users/wenjiepeng/Desktop/SDFA/I10/chr1"
+        ).setPedFile(new File("/Users/wenjiepeng/Desktop/SDFA/I10/I10_fam.ped")).submit();
+
     }
 }
 

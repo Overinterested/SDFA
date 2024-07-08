@@ -28,7 +28,8 @@ public class ConcatSingleAnnotationOutputFunction extends SingleAnnotationOutput
         int size = relatedRefRecords.size();
         for (int i = 0; i < size; i++) {
             try {
-                cache.writeSafety((ByteCode) relatedRefRecords.get(i).get(rawFieldIndex));
+                ByteCode value = relatedRefRecords.get(i).get(rawFieldIndex);
+                cache.writeSafety(value);
             } catch (ClassCastException e) {
                 cache.writeSafety(relatedRefRecords.get(i).get(rawFieldIndex).toString());
             }

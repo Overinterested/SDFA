@@ -19,9 +19,9 @@ import java.util.HashMap;
  */
 public class FortySixSamplesSummary {
     public static void main(String[] args) throws IOException {
-        File dir = new File("/Users/wenjiepeng/Desktop/SV/data/private/VCF/curated_data/46_samples_ngf_lncRNA_0.5_threshold");
+        File dir = new File("/Users/wenjiepeng/Desktop/SV/data/private/VCF/curated_data/46_samples_ngf_noncoding_exon_50_threshold_ngf");
         Array<File> filesFromDir = FileTool.getFilesFromDir(dir, "ngf.txt");
-        FileStream fs = new FileStream("/Users/wenjiepeng/Desktop/SV/data/private/VCF/curated_data/46_samples_ngf_lncRNA_0.5_threshold/type_file_SV_count.txt", FileStream.DEFAULT_WRITER);
+        FileStream fs = new FileStream("/Users/wenjiepeng/Desktop/SV/data/private/VCF/curated_data/46_samples_ngf_noncoding_exon_50_threshold_ngf/type_file_SV_count.txt", FileStream.DEFAULT_WRITER);
         fs.write("#FileID\tType\tSVCount\n");
         HashMap<ByteCode, Integer> SVTypeSVCountMap = new HashMap<>();
         int fileID = 0;

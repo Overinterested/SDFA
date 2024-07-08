@@ -74,7 +74,6 @@ public class SDFGlobalContig {
                 SDFGlobalContig.contigArray.addAll(contigArray);
                 return SDFGlobalContig.instance;
             } else if (!sdfReaderArray.isEmpty()) {
-                // TODO
                 return null;
             } else {
                 return null;

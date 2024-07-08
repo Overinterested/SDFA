@@ -30,6 +30,7 @@ public class SDFManager {
     boolean storeMeta = true;
     boolean globalContig = true;
     boolean globalSubject = true;
+    boolean clearRawMeta = false;
     final Array<File> sdfFileArray;
     final Array<File> vcfFileArray;
     private static SDFManager instance;
@@ -77,6 +78,10 @@ public class SDFManager {
             if (globalSubject) {
                 SubjectManager.getInstance().register(sdfReader);
             }
+            if (clearRawMeta) {
+                sdfReader.getMeta().clear();
+                CCFTable.clear(sdfReader.getReader());
+            }
             put(sdfReader);
             if (bar != null) {
                 bar.addProcessed(1);
@@ -103,6 +108,7 @@ public class SDFManager {
             bar.setFinish();
         }
     }
+
     public void collectSDFA(File sdfaDir) throws IOException {
         int fileID = 0;
         Array<File> files = FileTool.getFilesFromDir(sdfaDir, "sdfa");
@@ -156,7 +162,7 @@ public class SDFManager {
                 if (globalContig) {
                     SDFGlobalContig.Builder.getInstance().addVCFContig(sdfReader.getContig());
                 }
-                if (globalSubject){
+                if (globalSubject) {
                     SubjectManager.getInstance().register(sdfReader);
                 }
                 put(sdfReader);
@@ -178,7 +184,7 @@ public class SDFManager {
                         .convert();
                 SDFReader sdfReader = new SDFReader(sdfFile);
                 put(sdfReader.setFileID(fileID.get()));
-                if (globalSubject){
+                if (globalSubject) {
                     SubjectManager.getInstance().register(sdfReader);
                 }
                 fileID.incrementAndGet();
@@ -265,8 +271,12 @@ public class SDFManager {
         return vcfFileArray;
     }
 
-    public SDFManager globalSubject(boolean globalSubject){
+    public SDFManager globalSubject(boolean globalSubject) {
         this.globalSubject = globalSubject;
+        return this;
+    }
+    public SDFManager clearRawMeta(boolean clearRawMeta){
+        this.clearRawMeta = clearRawMeta;
         return this;
     }
 }

@@ -84,9 +84,6 @@ public class SlideResourceReaderForOutputter {
     }
 
     public ByteCode output(ByteCode featureSrc) {
-        if (featureSrc.equals(ByteCode.EMPTY)) {
-            return nullAnnotationRes;
-        }
         cache.reset();
         int[] relatedIndexArray = (int[]) indexParser.apply(featureSrc);
         int size = relatedIndexArray.length;

@@ -103,7 +103,7 @@ public class RefSVResourceManager extends AbstractResourceManager {
         setContigBlockContainer(ContigBlockContainer.decode(reader.getMeta().get("contigBlock").values().get(0)));
         IRecord record = reader.getRecord();
         while (reader.read(record)) {
-            update(record, line);
+            update(record, line++);
         }
         reader.close();
     }

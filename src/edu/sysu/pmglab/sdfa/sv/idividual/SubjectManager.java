@@ -27,6 +27,7 @@ public class SubjectManager {
         this.fileSubjectsMap.put(file, subjects);
         CallableSet<Subject> subjectSet = subjects.getSubjectSet();
         for (Subject subject : subjectSet) {
+            subject = subject.asUnmodified();
             this.nameSubjectMap.put(subject.name, subject);
             this.indexableSubjects.add(subject);
         }

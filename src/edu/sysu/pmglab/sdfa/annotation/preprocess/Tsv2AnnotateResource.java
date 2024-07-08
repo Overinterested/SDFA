@@ -6,6 +6,7 @@ import edu.sysu.pmglab.ccf.CCFWriter;
 import edu.sysu.pmglab.ccf.record.IRecord;
 import edu.sysu.pmglab.ccf.type.FieldType;
 import edu.sysu.pmglab.container.ByteCode;
+import edu.sysu.pmglab.container.CallableSet;
 import edu.sysu.pmglab.container.File;
 import edu.sysu.pmglab.container.VolumeByteStream;
 import edu.sysu.pmglab.container.array.Array;
@@ -19,6 +20,7 @@ import edu.sysu.pmglab.sdfa.annotation.collector.resource.RefSVResourceManager;
 import edu.sysu.pmglab.unifyIO.FileStream;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * @author Wenjie Peng
@@ -67,7 +69,7 @@ public class Tsv2AnnotateResource {
                 break;
             }
             //endregion
-            if (!columnName){
+            if (!columnName) {
                 throw new UnsupportedOperationException("The annotation file(" + file + ") has no column line(start with `#`).");
             }
             if (cache.size() == 0) {
@@ -75,11 +77,15 @@ public class Tsv2AnnotateResource {
             }
             BaseArray<ByteCode> tags = cache.toByteCode().asUnmodifiable().split(ByteCode.TAB);
             cache.reset();
+            HashMap<Chromosome, Integer> chrCount = new HashMap<>();
             while (fs.readLine(cache) != -1) {
                 BaseArray<ByteCode> line = cache.toByteCode().asUnmodifiable().split(ByteCode.TAB);
                 Chromosome chromosome = contigBlockContainer.getChromosomeByName(line.get(0));
-                if (chromosome.equals(Chromosome.unknown)) {
-                    chromosome = Chromosome.add(line.get(0).toString());
+                Integer exist = chrCount.get(chromosome);
+                if (exist != null) {
+                    chrCount.put(chromosome, exist + 1);
+                } else {
+                    chrCount.put(chromosome, 1);
                 }
                 int pos = 0;
                 try {
@@ -125,6 +131,17 @@ public class Tsv2AnnotateResource {
             }
             CCFMeta meta = new CCFMeta();
             writer.writeMeta(meta);
+            int rangeStart = 0;
+            int chromosomeCount = 0;
+            CallableSet<Chromosome> allChromosomes = contigBlockContainer.getAllChromosomes();
+            for (Chromosome chromosome : allChromosomes) {
+                chromosomeCount = 0;
+                if (chrCount.containsKey(chromosome)) {
+                    chromosomeCount = chrCount.get(chromosome);
+                }
+                contigBlockContainer.putChromosomeRange(chromosome, rangeStart, rangeStart + chromosomeCount);
+                rangeStart += chromosomeCount;
+            }
             meta.add("contigBlock", contigBlockContainer.encode());
             meta.add("resource", DefaultValueWrapper.periodBytecodeWrapper.getValue(resource));
             meta.add("version", DefaultValueWrapper.periodBytecodeWrapper.getValue(version));
@@ -160,9 +177,9 @@ public class Tsv2AnnotateResource {
     }
 
     public static void main(String[] args) throws IOException {
-        File file = new File("/Users/wenjiepeng/Desktop/SV/AnnotFile/KnownSV/SVAFotate_core_SV_popAFs.GRCh37.bed");
+        File file = new File("/Users/wenjiepeng/Desktop/SV/data/annotation/SVAFotate/SVAFotate_core_SV_popAFs.GRCh37.bed");
         new Tsv2AnnotateResource(file)
-                .setOutputDir("/Users/wenjiepeng/Desktop/SV/AnnotFile/KnownSV")
+                .setOutputDir("/Users/wenjiepeng/Desktop/SV/data/annotation/SVAFotate")
                 .setResource("SVAFotate")
                 .setVersion(1.0)
                 .isSVDatabase(true)

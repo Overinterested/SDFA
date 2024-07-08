@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * @author Wenjie Peng
@@ -128,12 +127,11 @@ public class SDFExtract {
             bar.setFinish();
             logger.info("Finish extraction task and drop " + dropSVCount + " SVs.");
         }
-        Subjects extractSubjectInFile = new Subjects(outputFile)
-                .addAll(
-                        extractSubjectSet.stream()
-                                .map(Subject::new)
-                                .collect(Collectors.toList())
-                );
+
+        Subjects extractSubjectInFile = new Subjects(outputFile);
+        for (int i = 0; i < indexOfExtractSubject.size(); i++) {
+            extractSubjectInFile.addSubject(subjects.getSubject(indexOfExtractSubject.get(i)));
+        }
         meta.initChrBlockRange(countSVOfContig);
         meta.setSubjects(extractSubjectInFile);
         writer.writeMeta(meta.write());
@@ -257,7 +255,7 @@ public class SDFExtract {
 //                "/Users/wenjiepeng/Desktop/SV/SVMerge/trio/wm_10md_PBCCS/sniffles_test.vcf",
 //                "/Users/wenjiepeng/Desktop/SV/SVMerge/trio/wm_10md_PBCCS/sniffles.sdf"
 //        ).setEncodeMode(1).convert();
-//        SDFExtract.of(
+//        SDFExtractTest.of(
 //                "/Users/wenjiepeng/Desktop/SV/SVMerge/trio/wm_10md_PBCCS/sniffles.sdf",
 //                "/Users/wenjiepeng/Desktop/SV/SVMerge/trio/wm_10md_PBCCS/subject_extract_test.txt",
 //                "/Users/wenjiepeng/Desktop/SV/SVMerge"

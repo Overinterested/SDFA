@@ -56,7 +56,7 @@ public class AnnotResourceBuilder {
         return this;
     }
 
-    // TODO
+
     public static Array<RefResource> setRefResourceArray(File file) {
         return refResourceArray;
     }
