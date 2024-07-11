@@ -30,9 +30,6 @@ public class RefSVResourceCoordinateTree {
     }
 
     public int[] getOverlap(BriefSVAnnotationFeature sv) {
-        if (coordinateSVTree == null) {
-            return new int[0];
-        }
         BaseArray<IntervalObject<BriefSVFeature, Integer>> overlapsIntervals = coordinateSVTree.getOverlapsIntervals(sv.getStart(), sv.getEnd());
         if (overlapsIntervals.isEmpty()) {
             return new int[0];

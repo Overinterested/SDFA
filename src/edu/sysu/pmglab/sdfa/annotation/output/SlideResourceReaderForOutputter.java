@@ -4,6 +4,7 @@ import edu.sysu.pmglab.ccf.CCFReader;
 import edu.sysu.pmglab.ccf.record.IRecord;
 import edu.sysu.pmglab.ccf.type.FieldType;
 import edu.sysu.pmglab.container.ByteCode;
+import edu.sysu.pmglab.container.Interval;
 import edu.sysu.pmglab.container.VolumeByteStream;
 import edu.sysu.pmglab.container.array.Array;
 import edu.sysu.pmglab.gbc.genome.Chromosome;
@@ -78,7 +79,17 @@ public class SlideResourceReaderForOutputter {
         }
         boolean flag = chromosome.equals(chr);
         if (!flag) {
-            return nullAnnotationRes;
+            Interval<Integer> range = fileMeta.getContigBlockContainer().getChromosomeRange(chromosome);
+            if (range == null) {
+                return nullAnnotationRes;
+            }
+            try {
+                fileReader = fileReader.newInstance();
+                fileReader.limit(range.start(), range.end());
+                fileReader.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
         return output(featureSrc);
     }

@@ -2,6 +2,7 @@ package edu.sysu.pmglab.sdfa.annotation.preprocess;
 
 import edu.sysu.pmglab.ccf.CCFFieldMeta;
 import edu.sysu.pmglab.ccf.CCFMeta;
+import edu.sysu.pmglab.ccf.CCFReader;
 import edu.sysu.pmglab.ccf.CCFWriter;
 import edu.sysu.pmglab.ccf.record.IRecord;
 import edu.sysu.pmglab.ccf.type.FieldType;
@@ -177,14 +178,18 @@ public class Tsv2AnnotateResource {
     }
 
     public static void main(String[] args) throws IOException {
-        File file = new File("/Users/wenjiepeng/Desktop/SV/data/annotation/SVAFotate/SVAFotate_core_SV_popAFs.GRCh37.bed");
-        new Tsv2AnnotateResource(file)
-                .setOutputDir("/Users/wenjiepeng/Desktop/SV/data/annotation/SVAFotate")
-                .setResource("SVAFotate")
-                .setVersion(1.0)
-                .isSVDatabase(true)
-                .loadHeader(true)
-                .convert();
+//        File file = new File("/Users/wenjiepeng/Desktop/SV/data/annotation/TAD/20171127_boundariesTAD_GRCh38.sorted.bed");
+//        new Tsv2AnnotateResource(file)
+//                .setOutputDir("/Users/wenjiepeng/Desktop/SV/data/annotation/TAD")
+//                .setResource("TAD")
+//                .setVersion(1.0)
+//                .isSVDatabase(false)
+//                .loadHeader(true)
+//                .convert();
+        CCFReader reader = new CCFReader("/Users/wenjiepeng/Desktop/SV/data/annotation/TAD/20171127_boundariesTAD_GRCh38.sorted.ccf");
+        ContigBlockContainer contigBlock = ContigBlockContainer.decode(reader.getMeta().get("contigBlock").values().get(0));
+        int a = 1;
+
     }
 
     public Tsv2AnnotateResource setOutputDir(Object outputDir) {

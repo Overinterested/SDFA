@@ -77,7 +77,7 @@ public class LeftIntro extends RNAElement {
         } else {
             cache.writeSafety(ValueUtils.Value2Text.int2bytes(offset));
         }
-        cache.writeSafety(new byte[]{40});
+        cache.writeSafety(new byte[]{ByteCode.N, 62, ByteCode.N});
         cache.writeSafety(ByteCode.COLON);
         cache.writeSafety(new byte[]{40});
         cache.writeSafety(ValueUtils.Value2Text.int2bytes(RNA.numOfExons()));

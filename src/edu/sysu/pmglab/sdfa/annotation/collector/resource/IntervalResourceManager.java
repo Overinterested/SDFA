@@ -49,10 +49,6 @@ public class IntervalResourceManager extends AbstractResourceManager {
         briefRefSVResourceTree.update(record.get(1), record.get(2), line);
     }
 
-    public int[] getOverlaps(Chromosome chromosome, BriefSVAnnotationFeature svAnnotationFeature) {
-        return chromosomeResourceTreeMap.get(chromosome).getOverlap(svAnnotationFeature);
-    }
-
     @Override
     public void checkResourceAndOutputFrame(File outputDir) {
         File resourcePath = getResourcePath();

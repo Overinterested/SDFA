@@ -28,9 +28,6 @@ public class IntervalResourceCoordinateTree {
     }
 
     public int[] getOverlap(BriefSVAnnotationFeature sv) {
-        if (coordinateIntervalTree == null) {
-            return new int[0];
-        }
         BaseArray<IntervalObject<Integer, Integer>> overlapsIntervals = coordinateIntervalTree.getOverlapsIntervals(sv.getStart(), sv.getEnd());
         if (overlapsIntervals.isEmpty()) {
             return new int[0];
@@ -40,7 +37,9 @@ public class IntervalResourceCoordinateTree {
         for (IntervalObject<Integer, Integer> overlapsInterval : overlapsIntervals) {
             relatedLines[count++] = overlapsInterval.getData();
         }
-        Arrays.sort(relatedLines);
+        if (count != 1){
+            Arrays.sort(relatedLines);
+        }
         return relatedLines;
     }
 
