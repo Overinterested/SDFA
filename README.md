@@ -136,8 +136,3 @@ Detailed documentation, including installation instructions, usage examples, and
 
 This project is licensed under the MIT License.
 
-## Acknowledgments
-
-- List any third-party libraries or resources used in the project.
-- Acknowledge any individuals or organizations who contributed to the project.
-
