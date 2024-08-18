@@ -15,9 +15,9 @@ import java.io.IOException;
  */
 public class IntegrateVCF {
     public static void main(String[] args) throws IOException {
-        FileStream HG002 = new FileStream("/Users/wenjiepeng/Desktop/SV/SVMerge/HG002.vcf", FileStream.DEFAULT_WRITER);
-        FileStream HG003 = new FileStream("/Users/wenjiepeng/Desktop/SV/SVMerge/HG003.vcf", FileStream.DEFAULT_WRITER);
-        FileStream HG004 = new FileStream("/Users/wenjiepeng/Desktop/SV/SVMerge/HG004.vcf", FileStream.DEFAULT_WRITER);
+        FileStream HG002 = new FileStream("/Users/wenjiepeng/Desktop/SV/SVMerge/HG002_chr3.vcf", FileStream.DEFAULT_WRITER);
+        FileStream HG003 = new FileStream("/Users/wenjiepeng/Desktop/SV/SVMerge/HG003_chr3.vcf", FileStream.DEFAULT_WRITER);
+        FileStream HG004 = new FileStream("/Users/wenjiepeng/Desktop/SV/SVMerge/HG004_chr3.vcf", FileStream.DEFAULT_WRITER);
         Array<FileStream> fsArray = new Array<>(new FileStream[]{HG002, HG003, HG004});
         Array<Boolean> headerFlagArray = new Array<>(new Boolean[]{Boolean.FALSE, Boolean.FALSE, Boolean.FALSE});
         File dir = new File("/Users/wenjiepeng/Desktop/SV/SVMerge/trio");
@@ -49,7 +49,7 @@ public class IntegrateVCF {
                                     continue;
                                 }
                                 headerFlagArray.set(fsIndex, true);
-                                if (cache.toByteCode().startsWith("chr17")) {
+                                if (cache.toByteCode().startsWith("chr3")) {
                                     ByteCode byteCode = cache.toByteCode();
                                     fs.write(cache.toByteCode());
                                     fs.write(ByteCode.NEWLINE);

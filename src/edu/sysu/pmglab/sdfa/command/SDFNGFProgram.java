@@ -17,7 +17,7 @@ import edu.sysu.pmglab.sdfa.annotation.collector.GlobalResourceManager;
 import edu.sysu.pmglab.sdfa.annotation.collector.resource.GeneFeatureAnnotationType;
 import edu.sysu.pmglab.sdfa.annotation.collector.sv.BriefSVAnnotationManager;
 import edu.sysu.pmglab.sdfa.annotation.genome.RefGeneManager;
-import edu.sysu.pmglab.sdfa.ngf.*;
+import edu.sysu.pmglab.sdfa.nagf.*;
 import edu.sysu.pmglab.sdfa.sv.idividual.SubjectManager;
 import edu.sysu.pmglab.sdfa.toolkit.SDFGlobalContig;
 import edu.sysu.pmglab.sdfa.toolkit.SDFManager;
@@ -89,6 +89,10 @@ import org.slf4j.LoggerFactory;
                 @Option(
                         names = {"--af-cutoff", "--AF-cutoff"}, type = float.class, defaultTo = "-1",
                         description = "Specify the AF threshold for sample level NGF result."
+                ),
+                @Option(
+                        names = {"-f","--genome-file"}, type = File.class, required = true,
+                        description = "Specify the genome file supported by SDFA for NAGF result."
                 )
         }
 )
@@ -138,7 +142,11 @@ public class SDFNGFProgram extends CommandLineProgram {
         //region load SVs
         SDFManager.of(options.value("-dir"), options.value("-o")).setLogger(logger).collectSDF();
         //endregion
-        File genomeFile = new File(options.passed("--hg19") ? "./resource/hg19_refGene.ccf" : "./resource/hg38_refGene.ccf");
+        File genomeFile = new File(options.passed("--hg19") ? "/resource/hg19_refGene.ccf" : "/resource/hg38_refGene.ccf");
+        genomeFile = options.value("-f");
+        if (!genomeFile.exists()){
+            logger.error("The genome file doesn't exist.");
+        }
         RefGeneManager of = RefGeneManager.of(genomeFile).setAnnotationLevel(GeneFeatureAnnotationType.HGVS_GENE_LEVEL);
         GlobalResourceManager.getInstance().putResource(of);
         FeatureType featureType = options.passed("--rna-level") ? FeatureType.RNA_LEVEL : FeatureType.GENE_LEVEL;

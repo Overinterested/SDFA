@@ -2,26 +2,47 @@
 
 
 
-<div align="center"> <img src="./assets/image-20240526104918323.png" alt="SDFA Logo" width="800"height="200"> </div>
+<div align="center"> 
+    <img src="./assets/image-20240526104918323.png" alt="SDFA Logo" width="800" height="200"> 
+</div>
 
-SDFA (SDF-based Analyzer) is a comprehensive framework designed for accurate and rapid parsing, storage, and analysis of structural variation (SV) data within large population samples. 
-It introduces a novel Standardized Decomposition Format (SDF) for efficient SV representation, and provides modules for merging, annotation, and quantitative gene feature assessment.
+SDFA (SDF-based Analyzer) is a novel computational framework designed for 
+accurate and rapid parsing, storage, and analysis of structural variation (SV) data within large population samples. 
+It introduces a novel Standardized Decomposition Format (SDF) for efficient SV representation, 
+and provides modules for merging, annotation, and numeric annotation of gene feature(NAGF).
 
 <p align="center">
-  <a href="#key-features"><img src="./assets/xingxing.png" width=20 alt="*">Key Features</a> |
-  <a href="#getting-start"><img src="./assets/xingxing.png" width=20 alt="*">Getting Start</a> |
-  <a href="#usage"><img src="./assets/xingxing.png" width=20 alt="*">Usage</a> |
-  <a href="#documentation"><img src="./assets/xingxing.png" width=20 alt="*">Documentation</a> |
-  <a href="#license"><img src="./assets/xingxing.png" width=20 alt="*">License</a> |
-  <a href="#acknowledgments"><img src="./assets/xingxing.png" width=20 alt="*">Acknowledgments</a>
+    <a href="#key-features">
+        <img src="./assets/xingxing.png" width=20 alt="*">Key Features
+    </a>
+    |
+    <a href="#getting-start">
+        <img src="./assets/xingxing.png" width=20 alt="*">Getting Start
+    </a>
+    |
+    <a href="#usage">
+        <img src="./assets/xingxing.png" width=20 alt="*">Usage
+    </a>
+    |
+    <a href="#documentation">
+        <img src="./assets/xingxing.png" width=20 alt="*">Documentation
+    </a>
+    |
+    <a href="#license">
+        <img src="./assets/xingxing.png" width=20 alt="*">License</a>
+    |
+    <a href="#acknowledgments">
+        <img src="./assets/xingxing.png" width=20 alt="*">Acknowledgments
+    </a>
 </p>
 
 ## Key Features
-<img src="./assets/img.png" alt="SDFA Framework"></img>
+<img src="./assets/img.png" alt="SDFA Framework">
+
 - <kbd>**Standardized Decomposition Format(SDF)**</kbd>: A novel format for standardizing, compressing, and storing various types of SVs arranged in genomic coordinates with indexes.
-- <kbd>**Population-scale SV Merge**</kbd>: A chromosome-level merging procedure for analyzing population samples, ensuring stable merging independent of the input order of samples and enabling efficient parallel processing.
-- <kbd>**Incremental Index Annotation**</kbd>: A light and fast annotation algorithm for annotating SVs with multiple resources, without repeatedly scanning the resource data.
-- <kbd>**Numeric Gene Feature (NGF) Annotation**</kbd>: A numeric and efficient assessment of the impact of SVs on genes, addressing the complexity and lengthiness of current gene feature annotations.
+- <kbd>**Population-scale SV Merge**</kbd>: A sample-wide merging procedure for analyzing population samples, ensuring a robust and efficient merging procedure.
+- <kbd>**Indexed sliding-window Annotation**</kbd>: A light and fast annotation algorithm for annotating SVs with multiple resources, without repeatedly scanning the resource data.
+- <kbd>**Numeric Annotation of Gene Feature (NAGF)**</kbd>: A numeric and efficient assessment of the impact of SVs on genes, addressing the complexity and lengthiness of current gene feature annotations.
 
 ## Getting Start
 
@@ -49,15 +70,16 @@ cd SDFA
 The SDFA command-line tool supports various functionalities, including VCF to SDF conversion, merging, annotation, and numeric gene feature annotation. Here are some examples:
 
 - <a href="#vcf2sdf">VCF2SDF Convertor</a>
-- <a href="#gui">SDF GUI</a>
-- <a href="#merge">SDF for Merge</a>
-- <a href="#annotation">SDFA for Annotation</a>
-- <a href="#ngf">SDFA for NGF</a>
-- <a href="#extract">Partial Subjects Extraction</a>
-- <a href="#concat">Multiply SDF files Concat </a>
+- <a href="#gui">SDF GUI</a>
+- <a href="#merge">Merge In SDFA</a>
+- <a href="#annotation">Annotation In SDFA</a>
+- <a href="#nagf">NAGF in SDFA</a>
+- <a href="#extract">Extraction for partial subjects in VCF</a>
+- <a href="#concat">Concat for multiple SDF files </a>
 - <a href="#sdf2plink">SDF2Plink </a>
 
-<a name="vcf2sdf"></a>**VCF to SDF Conversion**
+<a name="vcf2sdf"></a>
+**VCF to SDF Conversion**
 
 ```bash
 java -jar SDFA.jar vcf2sdf -f input.vcf -o output_dir
@@ -118,8 +140,4 @@ This project is licensed under the MIT License.
 
 - List any third-party libraries or resources used in the project.
 - Acknowledge any individuals or organizations who contributed to the project.
-
-## Contact
-
-For any questions or inquiries, please contact the project maintainers at overinterested.sysu@gmail.com.
 

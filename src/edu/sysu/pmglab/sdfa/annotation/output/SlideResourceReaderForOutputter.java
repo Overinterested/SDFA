@@ -80,12 +80,12 @@ public class SlideResourceReaderForOutputter {
         boolean flag = chromosome.equals(chr);
         if (!flag) {
             Interval<Integer> range = fileMeta.getContigBlockContainer().getChromosomeRange(chromosome);
-            if (range == null) {
-                return nullAnnotationRes;
-            }
+            currLine = range.start();
+            endLine = range.start() - 1;
             try {
                 fileReader = fileReader.newInstance();
                 fileReader.limit(range.start(), range.end());
+                fileReader.seek(currLine);
                 fileReader.close();
             } catch (IOException e) {
                 throw new RuntimeException(e);

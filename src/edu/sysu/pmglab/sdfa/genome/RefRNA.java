@@ -9,12 +9,11 @@ import edu.sysu.pmglab.container.intervaltree.IntervalObject;
 import edu.sysu.pmglab.container.intervaltree.IntervalTree;
 import edu.sysu.pmglab.sdfa.annotation.genome.RNAAnnot;
 import edu.sysu.pmglab.sdfa.genome.transcript.*;
-import edu.sysu.pmglab.sdfa.ngf.NumericTranscriptFeature;
+import edu.sysu.pmglab.sdfa.nagf.NumericTranscriptFeature;
 import edu.sysu.pmglab.sdfa.sv.SVCoordinate;
 import edu.sysu.pmglab.sdfa.sv.SVTypeSign;
 import edu.sysu.pmglab.sdfa.sv.UnifiedSV;
 
-import java.sql.Ref;
 import java.util.Arrays;
 
 /**
@@ -44,6 +43,7 @@ public class RefRNA implements Comparable<RefRNA> {
     public static final int DUP_TYPE = SVTypeSign.get("DUP").getIndex();
     public static final int CNV_TYPE = SVTypeSign.get("CNV").getIndex();
     public static final int INV_TYPE = SVTypeSign.get("INV").getIndex();
+    public static final int INS_TYPE = SVTypeSign.get("INS").getIndex();
     public static final int INV_DUP_TYPE = SVTypeSign.get("DUP:INV").getIndex();
 
     private RefRNA() {
@@ -698,7 +698,7 @@ public class RefRNA implements Comparable<RefRNA> {
                 }
                 return new NumericTranscriptFeature(rnaFeature, tmpCoverage);
             }
-            boolean isInsert = (SVEnd - SVStart) <= 1;
+            boolean isInsert = type.getIndex() == INS_TYPE || (SVEnd - SVStart) <= 1;
             // 1. exon
             BaseArray<IntervalObject<String, Integer>> exonRelatedIntervals = exonIntervalTree.getOverlapsIntervals(SVStart, SVEnd);
             int overlapWithExon = 0;
