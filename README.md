@@ -32,22 +32,23 @@ SDFA (SDF-based Analyzer) is a novel computational framework designed for accura
         <img src="./assets/xingxing.png" width=20 alt="*">Acknowledgments
     </a>
 </p>
+
 ## Key Features
 
 <img src="./assets/github_overview.png" alt="SDFA Framework">
 
-- <kbd>**Standardized Decomposition Format(SDF)**</kbd>: A novel format for standardizing, compressing, and storing various types of SVs arranged in genomic coordinates with indexes.
-- <kbd>**Sample-wide SV Merge**</kbd>: A sample-wide merging procedure for analyzing population samples, ensuring a robust and efficient merging procedure.
-- <kbd>**Indexed sliding-window Annotation**</kbd>: A light and fast annotation algorithm for annotating SVs with multiple resources, without repeatedly scanning the resource data.
-- <kbd>**Numeric Annotation of Gene Feature (NAGF)**</kbd>: A numeric and efficient assessment of the impact of SVs on genes, addressing the complexity and lengthiness of current gene feature annotations.
-- <kbd>**SV-based GWAS Pipeline**</kbd>: A SV-based GWAS analysis for large-scale population was constructed combined with Plink.
+- **Standardized Decomposition Format(SDF)**: A novel format for standardizing, compressing, and storing various types of SVs arranged in genomic coordinates with indexes.
+- **Sample-wide SV Merge**: A sample-wide merging procedure for analyzing population samples, ensuring a robust and efficient merging procedure.
+- **Indexed sliding-window Annotation**: A light and fast annotation algorithm for annotating SVs with multiple resources, without repeatedly scanning the resource data.
+- **Numeric Annotation of Gene Feature (NAGF)**: A numeric and efficient assessment of the impact of SVs on genes, addressing the complexity and lengthiness of current gene feature annotations.
+- **SV-based GWAS Pipeline**: A SV-based GWAS analysis for large-scale population was constructed combined with Plink.
 
 ## Getting Start
 
 ### Prerequisites
 
 - Java 8 or later
-- Plink (if conducting SV-based GWAS)
+- Plink (when using SV-based GWAS)
 
 ### Installation
 
