@@ -176,7 +176,7 @@ For more parameter information on available options and configurations, refer to
 java -jar SDFA.jar [function] --help
 ```
 
-**Note:** Detailed documentation, including installation instructions, usage examples, and API reference, can be found in the [project wiki](https://github.com/Overinterested/SDFA/wiki).
+**Note**: Detailed documentation, including installation instructions, usage examples, and API reference, can be found in the [project wiki](https://github.com/Overinterested/SDFA/wiki).
 
 ## License
 
