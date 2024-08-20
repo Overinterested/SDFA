@@ -32,7 +32,6 @@ SDFA (SDF-based Analyzer) is a novel computational framework designed for accura
         <img src="./assets/xingxing.png" width=20 alt="*">Acknowledgments
     </a>
 </p>
-
 ## Key Features
 
 <img src="./assets/github_overview.png" alt="SDFA Framework">
@@ -48,7 +47,7 @@ SDFA (SDF-based Analyzer) is a novel computational framework designed for accura
 ### Prerequisites
 
 - Java 8 or later
-- Plink (when using SV-based GWAS)
+- Plink (using SV-based GWAS)
 
 ### Installation
 
@@ -80,29 +79,40 @@ The SDFA command-line tool supports various functionalities, including conversio
 <a name="vcf2sdf"></a>
 **VCF to SDF Conversion**
 
+Use SDFA to build an SDF archive for the sample file `input.vcf` and output to the folder `output_dir`. The instructions to complete the task are as follows:
+
 ```bash
+# convert one file to SDF
 java -jar SDFA.jar vcf2sdf -f input.vcf -o output_dir
 ```
 
-<a name="gui"></a>**Show SDF file Content**
+<a name="gui"></a>**SDF GUi**
+
+Use SDFA to present the graphical interface for the sample SDF file
 
 ```shell
 java -jar SDFA.jar gui -f input.sdf
 ```
 
-<a name="merge"></a>**Merging**
+<a name="merge"></a>**Sample Merge**
+
+Use SDFA to merge all files in the folder `input_dir`, including raw VCF files and other compressed files based on VCF like gz, bgz and sdf.
 
 ```bash
 java -jar SDFA.jar merge -dir input_dir -o output_dir
 ```
 
-<a name="annotation"></a>**Annotation**
+<a name="annotation"></a>**SV Annotation**
+
+Use SDFA to annotate all SVs in the folder `input_dir`, configured by annotation config file `annotation.config`.
 
 ```bash
 java -jar SDFA.jar annotate -dir input_dir -o output_dir --annot-config annotation.config
 ```
 
-<a name="ngf"></a>**Numeric Gene Feature Annotation**
+<a name="ngf"></a>**NAGF For SV**
+
+Use numeric annotation of gene feature to annotate the all files in the folder `input_dir`.
 
 ```bash
 java -jar SDFA.jar ngf -dir input_dir -o output_dir --hg38 --gene-level
@@ -111,37 +121,50 @@ java -jar SDFA.jar ngf -dir input_dir -o output_dir --hg38 --gene-level
 
 Here, we consider several split VCF files, which can be combined to form a complete population VCF file for a large-scale sample (similar to the organization of SV files in the UK Biobank). Therefore, we need to complete the following steps:
 
-- <a name="concat">SDF Concat</a>: Concat mutiple vcf files into one file in coordinate order.
-- <a name="extract">Samples Extraction</a>: Extract partial samples from the concat vcf file using `ped` file
-- <a name="sdf2plink">SDF2Plink</a>: Convert the sdf files to plink format files
+- <a name="#concat">SDF Concat</a>: Concat mutiple vcf files into one file in coordinate order.
+- <a name="#extract">Samples Extraction</a>: Extract partial samples from the concat vcf file using `ped` file
+- <a name="#sdf2plink">SDF2Plink</a>: Convert the sdf files to plink format files
 
-- <a name="plink">Plink For GWAS</a>: Use plink to conduct the GWAS for SV
+- <a name="#plink">Plink For GWAS</a>: Use plink to conduct the GWAS for SV
 
-<a name="extract"></a>**Extract part subject from SDF**
-
-```bash
-java -jar SDFA.jar extract -f input.sdf --extract-subject ped.file --ped-file -o output_dir
-```
 <a name="concat"></a>**SDF Concat**
+
+Concat multiple SDF files into one SDF file.
 
 ```bash
 java -jar SDFA.jar concat -dir sdf_dir -o output_dir -threads 4
 ```
+
+<a name="extract"></a>**Extract partial subjects from all samples in the concated SDF**
+
+Extract samples in ped file and convert to SDF file.
+
+```bash
+java -jar SDFA.jar extract -f input.sdf --extract-subject ped.file --ped-file -o output_dir
+```
+
 <a name="sdf2plink"></a>**SDF2Plink**
-> Produce `.fam`, `.bed` and `.bim`
+
+Convert SDF to Plink format, producing three files: `.fam`, `.bed` and `.bim`.
+
 ```bash
 java -jar SDFA.jar sdf2plink -f sdf_file_path -o output_dir
 ```
+<a name="plink"></a>**Plink**
 
-For more detailed information on available options and configurations, refer to the command-line help:
+After conversion from SDF to Plink, the plink tool can be used to conduct the GWAS studies.
+
+The detailed usage can be accessed and searched in homepage of plink, https://www.cog-genomics.org/plink/2.0/.
+
+## Documentation
+
+For more parameter information on available options and configurations, refer to the command-line help:
 
 ```bash
 java -jar SDFA.jar [function] --help
 ```
 
-## Documentation
-
-Detailed documentation, including installation instructions, usage examples, and API reference, can be found in the [project wiki](https://github.com/Overinterested/SDFA/wiki).
+**Note:** Detailed documentation, including installation instructions, usage examples, and API reference, can be found in the [project wiki](https://github.com/Overinterested/SDFA/wiki).
 
 ## License
 
