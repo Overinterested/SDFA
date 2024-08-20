@@ -107,5 +107,10 @@ public class VCFOutputGenerator extends AbstractSVMergeOutput {
     @Override
     public void endWrite() throws IOException {
         fs.close();
+        // change name
+        File subFile = outputFile.getParentFile().getSubFile("merged.vcf");
+        if (!subFile.exists()){
+            outputFile.renameTo(subFile);
+        }
     }
 }

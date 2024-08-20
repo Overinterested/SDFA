@@ -32,6 +32,7 @@ SDFA (SDF-based Analyzer) is a novel computational framework designed for accura
         <img src="./assets/xingxing.png" width=20 alt="*">Acknowledgments
     </a>
 </p>
+
 ## Key Features
 
 <img src="./assets/github_overview.png" alt="SDFA Framework">
@@ -82,8 +83,19 @@ The SDFA command-line tool supports various functionalities, including conversio
 Use SDFA to build an SDF archive for the sample file `input.vcf` and output to the folder `output_dir`. The instructions to complete the task are as follows:
 
 ```bash
-# convert one file to SDF
-java -jar SDFA.jar vcf2sdf -f input.vcf -o output_dir
+# convert single vcf file to sdf file
+java -jar ./SDFA.jar vcf2sdf \
+-f ./test/resource/build/HG002_HiFi_aligned_GRCh38_winnowmap.sniffles.vcf \
+-o ./test/resource/build/output
+# convert compressed vcf file to sdf file: bgz, gz
+java -jar ./SDFA.jar vcf2sdf \
+-f ./test/resource/build/HG002_HiFi_aligned_GRCh38_winnowmap.sniffles.vcf.bgz \
+-o ./test/resource/build/output
+
+java -jar ./SDFA.jar vcf2sdf \
+-f ./test/resource/build/HG002_HiFi_aligned_GRCh38_winnowmap.sniffles.vcf.gz \
+-o ./test/resource/build/output
+
 ```
 
 <a name="gui"></a>**SDF GUi**
@@ -91,7 +103,8 @@ java -jar SDFA.jar vcf2sdf -f input.vcf -o output_dir
 Use SDFA to present the graphical interface for the sample SDF file
 
 ```shell
-java -jar SDFA.jar gui -f input.sdf
+java -jar ./SDFA.jar gui \
+-f ./test/resource/build/HG002_HiFi_aligned_GRCh38_winnowmap.sniffles.vcf.sdf
 ```
 
 <a name="merge"></a>**Sample Merge**
@@ -99,7 +112,9 @@ java -jar SDFA.jar gui -f input.sdf
 Use SDFA to merge all files in the folder `input_dir`, including raw VCF files and other compressed files based on VCF like gz, bgz and sdf.
 
 ```bash
-java -jar SDFA.jar merge -dir input_dir -o output_dir
+java -jar ./SDFA.jar merge \
+-dir ./test/resource/merge \
+-o ./test/resource/merge/output
 ```
 
 <a name="annotation"></a>**SV Annotation**
@@ -135,7 +150,7 @@ Concat multiple SDF files into one SDF file.
 java -jar SDFA.jar concat -dir sdf_dir -o output_dir -threads 4
 ```
 
-<a name="extract"></a>**Extract partial subjects from all samples in the concated SDF**
+<a name="extract"></a>**Partial subjects**
 
 Extract samples in ped file and convert to SDF file.
 
@@ -150,7 +165,7 @@ Convert SDF to Plink format, producing three files: `.fam`, `.bed` and `.bim`.
 ```bash
 java -jar SDFA.jar sdf2plink -f sdf_file_path -o output_dir
 ```
-<a name="plink"></a>**Plink**
+<a name="plink"></a>**Plink for GWAS**
 
 After conversion from SDF to Plink, the plink tool can be used to conduct the GWAS studies.
 

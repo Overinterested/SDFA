@@ -13,8 +13,8 @@ import java.io.IOException;
  */
 public class ExtractTest {
     public static void main(String[] args) throws IOException, InterruptedException {
-        String vcf = "/Users/wenjiepeng/Desktop/tmp/extract/ONT_CHM13_ngmlr_pbsv_CHM13.vcf";
-        ByteCode output = new ByteCode("/Users/wenjiepeng/Desktop/tmp/extract/1.sdf");
-        new VCF2SDF(vcf,output).setEncodeMode(2).setFileID(1).setFilterEncode(new KeyMapFieldType()).convert();
+        String vcf = "/Users/wenjiepeng/projects/sdfa_latest/test/resource/build/HG002_HiFi_aligned_GRCh38_winnowmap.sniffles.vcf";
+        ByteCode output = new ByteCode("/Users/wenjiepeng/projects/sdfa_latest/test/resource/build/output");
+        new VCF2SDF(vcf,output).setEncodeMode(0).setFileID(1).setFilterEncode(new KeyMapFieldType()).convert();
     }
 }

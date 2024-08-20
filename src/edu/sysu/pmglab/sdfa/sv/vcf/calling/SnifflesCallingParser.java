@@ -1,14 +1,12 @@
 package edu.sysu.pmglab.sdfa.sv.vcf.calling;
 
 import edu.sysu.pmglab.container.ByteCode;
+import edu.sysu.pmglab.container.Entry;
 import edu.sysu.pmglab.container.ReusableMap;
 import edu.sysu.pmglab.container.array.Array;
 import edu.sysu.pmglab.container.array.ByteCodeArray;
 import edu.sysu.pmglab.gbc.genome.Chromosome;
-import edu.sysu.pmglab.sdfa.sv.CSVLocation;
-import edu.sysu.pmglab.sdfa.sv.SVGenotype;
-import edu.sysu.pmglab.sdfa.sv.SVGenotypes;
-import edu.sysu.pmglab.sdfa.sv.SVTypeSign;
+import edu.sysu.pmglab.sdfa.sv.*;
 import edu.sysu.pmglab.sdfa.sv.vcf.VCFFormatField;
 
 /**
@@ -29,6 +27,14 @@ public class SnifflesCallingParser extends AbstractCallingParser {
                     vcfFormatFields, genotypes, new CSVLocation(indexOfFile));
             return;
         }
+        Entry<ByteCode, ByteCode> bndInfo = UnifiedSV.parseBNDAlt(encodeNoneFieldArray.get(2));
+        if (end1 == -1 && bndInfo != null) {
+            ByteCode endPos = bndInfo.getValue();
+            if (endPos != null) {
+                end1 = transferInt(endPos);
+            }
+        }
+
         loadTwo(indexOfFile, chromosome, wrapToChr(infoField.get(CHR2_BYTECODE), chromosome),
                 svTypeSign1, svTypeSign1, pos, end1, -1, -1, len1, -1,
                 encodeNoneFieldArray, infoField, vcfFormatFields, genotypes);
@@ -43,6 +49,13 @@ public class SnifflesCallingParser extends AbstractCallingParser {
             loadOneLatest(svTypeSign1, len1, pos, end1, chromosome, encodeNoneFieldArray, infoField,
                     svGenotypes, new CSVLocation(indexOfFile));
             return;
+        }
+        Entry<ByteCode, ByteCode> bndInfo = UnifiedSV.parseBNDAlt(encodeNoneFieldArray.get(2));
+        if (end1 == -1 && bndInfo != null) {
+            ByteCode endPos = bndInfo.getValue();
+            if (endPos != null) {
+                end1 = transferInt(endPos);
+            }
         }
         loadTwoLatest(indexOfFile, chromosome, wrapToChr(infoField.get(CHR2_BYTECODE), chromosome),
                 svTypeSign1, svTypeSign1, pos, end1, -1, -1, len1, -1,
