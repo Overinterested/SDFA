@@ -26,10 +26,7 @@ SDFA (SDF-based Analyzer) is a novel computational framework designed for accura
     </a>
     |
     <a href="#license">
-        <img src="./assets/xingxing.png" width=20 alt="*">License</a>
-    |
-    <a href="#acknowledgments">
-        <img src="./assets/xingxing.png" width=20 alt="*">Acknowledgments
+        <img src="./assets/xingxing.png" width=20 alt="*">License
     </a>
 </p>
 
