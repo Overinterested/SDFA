@@ -32,7 +32,7 @@ SDFA (SDF-based Analyzer) is a novel computational framework designed for accura
 
 ## Key Features
 
-<img src="./assets/github_overview.png" alt="SDFA Framework">
+<img src="./assets/github_overview.png" alt="SDFA Framework"></img>
 
 - **Standardized Decomposition Format(SDF)**: A novel format for standardizing, compressing, and storing various types of SVs arranged in genomic coordinates with indexes.
 - **Sample-wide SV Merge**: A sample-wide merging procedure for analyzing population samples, ensuring a robust and efficient merging procedure.
