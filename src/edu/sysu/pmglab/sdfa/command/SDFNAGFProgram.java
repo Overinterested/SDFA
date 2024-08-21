@@ -88,7 +88,7 @@ import org.slf4j.LoggerFactory;
                 ),
                 @Option(
                         names = {"--af-cutoff", "--AF-cutoff"}, type = float.class, defaultTo = "-1",
-                        description = "Specify the AF threshold for sample level NGF result."
+                        description = "Specify the AF threshold for sample level NAGF result."
                 ),
                 @Option(
                         names = {"-f","--genome-file"}, type = File.class, required = true,
@@ -104,10 +104,10 @@ import org.slf4j.LoggerFactory;
                 )
         }
 )
-public class SDFNGFProgram extends CommandLineProgram {
-    private static final Logger logger = LoggerFactory.getLogger("SDFA NGF(Numeric Gene Feature) - Command Line");
+public class SDFNAGFProgram extends CommandLineProgram {
+    private static final Logger logger = LoggerFactory.getLogger("SDFA NAGF(Numeric Gene Feature) - Command Line");
 
-    protected SDFNGFProgram(String[] args) {
+    protected SDFNAGFProgram(String[] args) {
         super(args);
     }
 
@@ -152,7 +152,7 @@ public class SDFNGFProgram extends CommandLineProgram {
         FeatureType featureType = options.passed("--rna-level") ? FeatureType.RNA_LEVEL : FeatureType.GENE_LEVEL;
         boolean showCoverage = options.passed("--show-coverage");
         if (options.passed("--sample-level")) {
-            logger.info("Start calculate NGF in sample level.");
+            logger.info("Start calculate NAGF in sample level.");
             // sample level ngf
             of.load();
             // init parameters
@@ -165,7 +165,7 @@ public class SDFNGFProgram extends CommandLineProgram {
             BriefSVAnnotationManager.getInstance().writeOut(outputDir);
             // ngf
             // init parameters
-            of.setAnnotationLevel(GeneFeatureAnnotationType.NGF_GENE_LEVEL);
+            of.setAnnotationLevel(GeneFeatureAnnotationType.NAGF_GENE_LEVEL);
             of.load();
             NumericGeneFeature.initSubjectSize(SubjectManager.getInstance().numOfAllSubjects());
             PopulationLevelNumericGeneFeature populationLevelNumericGeneFeature = new PopulationLevelNumericGeneFeature(outputDir.getSubFile("gene_summary.txt"))
@@ -173,11 +173,11 @@ public class SDFNGFProgram extends CommandLineProgram {
                     .addSDFReaders(SDFManager.getInstance().getAnnotatedSDFArray())
                     .setGeneResourceManager(of);
             populationLevelNumericGeneFeature.execute();
-            logger.info("Finish NGF function and see output dir: "+outputDir);
+            logger.info("Finish NAGF function and see output dir: "+outputDir);
         } else {
             //region sv level ngf
             // load SV to brief coordinate
-            logger.info("Start calculate NGF in SV level.");
+            logger.info("Start calculate NAGF in SV level.");
             Array<SDFReader> sdfReaderArray = SDFManager.getInstance().getSdfReaderArray();
             for (SDFReader sdfReader : sdfReaderArray) {
                 sdfReader.setFileID(0);
@@ -188,7 +188,7 @@ public class SDFNGFProgram extends CommandLineProgram {
                 BriefSVAnnotationManager.getInstance().initChromosomes().load(array, 1);
                 of.setAnnotationLevel(GeneFeatureAnnotationType.HGVS_GENE_LEVEL).load().annotateAll(0);
                 BriefSVAnnotationManager.getInstance().toWriteMode();
-                of.setAnnotationLevel(GeneFeatureAnnotationType.NGF_GENE_LEVEL).load();
+                of.setAnnotationLevel(GeneFeatureAnnotationType.NAGF_GENE_LEVEL).load();
                 BriefSVAnnotationManager.getInstance().writeOut(outputDir);
                 NumericGeneFeature.initSubjectSize(1);
                 File subFile = outputDir.getSubFile(sdfReader.getFilePath().changeExtension("sdfa", "sdf").getName());

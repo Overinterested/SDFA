@@ -84,8 +84,8 @@ public class RefGeneManager extends AbstractResourceManager {
                 chromosomeResourceTreeMap = new HashMap<>();
                 loadRNACoordinate();
                 break;
-            case NGF_GENE_LEVEL:
-            case NGF_RNA_LEVEL:
+            case NAGF_GENE_LEVEL:
+            case NAGF_RNA_LEVEL:
                 chromosomeRefGeneHashMap = new HashMap<>();
                 chromosomeResourceTreeMap.clear();
                 loadFullCoordinate();

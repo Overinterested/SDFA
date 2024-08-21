@@ -587,7 +587,7 @@ public class RefRNA implements Comparable<RefRNA> {
         return status == 0 ? Integer.compare(endPos, o.endPos) : status;
     }
 
-    public NumericTranscriptFeature calcNGF(UnifiedSV sv) {
+    public NumericTranscriptFeature calcNAGF(UnifiedSV sv) {
         if (ngfCalc == null) {
             ngfCalc = new NumericTranscriptFeatureCalculator(this);
         }
@@ -886,7 +886,7 @@ public class RefRNA implements Comparable<RefRNA> {
         return this;
     }
 
-    public void dropNGF() {
+    public void dropNAGF() {
         ngfCalc = null;
     }
 }

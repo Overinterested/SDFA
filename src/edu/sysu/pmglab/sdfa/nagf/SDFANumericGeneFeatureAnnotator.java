@@ -26,7 +26,7 @@ public class SDFANumericGeneFeatureAnnotator {
     FeatureType featureType;
     final ResearchType researchType;
     Array<SDFReader> sdfReaderArray = new Array<>();
-    private static final Logger logger = LoggerFactory.getLogger("SDFA NGF - Command Line");
+    private static final Logger logger = LoggerFactory.getLogger("SDFA NAGF - Command Line");
 
     private SDFANumericGeneFeatureAnnotator(FeatureType featureType, ResearchType researchType) {
         this.featureType = featureType;

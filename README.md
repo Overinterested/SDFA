@@ -127,7 +127,11 @@ java -jar SDFA.jar annotate -dir input_dir -o output_dir --annot-config annotati
 Use numeric annotation of gene feature to annotate the all files in the folder `input_dir`.
 
 ```bash
-java -jar SDFA.jar ngf -dir input_dir -o output_dir --hg38 --gene-level
+java -jar ./SDFA.jar nagf \
+-dir ./test/resource/nagf \
+-f ./resource/hg38_refGene.ccf \
+-o ./test/resource/nagf/output \
+--sample-level
 ```
 <a name="sv_gwas"></a>**SV-based GWAS**
 

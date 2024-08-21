@@ -40,7 +40,7 @@ public class PopulationTestForMulti {
         BriefSVAnnotationManager.getInstance().writeOut(new File("/Users/wenjiepeng/Desktop/SV/data/private/VCF/curated_data/sv_calls_2023-06-10/ngf_46"));
         // ngf
         // init parameters
-        of.setAnnotationLevel(GeneFeatureAnnotationType.NGF_GENE_LEVEL);
+        of.setAnnotationLevel(GeneFeatureAnnotationType.NAGF_GENE_LEVEL);
         of.load();
         NumericGeneFeature.initSubjectSize(SubjectManager.getInstance().numOfAllSubjects());
         PopulationLevelNumericGeneFeature populationLevelNumericGeneFeature = new PopulationLevelNumericGeneFeature(new File("/Users/wenjiepeng/Desktop/tmp/gene.txt"))

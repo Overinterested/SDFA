@@ -93,7 +93,7 @@ public class SDFAEntry extends CommandLineProgram {
         } else if (this.options.passed("annotate")) {
             ICommandLineProgram.execute(SDFAnnotatorProgram.class, this.options.value("annotate"));
         } else if (this.options.passed("ngf")) {
-            ICommandLineProgram.execute(SDFNGFProgram.class, this.options.value("ngf"));
+            ICommandLineProgram.execute(SDFNAGFProgram.class, this.options.value("ngf"));
         } else if (this.options.passed("concat")) {
             ICommandLineProgram.execute(SDFConcatProgram.class, this.options.value("concat"));
         } else if (this.options.passed("extract")) {

@@ -15,7 +15,7 @@ import java.util.HashMap;
  * @create 2024-05-14 08:55
  * @description
  */
-public class FortySixGeneBasedNGFFrequencySummary {
+public class FortySixGeneBasedNAGFFrequencySummary {
     public static void main(String[] args) throws IOException {
         VolumeByteStream cache = new VolumeByteStream();
         File file = new File("/Users/wenjiepeng/Desktop/SV/data/private/VCF/curated_data/46_samples_ngf_sample_exon_5/gene_summary.txt");

@@ -19,8 +19,8 @@ import java.io.IOException;
  * @create 2024-04-29 01:34
  * @description
  */
-public class NGFTest {
-    private static final Logger logger = LoggerFactory.getLogger(NGFTest.class);
+public class NAGFTest {
+    private static final Logger logger = LoggerFactory.getLogger(NAGFTest.class);
     public static void main(String[] args) throws IOException {
         SDFManager.of(new File("/Users/wenjiepeng/Desktop/SV/tmp/annotation"),new File("/Users/wenjiepeng/Desktop/SV/tmp/annotation"))
                 .setLogger(logger)
@@ -30,7 +30,7 @@ public class NGFTest {
                 new RefGeneManager(
                         new File("/Users/wenjiepeng/Desktop/SV/AnnotFile/RefGene/resource/hg19_regGene.ccf"),
                         "genome"
-                ).setAnnotationLevel(GeneFeatureAnnotationType.NGF_RNA_LEVEL)
+                ).setAnnotationLevel(GeneFeatureAnnotationType.NAGF_RNA_LEVEL)
         );
 
         SDFReader sdfReader = null;

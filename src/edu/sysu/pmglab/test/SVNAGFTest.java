@@ -20,7 +20,7 @@ import java.io.IOException;
  * @create 2024-04-11 23:33
  * @description
  */
-public class SVNGFTest {
+public class SVNAGFTest {
     public static void main(String[] args) throws IOException {
         SDFManager.of(
                 new File("/Users/wenjiepeng/Desktop/SV/tmp"),
@@ -42,7 +42,7 @@ public class SVNGFTest {
             BriefSVAnnotationManager.getInstance().initChromosomes().load(array, 1);
             of.setAnnotationLevel(GeneFeatureAnnotationType.HGVS_GENE_LEVEL).load().annotateAll(0);
             BriefSVAnnotationManager.getInstance().toWriteMode();
-            of.setAnnotationLevel(GeneFeatureAnnotationType.NGF_GENE_LEVEL).load();
+            of.setAnnotationLevel(GeneFeatureAnnotationType.NAGF_GENE_LEVEL).load();
             BriefSVAnnotationManager.getInstance().writeOut(outputDir);
             NumericGeneFeature.initSubjectSize(1);
             File subFile = outputDir.getSubFile(sdfReader.getFilePath().changeExtension("sdfa", "sdf").getName());
@@ -61,12 +61,12 @@ public class SVNGFTest {
         BriefSVAnnotationManager.getInstance().initChromosomes().load(array, 1);
         of.setAnnotationLevel(GeneFeatureAnnotationType.HGVS_GENE_LEVEL).load().annotateAll(0);
         BriefSVAnnotationManager.getInstance().toWriteMode();
-        of.setAnnotationLevel(GeneFeatureAnnotationType.NGF_GENE_LEVEL).load();
+        of.setAnnotationLevel(GeneFeatureAnnotationType.NAGF_GENE_LEVEL).load();
         BriefSVAnnotationManager.getInstance().writeOut(new File("/Users/wenjiepeng/Desktop/tmp"));
         NumericGeneFeature.initSubjectSize(1);
         SVLevelNumericGeneFeature svLevelNumericGeneFeature = new SVLevelNumericGeneFeature()
                 .setFeatureLevel(FeatureType.RNA_LEVEL)
-                .setOutputFile(new File("/Users/wenjiepeng/Desktop/tmp/SVLevel_NGF_1.txt"))
+                .setOutputFile(new File("/Users/wenjiepeng/Desktop/tmp/SVLevel_NAGF_1.txt"))
                 .setSDFReader(new SDFReader("/Users/wenjiepeng/Desktop/tmp/HG002_HiFi_aligned_GRCh38_winnowmap.cuteSV2.vcf.sdfa"))
                 .setGeneResourceManager(of);
         svLevelNumericGeneFeature.execute();

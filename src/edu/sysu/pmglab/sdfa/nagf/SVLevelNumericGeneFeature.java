@@ -66,7 +66,7 @@ public class SVLevelNumericGeneFeature {
                     numericGeneFeature.putSV(svRelatedGeneIndexRecord.sv);
                     if (featureLevel.equals(FeatureType.RNA_LEVEL)) {
                         for (RefRNA refRNA : numericGeneFeature.refGene.getRNAList()) {
-                            boolean exist = numericGeneFeature.buildRNALevelNGFForOneSV(refRNA);
+                            boolean exist = numericGeneFeature.buildRNALevelNAGFForOneSV(refRNA);
                             if (exist) {
                                 containLine = true;
                                 numericGeneFeature.writeRNALevelForOne(refRNA, cache, containCoverage);
@@ -87,7 +87,7 @@ public class SVLevelNumericGeneFeature {
                             }
                         }
                     } else if (featureLevel.equals(FeatureType.GENE_LEVEL)) {
-                        boolean exist = numericGeneFeature.buildGeneLevelNGFForOneSV();
+                        boolean exist = numericGeneFeature.buildGeneLevelNAGFForOneSV();
                         if (exist) {
                             containLine = true;
                             numericGeneFeature.writeGeneLevelForOne(cache, containCoverage);

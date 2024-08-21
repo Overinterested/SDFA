@@ -64,7 +64,7 @@ public class PopulationLevelNumericGeneFeature {
                     if (featureLevel.equals(FeatureType.RNA_LEVEL)) {
                         RefGene refGene = numericGeneFeature.refGene;
                         for (RefRNA refRNA : refGene.getRNAList()) {
-                            boolean overlap = numericGeneFeature.buildRNALevelNGF(refRNA);
+                            boolean overlap = numericGeneFeature.buildRNALevelNAGF(refRNA);
                             if (!overlap) {
                                 numericGeneFeature.clearAll();
                                 continue;
@@ -77,8 +77,8 @@ public class PopulationLevelNumericGeneFeature {
                             cache.reset();
                         }
                     } else if (featureLevel.equals(FeatureType.GENE_LEVEL)) {
-                        boolean hasNGF = numericGeneFeature.buildGeneLevelNGF();
-                        if (!hasNGF) {
+                        boolean hasNAGF = numericGeneFeature.buildGeneLevelNAGF();
+                        if (!hasNAGF) {
                             numericGeneFeature.clearAll();
                             continue;
                         }

@@ -9,8 +9,8 @@ public enum GeneFeatureAnnotationType {
     HGVS_GENE_LEVEL,
     HGVS_RNA_LEVEL,
     HGVS_SNP_LEVEL,
-    NGF_GENE_LEVEL,
-    NGF_RNA_LEVEL,
+    NAGF_GENE_LEVEL,
+    NAGF_RNA_LEVEL,
     HGVS_NAME_LEVEL,
     BRIEF_LOAD;
 }

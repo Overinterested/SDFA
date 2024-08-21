@@ -21,7 +21,7 @@
     - [SDF Format](#sdf-format)
     - [Merge Module](#merge-module)
     - [Annotation Module](#annotation-module)
-    - [NGF Module](#ngf-module)
+    - [NAGF Module](#ngf-module)
 
 ## Examples
 - [Example 1: VCF to SDF Conversion](#example-1-vcf-to-sdf-conversion)
@@ -46,10 +46,10 @@ considering to the complexity types of SV(like CSV called by SVision), various c
 Then to analyse the SV data in SDF, SDFA designed over 10 types of results of VCF called by different callers(including CuteSV2, Sniffles2).
 
 ## Key Concepts
-This section explains the key concepts and terminologies used in SDFA, such as Standardized Decomposition Format (SDF), Structural Variations (SVs), Numeric Gene Feature (NGF), and others.
+This section explains the key concepts and terminologies used in SDFA, such as Standardized Decomposition Format (SDF), Structural Variations (SVs), Numeric Annotation of Gene Feature (NAGF), and others.
 
 ## Architecture
-This section describes the overall architecture of SDFA, its core components (SDF, Merge Module, Annotation Module, NGF Module), and how they interact with each other.
+This section describes the overall architecture of SDFA, its core components (SDF, Merge Module, Annotation Module, NAGF Module), and how they interact with each other.
 
 ## Installation
 This section provides detailed instructions for installing SDFA on different platforms and environments.
@@ -76,7 +76,7 @@ Describes how to use the `merge` command to merge individual-level SV files into
 Covers the `annotate` command for annotating SV files with multiple annotation resources.
 
 ### Numeric Gene Feature Annotation
-Explains the `ngf` command for annotating SVs with Numeric Gene Feature (NGF) information.
+Explains the `ngf` command for annotating SVs with Numeric Annotation of Gene Feature (NAGF) information.
 
 ## API Reference
 This section provides a comprehensive reference for the SDFA API, covering the different modules and their respective classes, methods, and parameters.
@@ -90,8 +90,8 @@ Reference for the Merge Module, including its API and usage examples.
 ### Annotation Module
 Reference for the Annotation Module, including its API and usage examples.
 
-### NGF Module
-Reference for the Numeric Gene Feature (NGF) Module, including its API and usage examples.
+### NAGF Module
+Reference for the Numeric Annotation of Gene Feature (NAGF) Module, including its API and usage examples.
 
 ## Examples
 This section provides practical examples and use cases for different SDFA functionalities.

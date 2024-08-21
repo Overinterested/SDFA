@@ -20,7 +20,7 @@ public class NumericGeneFeature {
     Array<UnifiedSV> relatedSVRecord;
     private static float AFCutOff = -1f;
     static NumericTranscriptFeature SVLevel = new NumericTranscriptFeature();
-    private static Array<NumericTranscriptFeature> subjectOfRNALevelNGFArray;
+    private static Array<NumericTranscriptFeature> subjectOfRNALevelNAGFArray;
     private static final byte NONE_GENOTYPE = SVGenotype.of(".", ".").getBegCode();
     private static final byte HOMOZYGOUS_GENOTYPE = SVGenotype.of("0", "0").getBegCode();
 
@@ -36,33 +36,33 @@ public class NumericGeneFeature {
         return relatedSVRecord != null && !relatedSVRecord.isEmpty();
     }
 
-    public boolean buildGeneLevelNGF() {
-        initNGF();
-        boolean hasNGF = false;
+    public boolean buildGeneLevelNAGF() {
+        initNAGF();
+        boolean hasNAGF = false;
         Array<RefRNA> rnaList = refGene.getRNAList();
-        Array<NumericTranscriptFeature> subjectOfGeneLevelNGF = new Array<>(subjectSize);
+        Array<NumericTranscriptFeature> subjectOfGeneLevelNAGF = new Array<>(subjectSize);
         for (int i = 0; i < subjectSize; i++) {
-            subjectOfGeneLevelNGF.add(new NumericTranscriptFeature());
+            subjectOfGeneLevelNAGF.add(new NumericTranscriptFeature());
         }
         for (RefRNA refRNA : rnaList) {
-            boolean itemFlag = buildRNALevelNGF(refRNA);
+            boolean itemFlag = buildRNALevelNAGF(refRNA);
             if (!itemFlag) {
                 continue;
             }
-            hasNGF = true;
-            for (int i = 0; i < subjectOfGeneLevelNGF.getCapacity(); i++) {
-                subjectOfGeneLevelNGF.get(i).mergeInGene(subjectOfRNALevelNGFArray.get(i));
+            hasNAGF = true;
+            for (int i = 0; i < subjectOfGeneLevelNAGF.getCapacity(); i++) {
+                subjectOfGeneLevelNAGF.get(i).mergeInGene(subjectOfRNALevelNAGFArray.get(i));
             }
         }
         boolean filtered = false;
-        if (hasNGF) {
-            for (int i = 0; i < subjectOfRNALevelNGFArray.size(); i++) {
-                NumericTranscriptFeature tmp = subjectOfGeneLevelNGF.get(i);
+        if (hasNAGF) {
+            for (int i = 0; i < subjectOfRNALevelNAGFArray.size(); i++) {
+                NumericTranscriptFeature tmp = subjectOfGeneLevelNAGF.get(i);
                 filtered = filtered | NumericTranscriptFeature.filter(tmp);
-                subjectOfRNALevelNGFArray.set(i, tmp);
+                subjectOfRNALevelNAGFArray.set(i, tmp);
             }
         }
-        return hasNGF && filtered;
+        return hasNAGF && filtered;
     }
 
     public boolean writeGeneLevel(VolumeByteStream cache, boolean containCoverage) {
@@ -118,13 +118,13 @@ public class NumericGeneFeature {
     }
 
     private boolean write(VolumeByteStream cache, boolean containCoverage) {
-        int nonNGFCount = 0;
+        int nonNAGFCount = 0;
         for (int i = 0; i < subjectSize; i++) {
-            NumericTranscriptFeature item = subjectOfRNALevelNGFArray.get(i);
+            NumericTranscriptFeature item = subjectOfRNALevelNAGFArray.get(i);
             if (!item.parsed) {
                 cache.writeSafety(ByteCode.PERIOD);
             } else {
-                nonNGFCount++;
+                nonNAGFCount++;
                 if (item.getRnaFeatureValue() < 0) {
                     cache.writeSafety(ByteCode.MINUS);
                 }
@@ -137,7 +137,7 @@ public class NumericGeneFeature {
                 cache.writeSafety(ByteCode.TAB);
             }
         }
-        boolean AFFlag = (nonNGFCount / (float) subjectSize) < AFCutOff;
+        boolean AFFlag = (nonNAGFCount / (float) subjectSize) < AFCutOff;
         if (AFFlag) {
             cache.reset();
             return false;
@@ -145,8 +145,8 @@ public class NumericGeneFeature {
         return true;
     }
 
-    public boolean buildRNALevelNGFForOneSV(RefRNA refRNA) {
-        initOneNGF();
+    public boolean buildRNALevelNAGFForOneSV(RefRNA refRNA) {
+        initOneNAGF();
         UnifiedSV sv = relatedSVRecord.get(0);
         if (sv.getPos() >= refRNA.getEndPos() + RefRNA.downstreamDis) {
             return false;
@@ -155,30 +155,30 @@ public class NumericGeneFeature {
         if (end <= refRNA.getStartPos() - RefRNA.upstreamDis) {
             return false;
         }
-        SVLevel.mergeInRNA(refRNA.calcNGF(sv));
+        SVLevel.mergeInRNA(refRNA.calcNAGF(sv));
         return true;
     }
 
-    public boolean buildGeneLevelNGFForOneSV() {
+    public boolean buildGeneLevelNAGFForOneSV() {
         boolean geneLevelExist = false;
-        NumericTranscriptFeature geneLevelOfNGF = new NumericTranscriptFeature();
+        NumericTranscriptFeature geneLevelOfNAGF = new NumericTranscriptFeature();
         for (RefRNA refRNA : refGene.getRNAList()) {
-            boolean changed = buildRNALevelNGFForOneSV(refRNA);
+            boolean changed = buildRNALevelNAGFForOneSV(refRNA);
             if (changed) {
                 geneLevelExist = true;
-                geneLevelOfNGF.mergeInGene(SVLevel);
+                geneLevelOfNAGF.mergeInGene(SVLevel);
             }
         }
         if (geneLevelExist) {
-            SVLevel = geneLevelOfNGF;
+            SVLevel = geneLevelOfNAGF;
             geneLevelExist = NumericTranscriptFeature.filter(SVLevel);
         }
         return geneLevelExist;
     }
 
-    public boolean buildRNALevelNGF(RefRNA refRNA) {
-        initNGF();
-        boolean initNGF = false;
+    public boolean buildRNALevelNAGF(RefRNA refRNA) {
+        initNAGF();
+        boolean initNAGF = false;
         for (UnifiedSV sv : relatedSVRecord) {
             if (sv.getPos() >= refRNA.getEndPos() + RefRNA.downstreamDis) {
                 continue;
@@ -187,12 +187,12 @@ public class NumericGeneFeature {
             if (end <= refRNA.getStartPos() - RefRNA.upstreamDis) {
                 continue;
             }
-            initNGF = true;
-            NumericTranscriptFeature tmpNGFRes = refRNA.calcNGF(sv);
+            initNAGF = true;
+            NumericTranscriptFeature tmpNAGFRes = refRNA.calcNAGF(sv);
             int fileID = sv.getFileID();
             SVGenotype[] genotypes = sv.getGenotypes().getGenotypes();
             if (genotypes == null || genotypes.length == 0) {
-                subjectOfRNALevelNGFArray.get(fileID).mergeInRNA(tmpNGFRes);
+                subjectOfRNALevelNAGFArray.get(fileID).mergeInRNA(tmpNAGFRes);
                 continue;
             }
             for (int i = 0; i < genotypes.length; i++) {
@@ -200,12 +200,12 @@ public class NumericGeneFeature {
                 if (begCode == NONE_GENOTYPE || begCode == HOMOZYGOUS_GENOTYPE) {
                     continue;
                 }
-                subjectOfRNALevelNGFArray.get(fileID + i).mergeInRNA(tmpNGFRes);
+                subjectOfRNALevelNAGFArray.get(fileID + i).mergeInRNA(tmpNAGFRes);
             }
         }
         //region cycle the memory of used RNA
-        if (initNGF) {
-            refRNA.dropNGF();
+        if (initNAGF) {
+            refRNA.dropNAGF();
             return true;
         }
         return false;
@@ -224,20 +224,20 @@ public class NumericGeneFeature {
 
     public static void initSubjectSize(int subjectSize) {
         NumericGeneFeature.subjectSize = subjectSize;
-        subjectOfRNALevelNGFArray = new Array<>(subjectSize);
+        subjectOfRNALevelNAGFArray = new Array<>(subjectSize);
         for (int i = 0; i < subjectSize; i++) {
-            subjectOfRNALevelNGFArray.add(new NumericTranscriptFeature());
+            subjectOfRNALevelNAGFArray.add(new NumericTranscriptFeature());
         }
     }
 
-    private void initNGF() {
+    private void initNAGF() {
         relatedSVRecord.sort(UnifiedSV::compareTo);
-        for (NumericTranscriptFeature subjectNGF : subjectOfRNALevelNGFArray) {
-            subjectNGF.reset();
+        for (NumericTranscriptFeature subjectNAGF : subjectOfRNALevelNAGFArray) {
+            subjectNAGF.reset();
         }
     }
 
-    private void initOneNGF() {
+    private void initOneNAGF() {
         SVLevel.reset();
     }
 

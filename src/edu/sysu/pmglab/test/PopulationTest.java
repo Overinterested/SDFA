@@ -37,7 +37,7 @@ public class PopulationTest {
         of.load();
         of.annotateAll(0);
         BriefSVAnnotationManager.getInstance().toWriteMode();
-        of.setAnnotationLevel(GeneFeatureAnnotationType.NGF_GENE_LEVEL);
+        of.setAnnotationLevel(GeneFeatureAnnotationType.NAGF_GENE_LEVEL);
         of.load();
         BriefSVAnnotationManager.getInstance().writeOut(new File("/Users/wenjiepeng/Desktop/tmp"));
         NumericGeneFeature.initSubjectSize(1);
