@@ -70,10 +70,7 @@ public class SVTypeSign {
             throw new UnsupportedOperationException();
         } else {
             synchronized (svTypes) {
-                String[] var3 = alternativeNames;
-                int var4 = alternativeNames.length;
-                for (int var5 = 0; var5 < var4; ++var5) {
-                    String alternativeName = var3[var5];
+                for (String alternativeName : alternativeNames) {
                     if (alternativeName != null) {
                         svTypes.put(alternativeName, this);
                         svTypes.put(new ByteCode(alternativeName), this);
