@@ -16,7 +16,6 @@ import edu.sysu.pmglab.sdfa.sv.vcf.VCFHeader;
 import edu.sysu.pmglab.sdfa.toolkit.Contig;
 
 import java.util.Collection;
-import java.util.HashMap;
 
 /**
  * @author Wenjie Peng
@@ -34,7 +33,7 @@ public class SDFMeta extends CCFMeta {
     CallableSet<ByteCode> formatFieldSet = new CallableSet<>();
     ReusableMap<ByteCode, ByteCode> metaProperties = new ReusableMap<>();
     ContigBlockContainer contigBlockContainer = new ContigBlockContainer();
-    HashMap<Chromosome, Interval<Integer>> chrBlockRange = new HashMap<>();
+
     static final ByteCode CONTIG_BLOCK = new ByteCode(new byte[]{ByteCode.c, ByteCode.o, ByteCode.n, ByteCode.t, ByteCode.i, ByteCode.g,
             ByteCode.B, ByteCode.l, ByteCode.o, ByteCode.c, ByteCode.k});
     static final ByteCode ENCODE_MODE_TAG = new ByteCode("encode_mode").asUnmodifiable();
@@ -52,9 +51,6 @@ public class SDFMeta extends CCFMeta {
     static final ByteCode META_PROPERTY_TAG = new ByteCode(new byte[]{ByteCode.M, ByteCode.e, ByteCode.t, ByteCode.a, ByteCode.UNDERLINE,
             ByteCode.P, ByteCode.r, ByteCode.o, ByteCode.p, ByteCode.e, ByteCode.r, ByteCode.t, ByteCode.i,
             ByteCode.e, ByteCode.s});
-    static final ByteCode SDF_ENCODE_CONTIG_TAG = new ByteCode(new byte[]{
-            ByteCode.S, ByteCode.D, ByteCode.F, ByteCode.UNDERLINE, ByteCode.C, ByteCode.o, ByteCode.n, ByteCode.t, ByteCode.i, ByteCode.g
-    });
 
     public SDFMeta() {
         encodeMode = 0;

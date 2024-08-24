@@ -767,4 +767,9 @@ public class VCFHeader {
         vcfHeader.specificInfoFiledMap.putAll(specificInfoFiledMap);
         return vcfHeader;
     }
+
+    public VCFHeader setAltConfig(AltConfig altConfig) {
+        this.altConfig = altConfig;
+        return this;
+    }
 }

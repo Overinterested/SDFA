@@ -45,7 +45,7 @@ SDFA (SDF-based Analyzer) is a novel computational framework designed for accura
 ### Prerequisites
 
 - Java 8 or later
-- Plink (using SV-based GWAS)
+- Plink2.0 (using SV-based GWAS)
 
 ### Installation
 
@@ -119,7 +119,10 @@ java -jar ./SDFA.jar merge \
 Use SDFA to annotate all SVs in the folder `input_dir`, configured by annotation config file `annotation.config`.
 
 ```bash
-java -jar SDFA.jar annotate -dir input_dir -o output_dir --annot-config annotation.config
+java -jar ./SDFA.jar annotate \
+--annot-config ./test/resource/annotate/annotation.config \
+-dir ./test/resource/annotate \
+-o ./test/resource/annotate/output
 ```
 
 <a name="ngf"></a>**NAGF For SV**
@@ -170,7 +173,7 @@ java -jar SDFA.jar sdf2plink -f sdf_file_path -o output_dir
 
 After conversion from SDF to Plink, the plink tool can be used to conduct the GWAS studies.
 
-The detailed usage can be accessed and searched in homepage of plink, https://www.cog-genomics.org/plink/2.0/.
+The detailed usage can be accessed and searched in homepage of plink2.0.
 
 ## Documentation
 
@@ -185,4 +188,3 @@ java -jar SDFA.jar [function] --help
 ## License
 
 This project is licensed under the MIT License.
-

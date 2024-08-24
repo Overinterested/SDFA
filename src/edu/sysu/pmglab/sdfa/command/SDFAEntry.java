@@ -43,8 +43,8 @@ import org.slf4j.LoggerFactory;
                         greedy = true, arity = -1, format = "merge <input> [options]",
                         description = {"Merge individual SV files into one population SV file."}
                 ),
-                @Option(names = {"ngf"}, type = {String[].class}, splitter = EmptySplitter.class,
-                        greedy = true, arity = -1, format = "ngf <input> [options]",
+                @Option(names = {"nagf"}, type = {String[].class}, splitter = EmptySplitter.class,
+                        greedy = true, arity = -1, format = "nagf <input> [options]",
                         description = {"Annotate SV files with numeric gene feature."}
                 ),
                 @Option(names = {"concat"}, type = {String[].class}, splitter = EmptySplitter.class,
@@ -63,7 +63,7 @@ import org.slf4j.LoggerFactory;
 )
 @OptionRule(
         basic = {@Rule(
-                items = {"vcf2sdf", "gui", "annotate", "merge", "ngf", "concat","extract"},
+                items = {"vcf2sdf", "gui", "annotate", "merge", "nagf", "concat","extract"},
                 count = 1,
                 rule = EQUAL.class
         )}
@@ -92,7 +92,7 @@ public class SDFAEntry extends CommandLineProgram {
             ICommandLineProgram.execute(SDFMergerProgram.class, this.options.value("merge"));
         } else if (this.options.passed("annotate")) {
             ICommandLineProgram.execute(SDFAnnotatorProgram.class, this.options.value("annotate"));
-        } else if (this.options.passed("ngf")) {
+        } else if (this.options.passed("nagf")) {
             ICommandLineProgram.execute(SDFNAGFProgram.class, this.options.value("ngf"));
         } else if (this.options.passed("concat")) {
             ICommandLineProgram.execute(SDFConcatProgram.class, this.options.value("concat"));

@@ -26,14 +26,14 @@ import org.slf4j.LoggerFactory;
 
 @Synopsis(
         style = DefaultUsageStyle.STYLE_1,
-        usage = {"ngf <input> [options]"},
+        usage = {"nagf <input> [options]"},
         version = {"stable-2 (last edited on 2024.03.28)"},
         about = {"Annotate SV in numeric gene feature."}
 )
 @OptionGroup(
         items = {
                 @Option(
-                        names = {"ngf", ""},
+                        names = {"nagf", ""},
                         type = Void.class, hidden = true, required = true
                 ),
                 @Option(
@@ -120,7 +120,7 @@ public class SDFNAGFProgram extends CommandLineProgram {
         LogBackOptions.addConsoleAppender(level -> level.isGreaterOrEqual(Level.INFO));
         File outputDir = options.value("-o");
         outputDir.mkdirs();
-        LogBackOptions.addFileAppender(outputDir.getSubFile("ngf.track").toString(),
+        LogBackOptions.addFileAppender(outputDir.getSubFile("nagf.track").toString(),
                 level -> level.isGreaterOrEqual(Level.ALL));
         if (options.passed("--coverage-cutoff")) {
             byte[] cutoffValues = options.value("--coverage-cutoff");
