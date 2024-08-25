@@ -51,6 +51,7 @@ import edu.sysu.pmglab.sdfa.toolkit.SDF2Plink;
 )
 public class SDF2PlinkProgram extends CommandLineProgram {
 
+
     protected SDF2PlinkProgram(String[] args) {
         super(args);
     }

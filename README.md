@@ -140,29 +140,10 @@ java -jar ./SDFA.jar nagf \
 
 Here, we consider several split VCF files, which can be combined to form a complete population VCF file for a large-scale sample (similar to the organization of SV files in the UK Biobank). Therefore, we need to complete the following steps:
 
-- <a name="#concat">SDF Concat</a>: Concat mutiple vcf files into one file in coordinate order.
-- <a name="#extract">Samples Extraction</a>: Extract partial samples from the concat vcf file using `ped` file
-- <a name="#sdf2plink">SDF2Plink</a>: Convert the sdf files to plink format files
-
+- <a name="#SDF2Plink">SDF2Plink</a>: Convert SDF files to Plink files
 - <a name="#plink">Plink For GWAS</a>: Use plink to conduct the GWAS for SV
 
-<a name="concat"></a>**SDF Concat**
-
-Concat multiple SDF files into one SDF file.
-
-```bash
-java -jar SDFA.jar concat -dir sdf_dir -o output_dir -threads 4
-```
-
-<a name="extract"></a>**Partial subjects**
-
-Extract samples in ped file and convert to SDF file.
-
-```bash
-java -jar SDFA.jar extract -f input.sdf --extract-subject ped.file --ped-file -o output_dir
-```
-
-<a name="sdf2plink"></a>**SDF2Plink**
+<a name="SDF2Plink"></a>**SDF Concat**
 
 Convert SDF to Plink format, producing three files: `.fam`, `.bed` and `.bim`.
 
