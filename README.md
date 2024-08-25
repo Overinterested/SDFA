@@ -45,7 +45,7 @@ SDFA (SDF-based Analyzer) is a novel computational framework designed for accura
 ### Prerequisites
 
 - Java 8 or later
-- Plink2.0 (using SV-based GWAS)
+- [Plink2.0](https://www.cog-genomics.org/plink/2.0/) (using SV-based GWAS)
 
 ### Installation
 
@@ -136,25 +136,48 @@ java -jar ./SDFA.jar nagf \
 -o ./test/resource/nagf/output \
 --sample-level
 ```
-<a name="sv_gwas"></a>**SV-based GWAS**
+<a name="sv_gwas"></a>*SV-based GWAS*
 
 Here, we consider several split VCF files, which can be combined to form a complete population VCF file for a large-scale sample (similar to the organization of SV files in the UK Biobank). Therefore, we need to complete the following steps:
 
-- <a name="#SDF2Plink">SDF2Plink</a>: Convert SDF files to Plink files
+- <a name="#SDF2Plink">SDFA for SV GWAS</a>: Convert SDF files to Plink files
 - <a name="#plink">Plink For GWAS</a>: Use plink to conduct the GWAS for SV
 
-<a name="SDF2Plink"></a>**SDF Concat**
+<a name="SDF2Plink"></a>*SDFA for SV GWAS*
 
 Convert SDF to Plink format, producing three files: `.fam`, `.bed` and `.bim`.
 
 ```bash
-java -jar SDFA.jar sdf2plink -f sdf_file_path -o output_dir
+java -jar ./SDFA.jar gwas \
+-dir ./test/resource/gwas \
+-o ./test/resource/gwas/output \
+--ped-file ./test/resource/gwas/sample.ped \
+--concat \
+-t 4
 ```
-<a name="plink"></a>**Plink for GWAS**
+<a name="plink"></a>*Plink for GWAS*
 
 After conversion from SDF to Plink, the plink tool can be used to conduct the GWAS studies.
 
 The detailed usage can be accessed and searched in homepage of plink2.0.
+
+``` shell
+# filter
+./test/resource/gwas/plink2 --bfile ./test/resource/gwas/output/ \
+--geno 0.2 \
+--mind 0.8 \
+--hwe 1e-6 \
+--maf 0.05 \
+--make-bed \
+--out ./test/resource/gwas/output/geno_0.2_mind_0.8_maf_0.05
+# assocation
+./test/resource/gwas/plink2 --bfile ./test/resource/gwas/output/geno_0.2_mind_0.8_maf_0.05 \
+-adjust \
+--glm \
+allow-no-covars \
+--out ./test/resource/gwas/output/geno_0.2_maf_0.05_res
+
+```
 
 ## Documentation
 
