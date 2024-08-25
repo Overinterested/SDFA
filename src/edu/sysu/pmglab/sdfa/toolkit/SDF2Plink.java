@@ -251,6 +251,6 @@ class FamRecord implements Comparable<FamRecord> {
     }
     @Override
     public String toString() {
-        return famid + "\t" + iid + "\t" + famid + "\t" + mid + "\t" + sex + "\t" + phenotype;
+        return famid + "\t" + iid + "\t" + fid + "\t" + mid + "\t" + sex + "\t" + phenotype;
     }
 }

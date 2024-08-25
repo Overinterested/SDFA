@@ -105,7 +105,7 @@ import org.slf4j.LoggerFactory;
         }
 )
 public class SDFNAGFProgram extends CommandLineProgram {
-    private static final Logger logger = LoggerFactory.getLogger("SDFA NAGF(Numeric Gene Feature) - Command Line");
+    private static final Logger logger = LoggerFactory.getLogger("SDFA NAGF(Numeric Annotation of Gene Feature) - Command Line");
 
     protected SDFNAGFProgram(String[] args) {
         super(args);
