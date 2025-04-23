@@ -42,8 +42,8 @@ import org.slf4j.LoggerFactory;
                 @Option(names = "--threads", from = ThreadValidator.class),
                 @Option(names="--max--mergeSize", type = int.class, defaultTo = "1000",
                         description = "Specify the maximum merged range for SVs."
-                )
-
+                ),
+                @Option(names="--avg-pos",type = boolean.class, required = false)
         }
 )
 
@@ -60,6 +60,7 @@ public class SDFMergerProgram extends CommandLineProgram {
         LogBackOptions.addFileAppender(outputDir.getSubFile("merge_track.log").toString(),level -> level.isGreaterOrEqual(Level.ALL));
         int thread = this.options.value("--threads");
         PosSVMergeStrategy.mergePosRange = options.value("--max--mergeSize");
+        PosSVMergeStrategy.outputMeanPosFunc = options.passed("--avg-pos");
         new SDFAMergeManager()
                 .setCollectorMode(SVCollectorMode.CHR_LEVEL)
                 .setMergeMode(SVMergeMode.POS_LEVEL)

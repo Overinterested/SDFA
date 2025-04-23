@@ -7,10 +7,7 @@ import edu.sysu.pmglab.container.array.ByteCodeArray;
 import edu.sysu.pmglab.easytools.ValueUtils;
 import edu.sysu.pmglab.sdfa.merge.SDFAMergeManager;
 import edu.sysu.pmglab.sdfa.merge.base.SimpleSVMergeQueue;
-import edu.sysu.pmglab.sdfa.sv.ComplexSV;
-import edu.sysu.pmglab.sdfa.sv.SVGenotype;
-import edu.sysu.pmglab.sdfa.sv.SVGenotypes;
-import edu.sysu.pmglab.sdfa.sv.UnifiedSV;
+import edu.sysu.pmglab.sdfa.sv.*;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -30,6 +27,7 @@ public abstract class PosSVMergeStrategy extends AbstractSVMergeStrategy {
     boolean containStandardDev = true;
     boolean containSupportVector = true;
     public static int mergePosRange = 1000;
+    public static boolean outputMeanPosFunc = false;
     static StringBuilder builder = new StringBuilder();
     static ByteCode AF_BYTECODE = new ByteCode("AF");
     static ByteCode CHR_BYTECODE = new ByteCode("CHR");
@@ -67,7 +65,7 @@ public abstract class PosSVMergeStrategy extends AbstractSVMergeStrategy {
 
     public Array<ComplexSV> popFirstCanBeMergedCSVArray(Array<ComplexSV> specificTypeCSVArray) {
         Array<ComplexSV> res = new Array<>();
-        if (specificTypeCSVArray.isEmpty()){
+        if (specificTypeCSVArray.isEmpty()) {
             return res;
         }
         specificTypeCSVArray.sort(ComplexSV::compareTo);
@@ -315,6 +313,8 @@ public abstract class PosSVMergeStrategy extends AbstractSVMergeStrategy {
         double stdev_end = 0;
         float averagePos = (float) startSum / size;
         float averageEnd = (float) endSum / size;
+        float averageLen = (float) lengthSum / size;
+
         for (UnifiedSV simpleSV : simpleSVs) {
             stdev_pos += Math.pow(simpleSV.getPos() - averagePos, 2);
             stdev_end += Math.pow(simpleSV.getEnd() - averageEnd, 2);
@@ -325,12 +325,21 @@ public abstract class PosSVMergeStrategy extends AbstractSVMergeStrategy {
         // 1. CIPOS, CILEN, CIEND
         if (containCI) {
             int[] CIPosArray = new int[6];
-            CIPosArray[0] = startSV.getPos() - middlePos;
-            CIPosArray[1] = endSV.getPos() - middlePos;
-            CIPosArray[2] = lengthCI[0];
-            CIPosArray[3] = lengthCI[1];
-            CIPosArray[4] = endCI[0];
-            CIPosArray[5] = endCI[1];
+            if (outputMeanPosFunc) {
+                CIPosArray[0] = posCI[0] - (int) averagePos + middlePos;
+                CIPosArray[1] = posCI[1] - (int) averagePos + middlePos;
+                CIPosArray[2] = lengthCI[0] - (int) averageLen + middleLen;
+                CIPosArray[3] = lengthCI[1] - (int) averageLen + middleLen;
+                CIPosArray[4] = endCI[0] - (int) averageEnd + middleEnd;
+                CIPosArray[5] = endCI[1] - (int) averageEnd + middleEnd;
+            } else {
+                CIPosArray[0] = posCI[0];
+                CIPosArray[1] = posCI[1];
+                CIPosArray[2] = lengthCI[0];
+                CIPosArray[3] = lengthCI[1];
+                CIPosArray[4] = endCI[0];
+                CIPosArray[5] = endCI[1];
+            }
             infoFeatureArray.set(0, CIPosArray);
         }
         // 2. AVG
@@ -365,6 +374,9 @@ public abstract class PosSVMergeStrategy extends AbstractSVMergeStrategy {
         // modify the SV genotypes
         middleSV.setGenotypes(new SVGenotypes(svGenotypes));
         res.sv = middleSV;
+        if (outputMeanPosFunc) {
+            res.sv.setLength((int)averageLen).setCoordinate(new SVCoordinate((int) averagePos, (int) averageEnd, res.sv.getChr()));
+        }
         return res;
     }
 
