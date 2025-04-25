@@ -27,7 +27,7 @@ public class SDFWriter {
     CallableSet<CCFFieldMeta> extraFieldSet;
     public static SDFFormat format = new SDFFormat(SDFFormat.DEFAULT_COMPRESSION_LEVEL, SDFFormat.DEFAULT_VARIANT_NUM);
 
-    private SDFWriter(Object filePath, int encodeMode) throws IOException {
+    SDFWriter(Object filePath, int encodeMode) throws IOException {
         this.filePath = new File(filePath.toString());
         CCFWriter.Builder builder = CCFWriter.Builder.of(this.filePath)
                 .addFields(SDFFormat.SDFFields)

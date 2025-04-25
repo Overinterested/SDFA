@@ -20,7 +20,7 @@ public class MergeTest {
 //        SDFAEntry.main(new String[]{"merge", "--threads 4", "--avg-pos",
 //                "-dir /Users/wenjiepeng/Desktop/SV/data/private/VCF/curated_data/sv_calls_2023-06-10/cutesv_gz",
 //                "-o /Users/wenjiepeng/Desktop/SDFA/merge/mean_sdfa"});
-        PosSVMergeStrategy.outputMeanPosFunc = true;
+        PosSVMergeStrategy.outputMeanPosFunc = false;
         LogBackOptions.init();
         new SDFAMergeManager()
                 .setLogger(LogBackOptions.getRootLogger())
@@ -28,8 +28,8 @@ public class MergeTest {
                 .setMergeMode(SVMergeMode.POS_LEVEL)
                 .setOutputMode(SVMergedOutputMode.VCF_MODE)
                 .setThread(4)
-                .setInputDir("/Users/wenjiepeng/Downloads/HG002vGRCh38_wm_2000md_PBCCS_sniffles.s2l20.refined.nSVtypes.ism.vcf等3个文件")
-                .setOutputDir("/Users/wenjiepeng/Downloads/HG002vGRCh38_wm_2000md_PBCCS_sniffles.s2l20.refined.nSVtypes.ism.vcf等3个文件")
+                .setInputDir("/Users/wenjiepeng/Desktop/PaperWriter/SV/SDFA/revise/version_1/data/LEL5_cuteSV")
+                .setOutputDir("/Users/wenjiepeng/Desktop/PaperWriter/SV/SDFA/revise/version_1/data/LEL5_cuteSV/sdfa")
 //                .setInputDir("/Users/wenjiepeng/Desktop/SV/SVMerge/trio/wm_5md_PB")
 //                .setOutputDir("/Users/wenjiepeng/Desktop/SV/SVMerge/trio/wm_5md_PB/output")
                 .submit(4);

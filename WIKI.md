@@ -243,9 +243,95 @@ SVFilterManager svFilterManager = new SVFilterManager() {
 SVFilterManager newOne = svFilterManager.copy();
 ```
 
-## 2. SDFA Toolkit
+#### 1.3 SDF Index
 
-### 2.1 SDF GUI
+To quick search the SVs overlapped with the input coordinates, SDFA built a `index` option. Here we take an existing file([population_1.sdf](https://github.com/Overinterested/SDFA/blob/master/test/resource/gwas/population_1.sdf)) as an example to show this function:
+
+``` java
+java -jar SDFA.jar index -f population_1.sdf --search chr1:1000-30000
+```
+
+The `-f` option specifies the input SDF file and the `search` specifies the input range.
+
+#### 1.4 Covert other file types to SDF format
+
+Since almost all callers store SVs into VCF file after calling SVs, so we underlines the conversion from the VCF file to the SDF file through all evaluations. Moreover, to meet the more input file types, we also maintain the API to allow users to convert their own files to SDF files. The conversion API can be seen in SDFConversion class file and the following example (TSV2SDF) is built for users as a reference.
+
+``` java
+package edu.sysu.pmglab.test;
+
+import edu.sysu.pmglab.container.ByteCode;
+import edu.sysu.pmglab.container.array.BaseArray;
+import edu.sysu.pmglab.gbc.genome.Chromosome;
+import edu.sysu.pmglab.sdfa.sv.*;
+import edu.sysu.pmglab.sdfa.toolkit.SDFConstruction;
+
+import java.io.IOException;
+
+/**
+ * @author Wenjie Peng
+ * @create 2025-04-24 17:56
+ * @description the columns of tsv file contain 5 columns: CHR, POS, END, LENGTH, TYPE
+ */
+public class TSV2SDF extends SDFConstruction {
+
+    @Override
+    public SDFConstruction.LineConversionStatus lineConversion(ByteCode line, UnifiedSV sv) {
+        if (line.startsWith(ByteCode.NUMBER_SIGN)) {
+            return LineConversionStatus.SKIP_STATUS;
+        }
+        BaseArray<ByteCode> items = line.split(ByteCode.TAB);
+        Chromosome chromosome = Chromosome.get(items.get(0));
+        if (chromosome == null||chromosome==Chromosome.unknown){
+            chromosome = Chromosome.add(items.get(0).toString());
+        }
+        int start = items.get(1).toInt();
+        int end = items.get(2).toInt();
+        int length = Math.abs(items.get(3).toInt());
+        SVTypeSign svTypeSign = SVTypeSign.getByName(items.get(4));
+        sv.setType(svTypeSign)
+                .setCoordinate(new SVCoordinate(start, end, chromosome))
+                .setLength(length)
+                .setGenotypes(new SVGenotypes(new SVGenotype[0]));
+        return LineConversionStatus.ACCEPT_RECORD;
+    }
+
+    public static void main(String[] args) throws IOException {
+        new TSV2SDF().setInputFile("xxxx/tmp.tsv")
+                .setOutputFile("xxx/tmp_1.sdf")
+                .submit();
+    }
+}
+```
+
+#### 1.5 SDF Read and Write
+
+Since the SDF format initially serves as a storage for SV data, we consider the raw SDF file is solid and can’t be modified. However, we offer the read and write APIs for users to manipulate the record. The specific APIs are as follows:
+
+``` java
+String sdfFile = "xxx.sdf";
+// 1. Reader
+SDFReader reader = new SDFReader(sdfFile);
+// then we can use `read()` to obtain a SV class
+Unified sv = reader.read();
+// the SV instance contains attributes of current SV
+sv.getPos();
+sv.getEnd();
+// ....
+
+// 2. Write
+String outputFile = "xx.sdf";
+SDFWriter writer = SDFWriter.of(outputFile, 0);
+UnifiedSV sv = new UnifiedSV();
+sv.setType(SVTypeSign.getByName("INS"))
+  .setCoordinate(new SVCoordinate(start, end, chromosome))
+  .setLength(length);
+writer.write()
+```
+
+### 2. SDFA Toolkit
+
+#### 2.1 SDF GUI
 
 - To facilitate viewing SDF files, SDFA has designed a graphical interface that fully utilizes the block and column features of SDF files, with the following characteristics:
   - **Local scanning**: Only scans the content being viewed, utilizing the block and column features.
@@ -264,7 +350,7 @@ SVFilterManager newOne = svFilterManager.copy();
 > -f ./HG002_HiFi_aligned_GRCh38_winnowmap.sniffles.vcf.sdf
 > ```
 
-### 2.2 Sample Merge
+#### 2.2 Sample Merge
 
 To further conduct population-scale SV research, SDFA has developed a [sample-wide]() merging approach for population-level merging.
 
@@ -300,13 +386,13 @@ $$
 
 Moreover, we set the mean positions as the merged SVs' coordinates by default. To better conduct comparison and expansion, we have added the '-avg-pos' option to meet the output of the average position 
 
-### 2.3 Functional Annotation
+#### 2.3 Functional Annotation
 
 To further locate susceptible SVs and explore their biological principles, functional annotation of SVs is needed. SDFA uses the indexed sliding window algorithm (as shown in the figure) and completes functional annotation by filling out SDFA-defined annotation resource configuration files. Meanwhile, SDFA has built-in various annotation resources, including the TAD database and SVFotate's integrated SV database, and also accepts external annotation resource inputs.
 
 <img src="./assets/image-20250422100524144.png" alt="image-20250422100524144" style="zoom:50%;" />
 
-#### 2.3.1 Configuration File
+##### 2.3.1 Configuration File
 
 - Drawing from annoVcf, SDFA has defined an annotation configuration file that includes:
   - **Annotation resource location**: Starting with `file=`, followed by the full path to the annotation file.
@@ -358,7 +444,7 @@ To further locate susceptible SVs and explore their biological principles, funct
 > opts=["concat"]
 > ```
 
-#### 2.3.2 Annotation Resource Requirements
+##### 2.3.2 Annotation Resource Requirements
 
 SDFA supports integrating external databases for SV annotation, provided that external data files adhere to the following basic format requirements:
 
@@ -377,7 +463,7 @@ SDFA has built-in multiple output functions that can combine SDFA annotation out
 - **Numerical calculations for fields**: Provides functions like `max`, `min`, and `mean` for numerical calculations.
 - **Other functions**: Provides commonly used functions like `unique`, `count`, etc.
 
-### 2.4 NAGF Method
+#### 2.4 NAGF Method
 
 Numerical Annotation of Gene Feature (NAGF) is a new annotation result proposed by SDFA for SVs. NAGF uses 8 bits to represent affected gene feature regions (such as exons, introns) and 5 bytes to represent the proportion of affected regions for each gene feature within a single SV in a gene. The 8 bits form the feature bits, and the 5 bytes form the coverage. Below is detailed information about NAGF:
 
@@ -397,7 +483,7 @@ The final result looks like this: GENE_NAME : Value : [xxxx,xxx,xx,xx,xxx,x]. Fo
 > -o /Users/wenjiepeng/Desktop/tmp/sdfa_test/sdf-toolkit/sdfa-nagf
 > ```
 
-### 2.5 SV-based GWAS
+#### 2.5 SV-based GWAS
 
 - SV-based GWAS studies have already emerged. Since PLINK has integrated many practical statistical testing methods, SDFA provides an SV-based GWAS workflow for further mining susceptible SVs.
 

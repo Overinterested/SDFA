@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavadocGenerationManager">
-    <option name="OUTPUT_DIRECTORY" value="$USER_HOME$/Desktop/pmgManager/web/sdfa-docs/sdaf-javadoc" />
+    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/../../../../../../../pmgManager/web/sdfa-docs/latest_sdfa" />
     <option name="OTHER_OPTIONS" value="-encoding UTF-8 -charset UTF-8" />
   </component>
   <component name="PWA">

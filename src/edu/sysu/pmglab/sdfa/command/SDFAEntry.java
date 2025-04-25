@@ -59,6 +59,10 @@ import org.slf4j.LoggerFactory;
                         greedy = true, arity = -1, format = "gwas <input> [options]",
                         description = {"Convert SDF to plink format so that SV-based GWAS can be conducted."}
                 ),
+                @Option(names = {"index"}, type = {String[].class}, splitter = EmptySplitter.class,
+                        greedy = true, arity = -1, format = "index <input> [options]",
+                        description = {"Locate the SVs overlapped the input coordinate."}
+                ),
                 @Option(names = "--line-sort", type = Void.class, hidden = true,
                         description = "Convert VCF(s) to SDF(s) by first extracting line, then writing finally sorting"
                 )
@@ -67,7 +71,7 @@ import org.slf4j.LoggerFactory;
 )
 @OptionRule(
         basic = {@Rule(
-                items = {"vcf2sdf", "gui", "annotate", "merge", "nagf", "concat","extract","gwas"},
+                items = {"vcf2sdf", "gui", "annotate", "merge", "nagf", "concat","extract","gwas","index"},
                 count = 1,
                 rule = EQUAL.class
         )}
@@ -104,6 +108,8 @@ public class SDFAEntry extends CommandLineProgram {
             ICommandLineProgram.execute(SDFExtractProgram.class, this.options.value("extract"));
         } else if (this.options.passed("gwas")){
             ICommandLineProgram.execute(SDFSVBasedGWASProgram.class, this.options.value("gwas"));
+        } else if (this.options.passed("index")){
+            ICommandLineProgram.execute(SDFIndexProgram.class, this.options.value("index"));
         }
     }
 
