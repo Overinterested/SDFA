@@ -1,0 +1,3 @@
+[[annotation]]
+file="/Users/pwj/Desktop/SV/annotation/sdfa/gene_feature_annotation/hg38_refGene.ccf"
+type="genome"

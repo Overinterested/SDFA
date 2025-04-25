@@ -1,0 +1,10 @@
+Parsing cutesv2 costs 821.7744188308716 seconds with 0 errors
+Parsing debreak costs 199.89968705177307 seconds with 0 errors
+Parsing delly costs 467.08849000930786 seconds with 0 errors
+Parsing NanoSV costs 1123.4859809875488 seconds with 0 errors
+Parsing nanovar costs 91.72111892700195 seconds with 0 errors
+Parsing pbsv costs 147.7945749759674 seconds with 10 errors
+Parsing picky costs 37.68685793876648 seconds with 100 errors
+Parsing sniffles2 costs 315.43365502357483 seconds with 0 errors
+Parsing svim costs 5687.265805006027 seconds with 0 errors
+Parsing svision costs 598.9647090435028 seconds with 0 errors
