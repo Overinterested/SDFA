@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
         version = {"stable-2 (last edited on 2024.03.10)"}
 )
 @OptionGroup(
-        name = "simulation options",
+        name = "simulation.sh options",
         items = {
                 @Option(names = {"--length-threshold", "-lt"}, defaultTo = "50-5000",
                         type = {String.class}, format = "min_len-max_len",
