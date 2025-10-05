@@ -30,6 +30,7 @@ SDFA is a standardized decomposition format and toolkit for efficient structural
     </a>
 </p>
 
+> Contact Email: overinterested.sysu@gmail.com
 ## Key Features
 
 <img src="./assets/github_overview.png" alt="SDFA Framework"></img>
