@@ -41,6 +41,9 @@ SDFA is a standardized decomposition format and toolkit for efficient structural
 - **Numeric Annotation of Gene Feature (NAGF)**: A numeric and efficient assessment of the impact of SVs on genes, addressing the complexity and lengthiness of current gene feature annotations.
 - **SV-based GWAS Pipeline**: A SV-based GWAS analysis for large-scale population was constructed combined with Plink.
 
+## ⚠️ Important Notes
+We plan to release a major update by **November 25, 2025**, focusing on enhancing user experience, optimizing performance, and refining the overall code logic. Following these substantial improvements, a **new GitHub repository** will be launched. After this date, issues in the current repository will no longer be addressed, except for references or solutions related to the corresponding APIs in the new version.
+
 ## Getting Start
 
 ### Prerequisites
