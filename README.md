@@ -1,7 +1,9 @@
 # SDFA: A Standardized Decomposition Format and Toolkit for Efficient Structural Variant Analysis in Large-scale Population Genomics
 
 ## ⚠️ Important Notes
-We plan to release a major update by **November 25, 2025**, focusing on enhancing user experience, optimizing performance, and refining the overall code logic. Following these substantial improvements, a **new GitHub repository** will be launched. After this date, issues in the current repository will no longer be addressed, except for references or solutions related to the corresponding APIs in the new version.
+We are excited to share that the upcoming large-scale structural variant analysis platform, KGGSV, scheduled for release on November 25, 2025, is currently being deployed in collaboration with BGI for cohort-level SV analyses. This collaboration allows us to test our KGGSV under real population data and refine its stability, performance, and overall user experience before opening the source to the public.
+
+Once the software reaches a stable state, we will publish the full KGGSV with its source code in a new repository. Until then, if you are working on large-cohort SV analysis and require early access for research or customized workflows, you are welcome to contact us at overinterested.sysu@gmail.com to request the latest KGGSV source and discuss potential collaboration.
 
 <div align="center"> 
     <img src="assets/logo.png" alt="SDFA Logo" width="800" height="200"> 
